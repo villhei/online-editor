@@ -11,7 +11,7 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
+import 'phoenix_html'
 
 // Import local files
 //
@@ -20,9 +20,9 @@ import "phoenix_html"
 
 // import socket from "./socket"
 
-import render from "./react-entry"
+import render from './react-entry'
 
-var main = document.getElementById("react-main")
+var main = document.getElementById('react-main')
 if (main) {
-    render(main)
+  render(main)
 }
