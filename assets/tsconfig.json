@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "outDir": "ts-build",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "commonjs",
+    "target": "es2016",
+    "jsx": "react",
+    "moduleResolution": "node",
+    "baseUrl": "../priv/static/js",
+    "allowJs": true
+  },
+  "exclude": [
+    "node_modules",
+    "priv",
+    "ts-build"
+  ]
+}
