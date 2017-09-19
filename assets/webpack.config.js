@@ -10,7 +10,7 @@ function getPlugins () {
     new CopyWebpackPlugin([{ from: './static/' }])
   ]
   if (!process.env.SKIP_LINT) {
-    return plugins.concat(new WebpackShellPlugin({ onBuildStart: ['npm run fix-style'], onBuildEnd: ['echo "Webpack End"'] }))
+    return plugins.concat(new WebpackShellPlugin({ onBuildStart: ['npm run fix-style'] }))
   }
   return plugins
 }
@@ -22,7 +22,7 @@ const lessLoader = {
     plugins: [
       new RewriteImportPlugin({
         paths: {
-          '../../theme.config': path.join(__dirname, '/css/semantic-ui/theme.config')
+          '../../theme.config': path.join(__dirname, '/styles/semantic-ui/theme.config')
         }
       })
     ]
@@ -30,7 +30,7 @@ const lessLoader = {
 }
 
 const config = {
-  entry: ['./css/app.less', './src/app.js'],
+  entry: ['./styles/app.less', './src/app.js'],
   output: {
     path: path.resolve(__dirname, '../priv/static'),
     filename: 'js/app.js'
