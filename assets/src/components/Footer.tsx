@@ -3,7 +3,7 @@ import * as React from 'react'
 export default class Footer extends React.Component<any, any> {
   render () {
     return (
-      <div className='ui inverted vertical footer segment'>
+      <div className='ui inverted vertical fixed footer segment'>
         <div className='ui center aligned container'>
           <div className='ui stackable inverted divided grid'>
             <div className='three wide column'>
