@@ -3,11 +3,17 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const WebpackShellPlugin = require('webpack-shell-plugin')
 const RewriteImportPlugin = require('less-plugin-rewrite-import')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 function getPlugins () {
   const plugins = [
     new ExtractTextPlugin('css/app.css'),
-    new CopyWebpackPlugin([{ from: './static/' }])
+    new CopyWebpackPlugin([{ from: './static/' }]),
+    new HtmlWebpackPlugin({
+      title: 'Online editor',
+      template: 'index.ejs',
+      filename: 'index.html'
+    })
   ]
   if (!process.env.SKIP_LINT) {
     return plugins.concat(new WebpackShellPlugin({ onBuildStart: ['npm run fix-style'] }))
@@ -30,7 +36,7 @@ const lessLoader = {
 }
 
 const config = {
-  entry: ['./styles/app.less', './src/app.js'],
+  entry: ['./styles/app.less', './src/app.tsx'],
   output: {
     path: path.resolve(__dirname, '../priv/static'),
     filename: 'js/app.js'

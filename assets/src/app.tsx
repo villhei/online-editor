@@ -20,9 +20,19 @@ import 'phoenix_html'
 
 // import socket from "./socket"
 
-import render from './react-entry'
+import * as React from 'react'
+import * as ReactDOM from 'react-dom'
+import Main from './containers/Main'
 
-var main = document.getElementById('react-main')
+const APP_ROOT: string = 'main'
+
+export default function render (node: HTMLElement): void {
+  ReactDOM.render(<Main />, node)
+}
+
+const main: HTMLElement | null = document.getElementById(APP_ROOT)
 if (main) {
   render(main)
+} else {
+  console.error(`Error element '${APP_ROOT}' not found`)
 }
