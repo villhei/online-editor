@@ -6,7 +6,6 @@
     "watch": "webpack --watch-stdin --progress --color",
     "tslint": "tslint --fix -c tslint.json 'src/**/*.{ts,tsx}'",
     "standard": "standard --fix",
-    "fix-style": "npm run tslint && npm run standard --fix",
     "webpack": "webpack"
   },
   "dependencies": {

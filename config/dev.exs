@@ -33,7 +33,6 @@ config :online_editor, OnlineEditorWeb.Endpoint,
 config :online_editor, OnlineEditorWeb.Endpoint,
   live_reload: [
     patterns: [
-      ~r{priv/static/.*(js|css|png|jpeg|jpg|gif|svg)$},
       ~r{priv/gettext/.*(po)$},
       ~r{lib/online_editor_web/views/.*(ex)$},
       ~r{lib/online_editor_web/templates/.*(eex)$}

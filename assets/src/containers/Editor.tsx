@@ -9,7 +9,11 @@ type EditorState = {
 const EDITOR_OPTIONS = {
   lineNumbers: true,
   mode: 'markdown',
-  theme: 'material'
+  theme: 'material',
+  extraKeys: {
+    'Shift-Tab': 'indentLess',
+    'Tab': 'indentMore'
+  }
 }
 
 export default class Editor extends React.Component<any, EditorState> {
@@ -19,7 +23,7 @@ export default class Editor extends React.Component<any, EditorState> {
 
   editor: ReactCodeMirror.ReactCodeMirror
 
-  componentDidMount() {
+  componentDidMount () {
     this.editor.getCodeMirror().setSize('100%', '100%')
   }
 
@@ -29,7 +33,7 @@ export default class Editor extends React.Component<any, EditorState> {
     })
   }
 
-  render() {
+  render () {
     return <CodeMirror
       ref={(node: ReactCodeMirror.ReactCodeMirror) => this.editor = node}
       className='ui full height'

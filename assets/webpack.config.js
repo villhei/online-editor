@@ -15,9 +15,6 @@ function getPlugins () {
       filename: 'index.html'
     })
   ]
-  if (!process.env.SKIP_LINT) {
-    return plugins.concat(new WebpackShellPlugin({ onBuildStart: ['npm run fix-style'] }))
-  }
   return plugins
 }
 
