@@ -10,7 +10,6 @@ export default class Main extends React.Component<any, any> {
       <div className='ui padded equal full height grid'>
         <EditorView />
       </div>
-      <Footer />
     </div>)
   }
 }

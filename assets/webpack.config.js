@@ -1,7 +1,6 @@
 const path = require('path')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const WebpackShellPlugin = require('webpack-shell-plugin')
 const RewriteImportPlugin = require('less-plugin-rewrite-import')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
@@ -59,6 +58,8 @@ const config = {
           fallback: 'style-loader',
           use: [{
             loader: 'css-loader'
+          }, {
+            loader: 'resolve-url-loader'
           },
             lessLoader
           ]
@@ -76,7 +77,7 @@ const config = {
       },
       {
         test: /\.(ttf|otf|eot|svg|woff(2)?)(\?[a-z0-9]+)?$/,
-        loader: 'file-loader?name=fonts/[name].[ext]'
+        loader: 'file-loader?name=/fonts/[name].[ext]'
       }
     ]
   },
