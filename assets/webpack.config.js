@@ -3,6 +3,12 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const RewriteImportPlugin = require('less-plugin-rewrite-import')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
+const webpack = require('webpack')
+
+const PUBLIC_PATH = 'http://localhost:4001/'
+
+const env = process.env.MIX_ENV || 'dev'
+const isDev = env === 'dev'
 
 function getPlugins () {
   const plugins = [
@@ -14,7 +20,11 @@ function getPlugins () {
       filename: 'index.html'
     })
   ]
-  return plugins
+  if (!isDev) {
+    return plugins
+  } else {
+    return plugins.concat(new webpack.NamedModulesPlugin(), new webpack.HotModuleReplacementPlugin())
+  }
 }
 
 const lessLoader = {
@@ -31,8 +41,11 @@ const lessLoader = {
   }
 }
 
+const entryPoints = ['babel-polyfill', 'react-hot-loader/patch', './styles/app.less', './src/app.tsx']
 const config = {
-  entry: ['./styles/app.less', './src/app.tsx'],
+  entry: isDev ? [
+    'webpack-dev-server/client?' + PUBLIC_PATH,
+    'webpack/hot/only-dev-server'].concat(entryPoints) : entryPoints,
   output: {
     path: path.resolve(__dirname, '../priv/static'),
     filename: 'js/app.js'
@@ -46,7 +59,8 @@ const config = {
     rules: [
       {
         test: /\.tsx?$/,
-        use: ['babel-loader', 'awesome-typescript-loader']
+        use: ['react-hot-loader/webpack', 'awesome-typescript-loader'],
+        exclude: /node_modules/
       },
       {
         test: /\.jsx?$/,
@@ -67,7 +81,7 @@ const config = {
       },
       {
         enforce: 'pre',
-        test: /\.jsx?$/,
+        test: /\.js?$/,
         loader:
         'source-map-loader'
       },

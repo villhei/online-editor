@@ -7,12 +7,6 @@
 // in vendor, which are never wrapped in imports and
 // therefore are always executed.
 
-// Import dependencies
-//
-// If you no longer want to use a dependency, remember
-// to also remove its path from "config.paths.watched".
-import 'phoenix_html'
-
 // Import local files
 //
 // Local files can be imported directly using relative
@@ -22,17 +16,26 @@ import 'phoenix_html'
 
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { AppContainer } from 'react-hot-loader'
 import Main from './containers/Main'
 
 const APP_ROOT: string = 'main'
 
-export default function render (node: HTMLElement): void {
-  ReactDOM.render(<Main />, node)
-}
+function doRender(Main: React.ComponentClass<any>) {
+  const main: HTMLElement = document.getElementById(APP_ROOT) as HTMLElement
+  ReactDOM.render(
+    <AppContainer>
+      <Main />
+    </AppContainer>
+    , main)
 
-const main: HTMLElement | null = document.getElementById(APP_ROOT)
-if (main) {
-  render(main)
-} else {
-  console.error(`Error element '${APP_ROOT}' not found`)
+}
+doRender(Main)
+
+if (module.hot) {
+  console.log('hot modules')
+  module.hot.accept('./containers/Main', () => {
+    const Next = require('./containers/Main').default
+    doRender(Next)
+  })
 }
