@@ -1,7 +1,0 @@
-{
-  "presets": [["env", { "modules": false }], "react"],
-  "ignore": [
-    "node_modules"
-  ],
-  "plugins": ["react-hot-loader/babel"]
-}

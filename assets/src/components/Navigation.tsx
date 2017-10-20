@@ -7,10 +7,10 @@ export default class Navigation extends React.Component<any, any> {
         <div className='ui container'>
           <a href='#' className='header item'>
             <img className='logo' src='images/phoenix.png' />
-            Project Name
+            Project Namez
           </a>
           <a href='#' className='item'>
-            Home
+            Homes
           </a>
           <div className='ui simple dropdown item'>
             Dropdown <i className='dropdown icon'></i>
@@ -21,7 +21,7 @@ export default class Navigation extends React.Component<any, any> {
               <div className='header'>Header Item</div>
               <div className='item'>
                 <i className='dropdown icon'></i>
-                Sub Menu
+                Sub Menus
             <div className='menu'>
                   <a className='item' href='#'>Link Item</a>
                   <a className='item' href='#'>Link Item</a>

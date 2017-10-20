@@ -11,7 +11,7 @@ config :online_editor, OnlineEditorWeb.Endpoint,
   debug_errors: true,
   code_reloader: true,
   check_origin: false,
-  watchers: [npm: ["run", "watch",
+  watchers: [npm: ["run", "webpack-devserver",
                     cd: Path.expand("../assets", __DIR__)]]
 # ## SSL Support
 #

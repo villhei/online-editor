@@ -41,7 +41,7 @@ const lessLoader = {
   }
 }
 
-const entryPoints = ['babel-polyfill', 'react-hot-loader/patch', './styles/app.less', './src/app.tsx']
+const entryPoints = ['react-hot-loader/patch', './styles/app.less', './src/app.tsx']
 const config = {
   entry: isDev ? [
     'webpack-dev-server/client?' + PUBLIC_PATH,
@@ -61,10 +61,6 @@ const config = {
         test: /\.tsx?$/,
         use: ['react-hot-loader/webpack', 'awesome-typescript-loader'],
         exclude: /node_modules/
-      },
-      {
-        test: /\.jsx?$/,
-        use: 'babel-loader'
       },
       {
         test: /\.less$/,
