@@ -8,7 +8,14 @@
     "strictNullChecks": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "baseUrl": "../priv/static/js",
+    "baseUrl": "src",
+    "paths": {
+      "actions": ["actions/*"],
+      "constants": ["constants/*"],
+      "containers":["containers/*"],
+      "service": ["service/*"],
+      "mocks": ["mocks"]
+    },
     "allowJs": true
   },
   "exclude": [

@@ -16,26 +16,34 @@
 
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { Provider } from 'react-redux'
+import { ConnectedRouter } from 'react-router-redux'
 import { AppContainer } from 'react-hot-loader'
-import Main from './containers/Main'
+import Main from 'containers/Main'
+import { store, routerHistory } from './reducer'
 
 const APP_ROOT: string = 'main'
 
-function doRender(Main: React.ComponentClass<any>) {
+function render(Main: React.ComponentClass<any>) {
   const main: HTMLElement = document.getElementById(APP_ROOT) as HTMLElement
-  ReactDOM.render(
+  const reactApplication: JSX.Element =
     <AppContainer>
-      <Main />
+      <Provider store={store}>
+        <ConnectedRouter history={routerHistory}>
+          <Main />
+        </ConnectedRouter>
+      </Provider>
     </AppContainer>
-    , main)
+
+  return ReactDOM.render(reactApplication, main)
 
 }
-doRender(Main)
+render(Main)
 
 if (module.hot) {
   console.log('hot modules')
   module.hot.accept('./containers/Main', () => {
     const Next = require('./containers/Main').default
-    doRender(Next)
+    render(Next)
   })
 }
