@@ -12,8 +12,11 @@ config :logger, level: :warn
 # Configure your database
 config :online_editor, OnlineEditor.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "postgres",
-  password: "postgres",
+  username: "online_editor",
+  password: "online",
   database: "online_editor_test",
   hostname: "localhost",
   pool: Ecto.Adapters.SQL.Sandbox
+
+# Modules
+config :online_editor, :file_module, OnlineEditorWeb.Test.FileMock

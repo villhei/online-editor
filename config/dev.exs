@@ -54,3 +54,6 @@ config :online_editor, OnlineEditor.Repo,
   database: "online_editor_dev",
   hostname: "localhost",
   pool_size: 10
+
+# Modules
+config :online_editor, :file_module, File
