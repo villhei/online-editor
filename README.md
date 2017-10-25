@@ -1,4 +1,4 @@
-# OnlineEditor (working name)
+# OnlineEditor (update TBD)
 
 Dependencies
  * Erlang OTP 20
@@ -11,7 +11,7 @@ Dependencies
 
 ### Frontend stack
 * TypeScript
-* React
+* React (with redux, react-router)
 * Semantic UI
 * LESS
 * WebPack
@@ -19,14 +19,6 @@ Dependencies
 ### Backend stack
 * Elixir
 * Phoenix Framework
-
-### TODO / stackwise
-
-* Set up Webpack Hot Module Reload
-* Optimize the build, less assets take long to compile
-* Setup webpack-phoenix signals if needed
-* Optimized roduction build
-* PWA manifest generation
 
 ## Running in development
 
@@ -37,11 +29,24 @@ To start your Phoenix server:
   * Install Node.js dependencies with `cd assets && npm install`
   * Start Phoenix endpoint with `mix phoenix.server`
 
-Now you can visit [`localhost:4040`](http://localhost:4040) from your browser.
+Now you can visit [`localhost:4040`](http://localhost:4040) from your browser for the raw Phoenix-served app.
+
+Use the webpack-dev-server provided [`localhost:4001`](http://localhost:4001) for live reload. Useful for client-side development.
+
+### TODO / stackwise
+
+* Set up Webpack Hot Module Reload
+* Optimize the build, less assets take long to compile
+* Setup webpack-phoenix signals if needed
+* Optimized roduction build
+* PWA manifest generation
 
 ## Learn more
-
-  * Official website: http://www.phoenixframework.org/
+  * Elixir website: https://elixir-lang.org/
+  * Typescript website: https://www.typescriptlang.org/
+  * Phoenix framework website: http://www.phoenixframework.org/
+  * React docs: https://reactjs.org/docs/hello-world.html
+  
   * Guides: http://phoenixframework.org/docs/overview
   * Docs: https://hexdocs.pm/phoenix
   * Mailing list: http://groups.google.com/group/phoenix-talk
