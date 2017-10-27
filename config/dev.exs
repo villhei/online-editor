@@ -49,8 +49,8 @@ config :phoenix, :stacktrace_depth, 20
 # Configure your database
 config :online_editor, OnlineEditor.Repo,
   adapter: Ecto.Adapters.Postgres,
-  username: "online_editor",
-  password: "online",
+  username: "postgres",
+  password: "postgres",
   database: "online_editor_dev",
   hostname: "localhost",
   pool_size: 10
