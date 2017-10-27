@@ -20,6 +20,18 @@ Dependencies
 * Elixir
 * Phoenix Framework
 
+### TODO / stackwise
+
+* Set up Webpack Hot Module Reload
+* Optimize the build, less assets take long to compile
+* Setup webpack-phoenix signals if needed
+* Optimized roduction build
+* PWA manifest generation
+
+## Code style
+
+Run `mix credo` or `mix credo --strict` for code style checks.
+
 ## Running in development
 
 To start your Phoenix server:
@@ -46,7 +58,7 @@ Use the webpack-dev-server provided [`localhost:4001`](http://localhost:4001) fo
   * Typescript website: https://www.typescriptlang.org/
   * Phoenix framework website: http://www.phoenixframework.org/
   * React docs: https://reactjs.org/docs/hello-world.html
-  
+
   * Guides: http://phoenixframework.org/docs/overview
   * Docs: https://hexdocs.pm/phoenix
   * Mailing list: http://groups.google.com/group/phoenix-talk

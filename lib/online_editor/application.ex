@@ -1,4 +1,7 @@
 defmodule OnlineEditor.Application do
+  @moduledoc """
+  The main backend application supervision tree
+  """
   use Application
 
   # See https://hexdocs.pm/elixir/Application.html
