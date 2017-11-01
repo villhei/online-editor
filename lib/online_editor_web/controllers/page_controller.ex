@@ -10,7 +10,7 @@ defmodule OnlineEditorWeb.PageController do
 
   def try_read_file(file_path) do
     file_path = resolve_path(file_path)
-    file_res = @file_module.read(file_path)
+    @file_module.read(file_path)
   end
 
   def index(conn, %{"path" => request_path} = params) do

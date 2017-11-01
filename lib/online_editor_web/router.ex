@@ -17,7 +17,7 @@ defmodule OnlineEditorWeb.Router do
   scope "/api", OnlineEditorWeb do
       pipe_through :api
 
-      resources "/documents", DocumentController, only: [:index]
+      resources "/documents", DocumentController, only: [:index, :show]
   end
 
   scope "/", OnlineEditorWeb do
