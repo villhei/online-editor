@@ -10,7 +10,12 @@ defmodule OnlineEditorWeb.DocumentController do
   end
 
   def show(conn, %{"id" => id}) do
-    document = Repo.get(Document, id)
-    render(conn, "show.json", document: document)
+    case Repo.get(Document, id) do
+      nil -> conn
+              |> put_status(404)
+              |> render(OnlineEditorWeb.ErrorView, "404.json")
+      document -> conn
+              |> render("show.json", document: document)
+    end
   end
 end

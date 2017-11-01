@@ -9,6 +9,11 @@ defmodule OnlineEditorWeb.ErrorViewTest do
            "Page not found"
   end
 
+  test "renders 404.json" do
+    assert render(OnlineEditorWeb.ErrorView, "404.json", []) ==
+           %{"code" => 404, "message" => "Resource not found"}
+  end
+
   test "render 500.html" do
     assert render_to_string(OnlineEditorWeb.ErrorView, "500.html", []) ==
            "Internal server error"

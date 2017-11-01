@@ -23,4 +23,9 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     conn = get(conn, "/api/documents/#{document.id}")
     assert json_response(conn, 200) == document_format(document)
   end
+
+  test "show path returns a 404 not found document", %{conn: conn} do
+    conn = get(conn, "/api/documents/1")
+    assert json_response(conn, 404) == OnlineEditorWeb.ErrorView.render("404.json")
+  end
 end
