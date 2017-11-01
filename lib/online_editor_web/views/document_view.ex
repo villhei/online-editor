@@ -11,6 +11,7 @@ defmodule OnlineEditorWeb.DocumentView do
 
   def render("document.json", %{document: document}) do
     %{
+      id: document.id,
       name: document.name,
       content: document.content,
       owner: document.owner,

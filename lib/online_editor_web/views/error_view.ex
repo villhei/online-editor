@@ -9,6 +9,14 @@ defmodule OnlineEditorWeb.ErrorView do
     %{"code" => 404, "message" => "Resource not found"}
   end
 
+  def render("400.json", %{error: error}) do
+    %{"code" => 404, "message" => error}
+  end
+
+  def render("400.json", _) do
+    render("400.json", %{error: "Bad request"})
+  end
+
   def render("500.html", _assigns) do
     "Internal server error"
   end
