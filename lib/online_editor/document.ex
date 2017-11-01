@@ -8,10 +8,8 @@ defmodule OnlineEditor.Document do
 
   schema "documents" do
     field :content, :string
-    field :created, :date
     field :name, :string
     field :owner, :string
-    field :updated, :date
 
     timestamps()
   end
@@ -19,7 +17,7 @@ defmodule OnlineEditor.Document do
   @doc false
   def changeset(%Document{} = document, attrs) do
     document
-    |> cast(attrs, [:name, :owner, :created, :updated, :content])
-    |> validate_required([:name, :owner, :created, :updated, :content])
+    |> cast(attrs, [:name, :owner, :content])
+    |> validate_required([:name, :owner, :content])
   end
 end

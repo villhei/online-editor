@@ -13,14 +13,18 @@ defmodule OnlineEditorWeb.Router do
     plug :accepts, ["json"]
   end
 
+  # Other scopes may use custom stacks.
+  scope "/api", OnlineEditorWeb do
+      pipe_through :api
+
+      resources "/documents", DocumentController, only: [:index]
+  end
+
   scope "/", OnlineEditorWeb do
     pipe_through :browser # Use the default browser stack
 
     get "/*path", PageController, :index
   end
 
-  # Other scopes may use custom stacks.
-  # scope "/api", OnlineEditorWeb do
-  #   pipe_through :api
-  # end
+
 end
