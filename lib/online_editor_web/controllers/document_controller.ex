@@ -12,11 +12,10 @@ defmodule OnlineEditorWeb.DocumentController do
 
   def show(conn, %{"id" => id}) do
     case Repo.get(Document, id) do
-      nil -> conn
-              |> put_status(404)
-              |> render(ErrorView, "404.json")
+      nil      -> conn
+                  |> respond_with_error(404, "404.json")
       document -> conn
-              |> render("show.json", document: document)
+                  |> respond_show(document)
     end
   end
 
@@ -24,26 +23,36 @@ defmodule OnlineEditorWeb.DocumentController do
     changeset = Document.changeset(%Document{}, params)
     case Repo.insert(changeset) do
       {:ok, document} -> conn
-                         |> put_status(200)
-                         |> render("show.json", document: document)
+                         |> respond_show(document)
       {:error, _changeset} -> conn
-                         |> put_status(400)
-                         |> render(ErrorView, "400.json", error: "Unable to create document")
+                         |> respond_with_error(400, "400.json", error: "Unable to create document")
     end
   end
 
   def update(conn, %{"id" => id} = params) do
-    with  %Document{} = document <- Repo.get(Document, id),
-          changeset              <- Document.changeset(document, params),
-          {:ok, document}        <- Repo.update(changeset)
+    with %Document{} = document <- Repo.get(Document, id),
+         changeset              <- Document.changeset(document, params),
+         {:ok, document}        <- Repo.update(changeset)
          do
           document
          end
     |> case do
-      %Document{} = document -> conn |> put_status(200) |> render("show.json", document: document)
-      nil                    -> conn |> put_status(404) |> render(ErrorView, "404.json")
-      {:error, _}            -> conn |> put_status(400) |> render(ErrorView, "400.json")
-      other                  -> conn |> put_status(500) |> render(ErrorView, "500.json")
+       %Document{} = document -> conn |> respond_show(document)
+       nil                    -> conn |> respond_with_error(404, "404.json")
+       {:error, _}            -> conn |> respond_with_error(400, "400.json")
+       _                      -> conn |> respond_with_error(500, "500.json")
     end
+  end
+
+  defp respond_show(conn, document) do
+    conn
+    |> put_status(200)
+    |> render("show.json", document: document)
+  end
+
+  defp respond_with_error(conn, error_code, error_view, error_message \\ []) do
+      conn
+      |> put_status(error_code)
+      |> render(ErrorView, error_view, error_message)
   end
 end

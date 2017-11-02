@@ -11,7 +11,11 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     name: "title"
   }
 
-  @invalid_document %{}
+  @empty_document %{}
+
+  @invalid_document %{
+    name: 123
+  }
 
   defp render_json(template, assigns) do
     assigns = Map.new(assigns)
@@ -46,7 +50,7 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
   end
 
   test "POST 400 - does not accept invalid attrs", %{conn: conn} do
-    conn = post(conn, "/api/documents", @invalid_document)
+    conn = post(conn, "/api/documents", @empty_document)
     assert json_response(conn, 400) == ErrorView.render("400.json", error: "Unable to create document")
   end
 
@@ -60,5 +64,11 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
   test "PUT 404 - update path returns an error on missing user", %{conn: conn} do
     conn = put(conn, "/api/documents/1", @example_document)
     assert json_response(conn, 404) == ErrorView.render("404.json")
+  end
+
+  test "PUT 400 - update path returns an error on bad argumentsr", %{conn: conn} do
+    document = insert(:document)
+    conn = put(conn, "/api/documents/#{document.id}", @invalid_document)
+    assert json_response(conn, 400) == ErrorView.render("400.json")
   end
 end

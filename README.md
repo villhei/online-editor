@@ -45,12 +45,15 @@ Now you can visit [`localhost:4040`](http://localhost:4040) from your browser fo
 
 Use the webpack-dev-server provided [`localhost:4001`](http://localhost:4001) for live reload. Useful for client-side development.
 
+### Done / working
+* Document DB entity
+* Create, Read, Update endpoints for Document
+* Placeholder client
+
 ### TODO / stackwise
 
-* Set up Webpack Hot Module Reload
 * Optimize the build, less assets take long to compile
-* Setup webpack-phoenix signals if needed
-* Optimized roduction build
+* Optimized production build
 * PWA manifest generation
 
 ## Learn more
