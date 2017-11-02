@@ -51,8 +51,8 @@ defmodule OnlineEditorWeb.DocumentController do
   end
 
   defp respond_with_error(conn, error_code, error_view, error_message \\ []) do
-      conn
-      |> put_status(error_code)
-      |> render(ErrorView, error_view, error_message)
+    conn
+    |> put_status(error_code)
+    |> render(ErrorView, error_view, error_message)
   end
 end
