@@ -22,10 +22,10 @@ defmodule OnlineEditorWeb.DocumentController do
   def create(conn, params) do
     changeset = Document.changeset(%Document{}, params)
     case Repo.insert(changeset) do
-      {:ok, document} -> conn
-                         |> respond_show(document)
-      {:error, _changeset} -> conn
-                         |> respond_with_error(400, "400.json", error: "Unable to create document")
+      {:ok, document}       -> conn
+                               |> respond_show(document)
+      {:error, _changeset}  -> conn
+                               |> respond_with_error(400, "400.json", error: "Unable to create document")
     end
   end
 
@@ -34,13 +34,11 @@ defmodule OnlineEditorWeb.DocumentController do
          changeset              <- Document.changeset(document, params),
          {:ok, document}        <- Repo.update(changeset)
          do
-          document
-         end
-    |> case do
-       %Document{} = document -> conn |> respond_show(document)
-       nil                    -> conn |> respond_with_error(404, "404.json")
-       {:error, _}            -> conn |> respond_with_error(400, "400.json")
-       _                      -> conn |> respond_with_error(500, "500.json")
+          conn |> respond_show(document)
+    else
+       {:error, _} -> conn |> respond_with_error(400, "400.json")
+       nil         -> conn |> respond_with_error(404, "404.json")
+       _           -> conn |> respond_with_error(500, "500.json")
     end
   end
 
