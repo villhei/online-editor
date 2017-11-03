@@ -6,7 +6,7 @@ import { Route } from 'react-router-dom'
 interface EditorViewRouteProps {
   url: string
   params: {
-    file: string
+    doucmentId: string
   }
 }
 
@@ -15,9 +15,9 @@ interface EditorViewProps extends RouteComponentProps<EditorViewRouteProps> { }
 export default class EditorView extends React.Component<EditorViewProps, any> {
   render() {
     const { match } = this.props
-    return (<div className='ui equal full height row without padding'>
+    return (<div className='ui full height row without padding'>
       <div className='ui twelve wide centered column without padding'>
-        <Route path={`${match.url}/:file`} component={Editor} />
+        <Route path={`${match.url}/:documentId`} component={Editor} />
         <Route exact path={match.url} render={() => (
           <h3>Please select something</h3>
         )} />

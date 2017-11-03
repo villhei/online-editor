@@ -1,6 +1,9 @@
 import * as React from 'react'
-import { UnControlled as CodeMirror } from 'react-codemirror2'
-import { getFileByName } from 'service/file-service'
+import { Controlled as CodeMirror } from 'react-codemirror2'
+import { connect, Dispatch } from 'react-redux'
+import { RootState } from '../../reducer'
+import { getDocument } from 'actions/document-actions'
+import { TextDocument } from 'service/document-service'
 import 'codemirror/mode/markdown/markdown'
 
 const EDITOR_OPTIONS = {
@@ -14,31 +17,47 @@ const EDITOR_OPTIONS = {
   }
 }
 
-export interface EditorProps {
-  match: {
-    params: {
-      file: string
-    }
-  }
+export type EditorProps = {
+  getDocument: (id: string | number) => Promise<TextDocument>,
+  documentId: number,
+  document: TextDocument
 }
 
-export default class Editor extends React.Component<EditorProps, any> {
-  getFileContents(fileName: string): string {
-    const file = getFileByName(fileName)
-    if (file) {
-      return file.content
-    }
-    return ''
+class Editor extends React.Component<EditorProps, any> {
+  componentDidMount() {
+    const { documentId, getDocument } = this.props
+    getDocument(documentId)
   }
 
   render() {
-    const editorValue = this.getFileContents(this.props.match.params.file)
+    const { document } = this.props
+    console.log('document', document)
     return <CodeMirror
       className='ui full height without padding'
-      value={editorValue}
+      value={document ? document.content : ''}
+      onBeforeChange={(editor, data, value) => {
+        console.log('value', value)
+      }}
       onChange={(editor, metadata, value) => {
         console.log(metadata)
       }}
       options={EDITOR_OPTIONS} />
   }
 }
+
+const mapStateToProps = (state: RootState, ownProps: any) => {
+  const documentId: number = parseInt(ownProps.match.params.documentId) || 0
+  const document: TextDocument = state.documents.byId[documentId]
+  return {
+    document,
+    documentId
+  }
+}
+
+const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
+  return {
+    getDocument: (id: string | number) => getDocument(dispatch, { id })
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Editor)

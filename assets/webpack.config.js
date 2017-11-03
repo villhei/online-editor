@@ -67,7 +67,8 @@ const config = {
       constants: sourcePath('constants'),
       containers: sourcePath('containers'),
       service: sourcePath('service'),
-      mocks: sourcePath('mocks')
+      mocks: sourcePath('mocks'),
+      reducers: sourcePath('reducers')
     }
   },
   module: {

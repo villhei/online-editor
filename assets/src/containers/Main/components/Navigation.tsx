@@ -1,10 +1,14 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
+import { TextDocument } from 'service/document-service'
 
-import { MOCK_FILES } from 'mocks/files'
+export type NavigationProps = {
+  documents: TextDocument[]
+}
 
-export default class Navigation extends React.Component<any, any> {
+export default class Navigation extends React.Component<NavigationProps, any> {
   render() {
+    const { documents } = this.props
     return (
       <div className='ui fixed inverted menu'>
         <div className='ui container'>
@@ -14,7 +18,7 @@ export default class Navigation extends React.Component<any, any> {
           <div className='ui simple dropdown item'>
             <i className='ui icon share folder' />My Files <i className='dropdown icon'></i>
             <div className='menu'>
-              {MOCK_FILES.map(({ name }) => <Link key={name} to={`/edit/${name}`} className='item'>{name}</Link>)}
+              {documents.map(({ id, name }) => <Link key={id} to={`/edit/${id}`} className='item'>{name}</Link>)}
             </div>
           </div>
           <Link to='/other' className='item' href='#'><i className='ui icon share alternate' />Share</Link>
