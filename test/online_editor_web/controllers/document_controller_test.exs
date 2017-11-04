@@ -38,7 +38,7 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
   end
 
   test "GET 404 - show path returns a 404 not found document", %{conn: conn} do
-    conn = get(conn, "/api/documents/1")
+    conn = get(conn, "/api/documents/#{UUID.uuid4()}")
     assert json_response(conn, 404) == ErrorView.render("404.json")
   end
 
@@ -61,8 +61,8 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     assert body["content"] == "new content"
   end
 
-  test "PUT 404 - update path returns an error on missing user", %{conn: conn} do
-    conn = put(conn, "/api/documents/1", @example_document)
+  test "PUT 404 - update path returns an error on missing document", %{conn: conn} do
+    conn = put(conn, "/api/documents/#{UUID.uuid4()}", @example_document)
     assert json_response(conn, 404) == ErrorView.render("404.json")
   end
 

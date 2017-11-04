@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { AxiosResponse } from 'axios'
 
-export type TextDocumentId = number
+export type TextDocumentId = string
 export type TextDocument = {
   readonly id: TextDocumentId,
   readonly name: string,

@@ -42,7 +42,8 @@ defmodule OnlineEditor.Mixfile do
       {:gettext, "~> 0.11"},
       {:cowboy, "~> 1.0"},
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
-      {:ex_machina, "~> 2.1"}
+      {:ex_machina, "~> 2.1"},
+      {:uuid, "~> 1.1"}
     ]
   end
 

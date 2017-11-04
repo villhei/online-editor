@@ -22,7 +22,6 @@ const ConnectedSwitch = connect((state: RootState): any => {
 
 class Main extends React.Component<MainProps, any> {
   componentDidMount() {
-    console.log('get')
     this.props.getDocuments()
   }
 

@@ -2,7 +2,7 @@ defmodule OnlineEditor.Document do
   @moduledoc """
   The text editor document schema. Used for everything in the frontend
   """
-  use Ecto.Schema
+  use OnlineEditor.Schema
   import Ecto.Changeset
   alias OnlineEditor.Document
 

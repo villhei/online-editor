@@ -5,7 +5,7 @@ import { wrapAsyncWorker } from './async'
 
 import { getById, getAll } from '../service/document-service'
 
-export type GetDocumentParams = {id: string | number}
+export type GetDocumentParams = {id: string }
 
 const actionCreator = actionCreatorFactory()
 

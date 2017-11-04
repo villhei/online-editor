@@ -3,7 +3,7 @@ import { isType } from 'typescript-fsa'
 import { getDocumentAction, getDocumentsAction } from 'actions/document-actions'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 
-type DocumentMap = { [id: number]: TextDocument }
+type DocumentMap = { [id: string]: TextDocument }
 export type DocumentReducerState = {
   byId: DocumentMap,
   all: Array<TextDocument>

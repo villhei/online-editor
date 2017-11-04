@@ -3,7 +3,7 @@ import { Controlled as CodeMirror } from 'react-codemirror2'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../../reducer'
 import { getDocument } from 'actions/document-actions'
-import { TextDocument } from 'service/document-service'
+import { TextDocument, TextDocumentId } from 'service/document-service'
 import 'codemirror/mode/markdown/markdown'
 
 const EDITOR_OPTIONS = {
@@ -36,17 +36,18 @@ class Editor extends React.Component<EditorProps, any> {
       className='ui full height without padding'
       value={document ? document.content : ''}
       onBeforeChange={(editor, data, value) => {
-        console.log('value', value)
+        console.log('data', data)
+        console.log('value', value.substr(0, 10))
       }}
       onChange={(editor, metadata, value) => {
-        console.log(metadata)
+        console.log('meta', metadata)
       }}
       options={EDITOR_OPTIONS} />
   }
 }
 
 const mapStateToProps = (state: RootState, ownProps: any) => {
-  const documentId: number = parseInt(ownProps.match.params.documentId) || 0
+  const documentId: TextDocumentId = ownProps.match.params.documentId
   const document: TextDocument = state.documents.byId[documentId]
   return {
     document,
