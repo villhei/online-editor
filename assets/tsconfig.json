@@ -14,7 +14,7 @@
       "constants": ["constants/*"],
       "containers":["containers/*"],
       "service": ["service/*"],
-      "reducers": ["recuers/*"],
+      "reducers": ["reducers/*"],
       "mocks": ["mocks"]
     },
     "allowJs": true

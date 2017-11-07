@@ -16,8 +16,10 @@ export const initialState: DocumentReducerState = {
 
 function updateOrJoin(array: Array<TextDocument>, object: TextDocument): Array<TextDocument> {
   const index = array.findIndex(({ id }) => object.id === id)
-  if (index > 0) {
-    return Array.from(array).splice(index, 1, object)
+  if (index > -1) {
+    const modified = Array.from(array)
+    modified.splice(index, 1, object)
+    return modified
   } else {
     return array.concat(object)
   }
@@ -26,12 +28,10 @@ function updateOrJoin(array: Array<TextDocument>, object: TextDocument): Array<T
 export default function documentReducer(state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
   if (isType(action, getDocumentsAction.done)) {
     const documents = action.payload.result
-    const byId: DocumentMap = documents.reduce((acc, document) => {
-      return {
-        ...acc,
-        [document.id]: document
-      }
-    }, {})
+    const byId: DocumentMap = documents.reduce((acc, document) => ({
+      ...acc,
+      [document.id]: document
+    }), {})
     return {
       ...state,
       byId,
@@ -40,7 +40,10 @@ export default function documentReducer(state: DocumentReducerState = initialSta
   }
   if (isType(action, getDocumentAction.done)) {
     const document = action.payload.result
-    const byId = { ...state.byId, [document.id]: document }
+    const byId = {
+      ...state.byId,
+      [document.id]: document
+    }
     const all = updateOrJoin(state.all, document)
     return {
       ...state,

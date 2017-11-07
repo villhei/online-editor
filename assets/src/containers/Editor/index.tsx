@@ -9,7 +9,7 @@ import 'codemirror/mode/markdown/markdown'
 const EDITOR_OPTIONS = {
   lineNumbers: true,
   mode: 'markdown',
-  theme: 'material',
+  theme: 'default',
   lineWrapping: true,
   extraKeys: {
     'Shift-Tab': 'indentLess',
@@ -18,8 +18,8 @@ const EDITOR_OPTIONS = {
 }
 
 export type EditorProps = {
-  getDocument: (id: string | number) => Promise<TextDocument>,
-  documentId: number,
+  getDocument: (id: string) => Promise<TextDocument>,
+  documentId: string,
   document: TextDocument
 }
 
@@ -31,7 +31,6 @@ class Editor extends React.Component<EditorProps, any> {
 
   render() {
     const { document } = this.props
-    console.log('document', document)
     return <CodeMirror
       className='ui full height without padding'
       value={document ? document.content : ''}
@@ -46,9 +45,9 @@ class Editor extends React.Component<EditorProps, any> {
   }
 }
 
-const mapStateToProps = (state: RootState, ownProps: any) => {
+const mapStateToProps = ({ model }: RootState, ownProps: any) => {
   const documentId: TextDocumentId = ownProps.match.params.documentId
-  const document: TextDocument = state.documents.byId[documentId]
+  const document: TextDocument = model.documents.byId[documentId]
   return {
     document,
     documentId
@@ -57,7 +56,7 @@ const mapStateToProps = (state: RootState, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getDocument: (id: string | number) => getDocument(dispatch, { id })
+    getDocument: (id: string) => getDocument(dispatch, { id })
   }
 }
 

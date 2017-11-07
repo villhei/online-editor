@@ -20,7 +20,8 @@ import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
 import { AppContainer } from 'react-hot-loader'
 import Main from 'containers/Main'
-import { store, routerHistory } from './reducer'
+import { store } from './reducer'
+import { history } from 'reducers/ui'
 
 const APP_ROOT: string = 'main'
 
@@ -29,7 +30,7 @@ function render(Main: React.ComponentClass<any>) {
   const reactApplication: JSX.Element =
     <AppContainer>
       <Provider store={store}>
-        <ConnectedRouter history={routerHistory}>
+        <ConnectedRouter history={history}>
           <Main />
         </ConnectedRouter>
       </Provider>

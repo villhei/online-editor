@@ -1,9 +1,8 @@
 import actionCreatorFactory from 'typescript-fsa'
-import { TextDocument } from 'service/document-service'
 import { ACTION_GET_DOCUMENT, ACTION_GET_DOCUMENTS } from 'constants/document'
 import { wrapAsyncWorker } from './async'
 
-import { getById, getAll } from '../service/document-service'
+import { getById, getAll, TextDocument } from 'service/document-service'
 
 export type GetDocumentParams = {id: string }
 

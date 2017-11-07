@@ -62,7 +62,7 @@ for (var i=1; i <= 20; i++)
 ].map((partialDocument, index) => {
     return {
         ...partialDocument,
-        id: index + 1,
+        id: Math.random().toString(36).substring(16),
         inserted_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
     }
