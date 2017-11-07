@@ -21,7 +21,7 @@ import { ConnectedRouter } from 'react-router-redux'
 import { AppContainer } from 'react-hot-loader'
 import Main from 'containers/Main'
 import { store } from './reducer'
-import { history } from 'reducers/ui'
+import { history } from 'reducers/router'
 
 const APP_ROOT: string = 'main'
 

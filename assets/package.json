@@ -11,6 +11,7 @@
     "webpack-devserver": "node webpack.devserver.js"
   },
   "dependencies": {
+    "@types/classnames": "^2.2.3",
     "@types/codemirror": "0.0.50",
     "@types/react": "^15.0.22",
     "@types/react-dom": "^15.5.4",
@@ -19,6 +20,7 @@
     "@types/react-router-dom": "^4.2.0",
     "@types/react-router-redux": "^5.0.9",
     "axios": "^0.17.0",
+    "classnames": "^2.2.5",
     "codemirror": "^5.31.0",
     "history": "^4.7.2",
     "phoenix": "file:../deps/phoenix",

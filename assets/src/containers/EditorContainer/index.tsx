@@ -3,11 +3,8 @@ import Editor from '../Editor'
 import { RouteComponentProps } from 'react-router'
 import { Route } from 'react-router-dom'
 
-interface EditorViewRouteProps {
+type EditorViewRouteProps = {
   url: string
-  params: {
-    doucmentId: string
-  }
 }
 
 interface EditorViewProps extends RouteComponentProps<EditorViewRouteProps> { }

@@ -15,8 +15,8 @@ export default class FileList extends React.Component<FileListProps, any> {
         <div className='ui four doubling cards'>
           {
             documents.map(document => (
-              <Link className='ui card' key={document.id} to={`/edit/${document.id}`} >
-                <div className='ui centered header'><i className='file icon'/>{document.name}</div>
+              <Link className='ui padded card' key={document.id} to={`/edit/${document.id}`} >
+                <div className='ui left aligned header'><i className='file icon'/>{document.name}</div>
                 <div className='ui divider' />
                 {document.updated_at}
               </Link>))
