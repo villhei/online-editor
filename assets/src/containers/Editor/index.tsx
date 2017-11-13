@@ -3,6 +3,7 @@ import { Controlled as CodeMirror } from 'react-codemirror2'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../../reducer'
 import { getDocument } from 'actions/document-actions'
+import { updatedocumentContent } from 'actions/editor-actions'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 import 'codemirror/mode/markdown/markdown'
 
@@ -19,8 +20,9 @@ const EDITOR_OPTIONS = {
 
 export type EditorProps = {
   getDocument: (id: string) => Promise<TextDocument>,
+  updatedocumentContent: (value: string) => any,
   documentId: string,
-  document: TextDocument
+  documentValue: string
 }
 
 class Editor extends React.Component<EditorProps, any> {
@@ -30,33 +32,33 @@ class Editor extends React.Component<EditorProps, any> {
   }
 
   render() {
-    const { document } = this.props
+    const { documentValue, updatedocumentContent } = this.props
     return <CodeMirror
       className='ui full height without padding'
-      value={document ? document.content : ''}
+      value={documentValue}
       onBeforeChange={(editor, data, value) => {
-        console.log('data', data)
-        console.log('value', value.substr(0, 10))
+        updatedocumentContent(value)
       }}
       onChange={(editor, metadata, value) => {
-        console.log('meta', metadata)
       }}
       options={EDITOR_OPTIONS} />
   }
 }
 
-const mapStateToProps = ({ model }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model, state }: RootState, ownProps: any) => {
   const documentId: TextDocumentId = ownProps.match.params.documentId
-  const document: TextDocument = model.documents.byId[documentId]
+  const document: TextDocument | undefined = model.documents.byId[documentId]
+  const documentValue = state.editor.modifiedContent || (document && document.content) || ''
   return {
-    document,
+    documentValue,
     documentId
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getDocument: (id: string) => getDocument(dispatch, { id })
+    getDocument: (id: string) => getDocument(dispatch, { id }),
+    updatedocumentContent: (value: string) => dispatch(updatedocumentContent({ value }))
   }
 }
 

@@ -5,6 +5,7 @@ import promiseMiddleware from 'redux-promise-middleware'
 import documentReducer, { DocumentReducerState } from 'reducers/documents'
 import { history, router } from 'reducers/router'
 import pageReducer, { PageState } from 'reducers/page'
+import editorReducer, { EditorState } from 'reducers/editor'
 
 const reactRouterMiddleware = routerMiddleware(history)
 
@@ -15,6 +16,9 @@ export type RootState = {
   },
   model: {
     documents: DocumentReducerState
+  },
+  state: {
+    editor: EditorState
   }
 }
 
@@ -25,6 +29,9 @@ export const rootReducer: Reducer<RootState> = combineReducers({
   }),
   model: combineReducers({
     documents: documentReducer
+  }),
+  state: combineReducers({
+    editor: editorReducer
   })
 })
 
