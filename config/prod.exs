@@ -56,7 +56,7 @@ config :logger, level: :info
 # Alternatively, you can configure exactly which server to
 # start per endpoint:
 #
-#     config :online_editor, OnlineEditorWeb.Endpoint, server: true
+config :online_editor, OnlineEditorWeb.Endpoint, server: true
 #
 
 # Finally import the config/prod.secret.exs
@@ -65,3 +65,11 @@ import_config "prod.secret.exs"
 
 # Modules
 config :online_editor, :file_module, File
+
+# Ecto
+config :online_editor, OnlineEditor.Repo,
+  adapter: Ecto.Adapters.Postgres,
+  url: "${DATABASE_URL}",
+  database: "",
+  ssl: true,
+  pool_size: 10
