@@ -1,6 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, Reducer } from 'redux'
 import { routerReducer, routerMiddleware, RouterState } from 'react-router-redux'
-import promiseMiddleware from 'redux-promise-middleware'
 
 import documentReducer, { DocumentReducerState } from 'reducers/documents'
 import { history, router } from 'reducers/router'
@@ -35,4 +34,4 @@ export const rootReducer: Reducer<RootState> = combineReducers({
   })
 })
 
-export const store = createStore(rootReducer, applyMiddleware(reactRouterMiddleware, promiseMiddleware()))
+export const store = createStore(rootReducer, applyMiddleware(reactRouterMiddleware))
