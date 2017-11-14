@@ -9,6 +9,7 @@
     "jsx": "react",
     "moduleResolution": "node",
     "baseUrl": "src",
+    "types": ["node"],
     "paths": {
       "actions": ["actions/*"],
       "constants": ["constants/*"],

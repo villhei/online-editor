@@ -48,10 +48,11 @@ const lessLoader = {
   }
 }
 
-const entryPoints = ['react-hot-loader/patch', './styles/app.less', './src/app.tsx']
+const entryPoints = ['./styles/app.less', './src/app.tsx']
 const config = {
   entry: isDev ? [
     'webpack-dev-server/client?' + PUBLIC_PATH,
+    'react-hot-loader/patch',
     'webpack/hot/only-dev-server'].concat(entryPoints) : entryPoints,
   output: {
     path: path.resolve(__dirname, '../priv/static'),
