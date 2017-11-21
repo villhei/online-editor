@@ -1,3 +1,5 @@
+///<reference types="webpack-env" />
+
 // Brunch automatically concatenates all files in your
 // watched paths. Those paths can be configured at
 // config.paths.watched in "brunch-config.js".
@@ -42,7 +44,7 @@ function render(Main: React.ComponentClass<any>) {
 render(Main)
 
 if (module.hot) {
-  console.log('hot modules')
+  console.log('Hot module reload)')
   module.hot.accept('./containers/Main', () => {
     const Next = require('./containers/Main').default
     render(Next)
