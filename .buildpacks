@@ -1,4 +1,4 @@
 https://github.com/gigalixir/gigalixir-buildpack-clean-cache.git
 https://github.com/HashNuke/heroku-buildpack-elixir
-https://github.com/mlankenau/heroku-buildpack-phoenix-webpack
+https://github.com/zzats/heroku-buildpack-phoenix-webpack
 https://github.com/gigalixir/gigalixir-buildpack-distillery.git
