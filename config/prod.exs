@@ -57,7 +57,7 @@ config :logger, level: :info
 # start per endpoint:
 #
 config :online_editor, OnlineEditorWeb.Endpoint,
-  server: true,
+  server: true, -
   secret_key_base: "${SECRET_KEY_BASE}"
 #
 
@@ -71,7 +71,7 @@ config :online_editor, :file_module, File
 # Ecto
 config :online_editor, OnlineEditor.Repo,
   adapter: Ecto.Adapters.Postgres,
-  url: "${DATABASE_URL}",
+  url: {:system, "${DATABASE_URL}"},
   database: "",
   ssl: true,
-  pool_size: 10
+  pool_size: 1
