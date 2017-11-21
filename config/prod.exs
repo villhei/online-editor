@@ -57,7 +57,7 @@ config :logger, level: :info
 # start per endpoint:
 #
 config :online_editor, OnlineEditorWeb.Endpoint,
-  server: true, -
+  server: true,
   secret_key_base: "${SECRET_KEY_BASE}"
 #
 
