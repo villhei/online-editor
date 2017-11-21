@@ -7,7 +7,7 @@ const Uglify = require('uglifyjs-webpack-plugin')
 
 module.exports = merge(baseConfig, {
   plugins: [
-    new CleanWebpackPlugin(['/priv/static'], {
+    new CleanWebpackPlugin(['priv/static'], {
       root: path.join(__dirname, '..')
     }),
     new Uglify()
