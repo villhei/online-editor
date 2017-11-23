@@ -11,6 +11,12 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     name: "title"
   }
 
+  @no_content_document %{
+    content: "",
+    owner: "owner",
+    name: "title"
+  }
+
   @empty_document %{}
 
   @invalid_document %{
@@ -45,6 +51,13 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
   test "POST 200 - create path allows creating documents", %{conn: conn} do
     conn = post(conn, "/api/documents", @example_document)
     document =  Repo.get_by(Document, @example_document)
+    assert document
+    assert json_response(conn, 200) == render_json("show.json", document: document)
+  end
+
+  test "POST 200 - create path allows creating documents without content", %{conn: conn} do
+    conn = post(conn, "/api/documents", @no_content_document)
+    document =  Repo.get_by(Document, @no_content_document)
     assert document
     assert json_response(conn, 200) == render_json("show.json", document: document)
   end

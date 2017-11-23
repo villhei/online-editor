@@ -5,7 +5,7 @@ import { connect, Dispatch } from 'react-redux'
 import Main from 'components/Main'
 import Navigation from 'components/Navigation'
 import Footer from 'components/Footer'
-import FileList from 'components/FileList'
+import FileList from 'containers/FileList'
 import Editor from 'containers/Editor'
 import { TextDocument } from 'service/document-service'
 
@@ -26,9 +26,7 @@ export default (props: Props) => {
         <div className='ui twelve wide centered column without padding'>
           <ConnectedSwitch>
             <Route path={'/edit/:documentId'} component={Editor} />
-            <Route exact path='/' render={() =>
-              <FileList documents={documents}
-              />} />
+            <Route exact path='/' component={FileList} />
           </ConnectedSwitch>
         </div>
       </div>

@@ -1,7 +1,7 @@
 import { Action } from 'redux'
 import { TextDocument } from 'service/document-service'
 import actionCreatorFactory from 'typescript-fsa'
-import { ACTION_GET_DOCUMENT, ACTION_GET_DOCUMENTS } from 'constants/document'
+import { ACTION_GET_DOCUMENT, ACTION_GET_DOCUMENTS, ACTION_CREATE_DOCUMENT } from 'constants/document'
 import documentReducer, { initialState, DocumentReducerState } from './documents'
 
 const actionFactory = actionCreatorFactory()
@@ -28,11 +28,20 @@ const modifiedDocument: TextDocument = {
   content: 'modified content'
 }
 
+const newDocument: TextDocument = {
+  id: 'newId',
+  name: '',
+  owner: 'barguy',
+  content: '',
+  inserted_at: new Date().toISOString(),
+  updated_at: new Date().toISOString()
+}
 const documents = [
   document,
   other
 ]
 
+const createDocument = actionFactory.async<{}, typeof document>(ACTION_CREATE_DOCUMENT)
 const getDocuments = actionFactory.async<{}, typeof documents>(ACTION_GET_DOCUMENTS)
 const getDocument = actionFactory.async<{}, typeof document>(ACTION_GET_DOCUMENT)
 
@@ -60,5 +69,12 @@ describe('Document reducer', () => {
     const action = getDocument.done({ params: {}, result: modifiedDocument })
     const modifiedState = documentReducer(state, action)
     expect(modifiedState.all).toEqual([modifiedDocument, other])
+  })
+
+  it('should save the crated document to the state', () => {
+    const action = createDocument.done({ params: {}, result: newDocument })
+    const modifiedState = documentReducer(initialState, action)
+    expect(modifiedState.all).toEqual([newDocument])
+    expect(modifiedState.byId[newDocument.id]).toEqual(newDocument)
   })
 })

@@ -7,7 +7,7 @@ defmodule OnlineEditor.Document do
   alias OnlineEditor.Document
 
   schema "documents" do
-    field :content, :string
+    field :content, :string, default: ""
     field :name, :string
     field :owner, :string
 
@@ -17,7 +17,9 @@ defmodule OnlineEditor.Document do
   @doc false
   def changeset(%Document{} = document, attrs) do
     document
+    |> change(%{})
+    |> Map.put(:empty_values, [""])
     |> cast(attrs, [:name, :owner, :content])
-    |> validate_required([:name, :owner, :content])
+    |> validate_required([:name, :owner])
   end
 end

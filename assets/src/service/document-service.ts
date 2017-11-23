@@ -11,6 +11,14 @@ export type TextDocument = {
   readonly updated_at: string
 }
 
+export function create(): Promise<TextDocument> {
+  return axios.post<Promise<TextDocument>>('/api/documents', {
+    content: '',
+    owner: 'fooguy',
+    name: 'new document'
+  }).then(response => response.data)
+}
+
 export function getAll(): Promise<Array<TextDocument>> {
   return axios.get<Array<TextDocument>>('/api/documents').then(response => response.data)
 }
