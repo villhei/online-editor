@@ -14,6 +14,7 @@
       "actions": ["actions/*"],
       "constants": ["constants/*"],
       "containers":["containers/*"],
+      "components": ["components/*"],
       "service": ["service/*"],
       "reducers": ["reducers/*"],
       "mocks": ["mocks"]

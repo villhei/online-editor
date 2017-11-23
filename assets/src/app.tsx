@@ -21,7 +21,7 @@ import * as ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
 import { AppContainer } from 'react-hot-loader'
-import Main from 'containers/Main'
+import MainContainer from 'containers/Main'
 import { store } from './reducer'
 import { history } from 'reducers/router'
 
@@ -41,10 +41,10 @@ function render(Main: React.ComponentClass<any>) {
   return ReactDOM.render(reactApplication, main)
 
 }
-render(Main)
+render(MainContainer)
 
 if (module.hot) {
-  console.log('Hot module reload)')
+  console.log('** HMR triggered for ' + module)
   module.hot.accept('./containers/Main', () => {
     const Next = require('./containers/Main').default
     render(Next)

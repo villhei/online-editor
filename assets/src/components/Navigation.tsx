@@ -27,7 +27,7 @@ export default class Navigation extends React.Component<NavigationProps, any> {
           <div onClick={toggleNavigation} className={menuButtonClasses}>
             <i className='ui icon share folder' />My Files <i className='dropdown icon'></i>
             <div className={menuClasses}>
-              {!documents.length && 'No documents'}
+              {!documents.length && <div className='item'>No documents</div>}
               {documents.map(({ id, name }) => <Link key={id} to={`/edit/${id}`} className='item'>{name}</Link>)}
             </div>
           </div>

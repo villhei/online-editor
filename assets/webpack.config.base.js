@@ -39,6 +39,7 @@ const config = {
       actions: sourcePath('actions'),
       constants: sourcePath('constants'),
       containers: sourcePath('containers'),
+      components: sourcePath('components'),
       service: sourcePath('service'),
       mocks: sourcePath('mocks'),
       reducers: sourcePath('reducers')

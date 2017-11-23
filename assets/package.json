@@ -82,6 +82,7 @@
       "^actions(.*)$": "<rootDir>/src/actions/$1",
       "^constants(.*)$": "<rootDir>/src/constants/$1",
       "^containers(.*)$": "<rootDir>/src/containers/$1",
+      "^components(.*)$": "<rootDir>/src/components/$1",
       "^service(.*)$": "<rootDir>/src/service/$1",
       "^reducers(.*)$": "<rootDir>/src/reducers/$1",
       "mocks": "mocks"

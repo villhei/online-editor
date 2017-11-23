@@ -1,7 +1,7 @@
 import * as React from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../../reducer'
+import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
 import { updatedocumentContent } from 'actions/editor-actions'
 import { TextDocument, TextDocumentId } from 'service/document-service'

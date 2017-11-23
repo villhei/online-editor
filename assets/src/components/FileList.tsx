@@ -1,12 +1,12 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { RootState } from '../../../reducer'
+import { RootState } from '../reducer'
 import { TextDocument } from 'service/document-service'
 
-type FileListProps = {
+type Props = {
   documents: RootState['model']['documents']['all']
 }
-export default class FileList extends React.Component<FileListProps, any> {
+export default class FileList extends React.Component<Props, any> {
 
   render() {
     const { documents } = this.props

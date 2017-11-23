@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-var webpack = require('webpack')
-var WebpackDevServer = require('webpack-dev-server')
-var config = require('./webpack.config')
+const webpack = require('webpack')
+const WebpackDevServer = require('webpack-dev-server')
+const config = require('./webpack.config.dev')
 
 new WebpackDevServer(webpack(config), {
   proxy: { '*': 'http://localhost:4040' },
