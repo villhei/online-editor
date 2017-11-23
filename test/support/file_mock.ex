@@ -1,6 +1,8 @@
 defmodule OnlineEditorWeb.Test.FileMock do
 
-  def read!("priv/static/index.html") do
+  @index Application.app_dir(:online_editor, "/priv/static/index.html")
+
+  def read!(@index) do
     """
     <html>
       <title>app_title</h1>
@@ -9,22 +11,9 @@ defmodule OnlineEditorWeb.Test.FileMock do
     """
   end
 
-  def read!("priv/static/js/app.js") do
-    """
-    const jsContent = 'awesome js'
-    """
-  end
-
-  def read("priv/static/css/style.css") do
-    file = """
-    body {
-      background: black;
-    }
-    """
-    {:ok, file}
-  end
-
-  def read(_) do
-    {:error, :enoent}
+  def read(p) do
+    {:error, {
+      :enoent, p
+    }}
   end
 end
