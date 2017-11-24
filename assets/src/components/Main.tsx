@@ -28,7 +28,7 @@ export default (props: Props) => {
     </Navigation>
     <div className='ui padded equal full height grid'>
       <div className='ui full height row without padding'>
-        <div className='ui twelve wide centered column without padding'>
+        <div className='ui twelve wide computer sixteen wide tablet centered column without padding'>
           <ConnectedSwitch>
             <Route path={'/edit/:documentId'} component={Editor} />
             <Route exact path='/' component={FileList} />
