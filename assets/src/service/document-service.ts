@@ -19,10 +19,14 @@ export function create(): Promise<TextDocument> {
   }).then(response => response.data)
 }
 
+export function update(document: TextDocument): Promise<TextDocument> {
+  return axios.put<TextDocument>('/api/documents/' + document.id, document).then(res => res.data)
+}
+
 export function getAll(): Promise<Array<TextDocument>> {
-  return axios.get<Array<TextDocument>>('/api/documents').then(response => response.data)
+  return axios.get<Array<TextDocument>>('/api/documents').then(res => res.data)
 }
 
 export function getById(id: number | string): Promise<TextDocument> {
-  return axios.get<TextDocument>(`/api/documents/${id}`).then(response => response.data)
+  return axios.get<TextDocument>(`/api/documents/${id}`).then(res => res.data)
 }

@@ -3,7 +3,7 @@ import { Controlled as CodeMirror } from 'react-codemirror2'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
-import { updatedocumentContent } from 'actions/editor-actions'
+import { updatedocumentContent, resetDocumentChanges } from 'actions/editor-actions'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 import 'codemirror/mode/markdown/markdown'
 
@@ -21,6 +21,7 @@ const EDITOR_OPTIONS = {
 export type EditorProps = {
   getDocument: (id: string) => Promise<TextDocument>,
   updatedocumentContent: (value: string) => any,
+  resetDocumentChanges: () => any,
   documentId: string,
   documentValue: string
 }
@@ -29,6 +30,13 @@ class Editor extends React.Component<EditorProps, any> {
   componentDidMount() {
     const { documentId, getDocument } = this.props
     getDocument(documentId)
+  }
+
+  componentWillReceiveProps(nextProps: EditorProps) {
+    if(nextProps.documentId !== this.props.documentId) {
+      this.props.resetDocumentChanges()
+    }
+
   }
 
   render() {
@@ -58,7 +66,8 @@ const mapStateToProps = ({ model, state }: RootState, ownProps: any) => {
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
     getDocument: (id: string) => getDocument(dispatch, { id }),
-    updatedocumentContent: (value: string) => dispatch(updatedocumentContent({ value }))
+    updatedocumentContent: (value: string) => dispatch(updatedocumentContent({ value })),
+    resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined))
   }
 }
 

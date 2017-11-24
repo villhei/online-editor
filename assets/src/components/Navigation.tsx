@@ -21,7 +21,7 @@ export default class Navigation extends React.Component<NavigationProps, any> {
     return (
       <div className='ui fixed inverted menu'>
         <div className='ui container'>
-          <Link to='/' className='header item'>
+          <Link to='/' className='ui item'>
             <i className='ui icon file text outline' />
           </Link>
           <div onClick={toggleNavigation} className={menuButtonClasses}>
@@ -32,6 +32,7 @@ export default class Navigation extends React.Component<NavigationProps, any> {
             </div>
           </div>
           <Link to='/other' className='item' href='#'><i className='ui icon share alternate' />Share</Link>
+          {this.props.children}
         </div>
       </div >)
   }

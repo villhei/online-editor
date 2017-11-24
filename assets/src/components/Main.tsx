@@ -5,6 +5,7 @@ import { connect, Dispatch } from 'react-redux'
 import Main from 'components/Main'
 import Navigation from 'components/Navigation'
 import Footer from 'components/Footer'
+import EditorToolbar from 'containers/EditorToolbar'
 import FileList from 'containers/FileList'
 import Editor from 'containers/Editor'
 import { TextDocument } from 'service/document-service'
@@ -20,7 +21,11 @@ export default (props: Props) => {
   return <div className='ui full height'>
     <Navigation documents={documents}
       showNavigation={navigationOpen}
-      toggleNavigation={toggleNavigation} />
+      toggleNavigation={toggleNavigation} >
+      <ConnectedSwitch>
+        <Route path={'/edit/:documentId'} component={EditorToolbar} />
+      </ConnectedSwitch>
+    </Navigation>
     <div className='ui padded equal full height grid'>
       <div className='ui full height row without padding'>
         <div className='ui twelve wide centered column without padding'>
@@ -31,5 +36,5 @@ export default (props: Props) => {
         </div>
       </div>
     </div>
-  </div>
+  </div >
 }
