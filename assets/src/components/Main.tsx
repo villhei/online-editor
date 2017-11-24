@@ -18,7 +18,7 @@ type Props = {
 
 export default (props: Props) => {
   const { documents, navigationOpen, toggleNavigation } = props
-  return <div className='ui full height'>
+  return <div className='ui full height with padding'>
     <Navigation documents={documents}
       showNavigation={navigationOpen}
       toggleNavigation={toggleNavigation} >
