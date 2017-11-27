@@ -10,6 +10,10 @@ export type NavigationProps = {
 }
 
 export default class Navigation extends React.Component<NavigationProps, any> {
+  supressClickEvent = (event: React.MouseEvent<HTMLDivElement>) => {
+    event.stopPropagation()
+  }
+
   render() {
     const { documents, showNavigation, toggleNavigation } = this.props
     const menuButtonClasses = classNames('ui dropdown item', {
@@ -26,7 +30,7 @@ export default class Navigation extends React.Component<NavigationProps, any> {
           </Link>
           <div onClick={toggleNavigation} className={menuButtonClasses}>
             <i className='ui icon share folder' />My Files <i className='dropdown icon'></i>
-            <div className={menuClasses}>
+            <div className={menuClasses} onClick={this.supressClickEvent} >
               {!documents.length && <div className='item'>No documents</div>}
               {documents.map(({ id, name }) => <Link key={id} to={`/edit/${id}`} className='item'>{name}</Link>)}
             </div>

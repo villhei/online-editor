@@ -36,7 +36,6 @@ class Editor extends React.Component<EditorProps, any> {
     if(nextProps.documentId !== this.props.documentId) {
       this.props.resetDocumentChanges()
     }
-
   }
 
   render() {
