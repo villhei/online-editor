@@ -42,6 +42,18 @@ defmodule OnlineEditorWeb.DocumentController do
     end
   end
 
+  def delete(conn, %{"id" => id}) do
+    with %Document{} = document <- Repo.get(Document, id),
+         {:ok, document} <- Repo.delete(document)
+         do
+            send_resp(conn, :no_content, "")
+    else
+      {:error, _} -> conn |> respond_with_error(400, "400.json")
+      nil         -> conn |> respond_with_error(404, "404.json")
+      _           -> conn |> respond_with_error(500, "500.json")
+    end
+  end
+
   defp respond_show(conn, document) do
     conn
     |> put_status(200)

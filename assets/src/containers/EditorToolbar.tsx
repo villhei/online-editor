@@ -2,13 +2,14 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { resetDocumentChanges } from 'actions/editor-actions'
-import { updateDocument, getDocument } from 'actions/document-actions'
+import { updateDocument, getDocument, deleteAndRefresh } from 'actions/document-actions'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 
 export type Props = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
   updateDocument: (document: TextDocument) => any,
   resetDocumentChanges: () => any,
+  deleteAndRefresh: (id: TextDocumentId) => any,
   documentId: string,
   document: TextDocument,
   modifiedContent: string | null
@@ -23,6 +24,10 @@ class EditorActions extends React.Component<Props, any> {
   refreshDocument = () => {
     this.props.getDocument(this.props.documentId)
     this.props.resetDocumentChanges()
+  }
+
+  deleteDocument = () => {
+    this.props.deleteAndRefresh(this.props.documentId)
   }
 
   updatedocument = () => {
@@ -43,7 +48,7 @@ class EditorActions extends React.Component<Props, any> {
       <div className='ui item'>
         <i onClick={this.refreshDocument} className='ui icon refresh text outline' />
         <i onClick={this.updatedocument} className='ui icon save text outline' />
-        <i className='ui icon delete text outline' />
+        <i onClick={this.deleteDocument} className='ui icon delete text outline' />
       </div>
     )
   }
@@ -64,7 +69,10 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
     getDocument: (id: TextDocumentId) => getDocument(dispatch, { id }),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
-    updateDocument: (document: TextDocument) => updateDocument(dispatch, document)
+    updateDocument: (document: TextDocument) => updateDocument(dispatch, document),
+    deleteAndRefresh: (id: TextDocumentId) => {
+      dispatch(deleteAndRefresh({ id }))
+    }
   }
 }
 

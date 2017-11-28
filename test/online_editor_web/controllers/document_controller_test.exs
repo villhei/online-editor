@@ -84,4 +84,15 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     conn = put(conn, "/api/documents/#{document.id}", @invalid_document)
     assert json_response(conn, 400) == ErrorView.render("400.json")
   end
+
+  test "DELETE 204 - delete path allows deleting documents", %{conn: conn} do
+    document = insert(:document)
+    conn = delete(conn, "/api/documents/#{document.id}")
+    body = response(conn, 204)
+  end
+
+  test "DELETE 404 - delete path returns an error on missing document", %{conn: conn} do
+    conn = delete(conn, "/api/documents/#{UUID.uuid4()}")
+    assert json_response(conn, 404) == ErrorView.render("404.json")
+  end
 end

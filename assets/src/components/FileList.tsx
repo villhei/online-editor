@@ -8,7 +8,6 @@ type Props = {
   createDocument: () => void
 }
 export default class FileList extends React.Component<Props, any> {
-
   render() {
     const { documents, createDocument } = this.props
     return (
@@ -27,6 +26,5 @@ export default class FileList extends React.Component<Props, any> {
           }
         </div>
       </div>)
-
   }
 }

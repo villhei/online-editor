@@ -27,6 +27,10 @@ export function getAll(): Promise<Array<TextDocument>> {
   return axios.get<Array<TextDocument>>('/api/documents').then(res => res.data)
 }
 
-export function getById(id: number | string): Promise<TextDocument> {
+export function getById(id: TextDocumentId): Promise<TextDocument> {
   return axios.get<TextDocument>(`/api/documents/${id}`).then(res => res.data)
+}
+
+export function deleteById(id: TextDocumentId): Promise<void> {
+  return axios.delete('/api/documents/' + id).then(res => res.data)
 }

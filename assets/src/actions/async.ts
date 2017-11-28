@@ -13,7 +13,7 @@ export function wrapAsyncWorker<P, S, E>(
     }, error => {
       dispatch(asyncAction.failed({ params, error }))
       throw error
-    });
+    })
   }
 }
 
