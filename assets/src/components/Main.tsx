@@ -17,7 +17,7 @@ type Props = {
 
 export default (props: Props) => {
   const { documents, navigationOpen, toggleNavigation } = props
-  return <div className='ui main height with padding'>
+  return <div className='ui main full height with padding'>
     <Navigation documents={documents}
       showNavigation={navigationOpen}
       toggleNavigation={toggleNavigation} >
@@ -27,7 +27,7 @@ export default (props: Props) => {
     </Navigation>
     <div className='ui padded equal full height grid'>
       <div className='ui full height row'>
-        <section className='ui twelve wide computer sixteen wide tablet centered blue column without padding'>
+        <section className='ui twelve wide computer sixteen wide tablet centered column without padding'>
           <ConnectedSwitch>
             <Route path={'/edit/:documentId'} component={Editor} />
             <Route exact path='/' component={FileList} />

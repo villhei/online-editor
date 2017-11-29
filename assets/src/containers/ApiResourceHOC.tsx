@@ -1,5 +1,6 @@
 
 import * as React from 'react'
+import Loading from 'components/Loading'
 import { ApiResource, ResourceStatus } from 'service/common'
 
 export interface ApiResourceProps<T> {
@@ -32,12 +33,7 @@ export default function wrapApiResource<T, P>
       else if (resource && resource !== ResourceStatus.Loading) {
         return <Component {...this.props } />
       } else {
-        return (<div className='ui segment'>
-          <p></p>
-          <div className='ui active inverted dimmer'>
-            <div className='ui loader'></div>
-          </div>
-        </div>)
+        return (<Loading />)
       }
     }
   }
