@@ -11,6 +11,10 @@ export type TextDocument = {
   readonly updated_at: string
 }
 
+export type PartialTextDocument = {
+  [P in keyof TextDocument]?: TextDocument[P]
+}
+
 export function create(): Promise<TextDocument> {
   return axios.post<Promise<TextDocument>>('/api/documents', {
     content: '',
@@ -19,8 +23,8 @@ export function create(): Promise<TextDocument> {
   }).then(response => response.data)
 }
 
-export function update(document: TextDocument): Promise<TextDocument> {
-  return axios.put<TextDocument>('/api/documents/' + document.id, document).then(res => res.data)
+export function update(id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {
+  return axios.put<TextDocument>('/api/documents/' + id, document).then(res => res.data)
 }
 
 export function getAll(): Promise<Array<TextDocument>> {

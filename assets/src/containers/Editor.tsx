@@ -4,7 +4,9 @@ import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
 import { updatedocumentContent, resetDocumentChanges } from 'actions/editor-actions'
+import { ApiResource } from 'service/common'
 import { TextDocument, TextDocumentId } from 'service/document-service'
+import wrapApiResource, { ApiResourceProps } from 'containers/ApiResourceHOC'
 import 'codemirror/mode/markdown/markdown'
 
 const EDITOR_OPTIONS = {
@@ -19,32 +21,28 @@ const EDITOR_OPTIONS = {
 }
 
 export type EditorProps = {
-  getDocument: (id: string) => Promise<TextDocument>,
-  updatedocumentContent: (value: string) => any,
+  getResource: (id: string) => Promise<TextDocument>,
+  updateDocumentContent: (value: string) => any,
   resetDocumentChanges: () => any,
-  documentId: string,
-  documentValue: string
+  resourceId: string,
+  resource: TextDocument,
+  modifiedContent: string
 }
 
-class Editor extends React.Component<EditorProps, any> {
-  componentDidMount() {
-    const { documentId, getDocument } = this.props
-    getDocument(documentId)
-  }
-
+class Editor extends React.PureComponent<EditorProps> {
   componentWillReceiveProps(nextProps: EditorProps) {
-    if(nextProps.documentId !== this.props.documentId) {
+    if (nextProps.resourceId !== this.props.resourceId) {
       this.props.resetDocumentChanges()
     }
   }
 
   render() {
-    const { documentValue, updatedocumentContent } = this.props
+    const { resource, updateDocumentContent, modifiedContent } = this.props
     return <CodeMirror
       className='ui full height without padding'
-      value={documentValue}
+      value={modifiedContent || resource.content}
       onBeforeChange={(editor, data, value) => {
-        updatedocumentContent(value)
+        updateDocumentContent(value)
       }}
       onChange={(editor, metadata, value) => {
       }}
@@ -53,21 +51,23 @@ class Editor extends React.Component<EditorProps, any> {
 }
 
 const mapStateToProps = ({ model, state }: RootState, ownProps: any) => {
-  const documentId: TextDocumentId = ownProps.match.params.documentId
-  const document: TextDocument | undefined = model.documents.byId[documentId]
-  const documentValue = state.editor.modifiedContent || (document && document.content) || ''
+  const resourceId: TextDocumentId = ownProps.match.params.documentId
+  const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
+  const { modifiedContent } = state.editor
   return {
-    documentValue,
-    documentId
+    resource,
+    resourceId,
+    modifiedContent
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getDocument: (id: string) => getDocument(dispatch, { id }),
-    updatedocumentContent: (value: string) => dispatch(updatedocumentContent({ value })),
+    getResource: (id: string) => getDocument(dispatch, { id }),
+    updateDocumentContent: (value: string) => dispatch(updatedocumentContent({ value })),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined))
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Editor)
+export default connect(mapStateToProps, mapDispatchToProps)
+  (wrapApiResource<TextDocument, EditorProps>(Editor))

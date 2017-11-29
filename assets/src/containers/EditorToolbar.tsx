@@ -3,15 +3,16 @@ import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { resetDocumentChanges } from 'actions/editor-actions'
 import { updateDocument, getDocument, deleteAndRefresh } from 'actions/document-actions'
-import { TextDocument, TextDocumentId } from 'service/document-service'
+import { ApiResource } from 'service/common'
+import { TextDocument, PartialTextDocument, TextDocumentId } from 'service/document-service'
 
 export type Props = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
-  updateDocument: (document: TextDocument) => any,
+  updateDocument: (id: TextDocumentId, document: PartialTextDocument) => any,
   resetDocumentChanges: () => any,
   deleteAndRefresh: (id: TextDocumentId) => any,
   documentId: string,
-  document: TextDocument,
+  document: ApiResource<TextDocument>,
   modifiedContent: string | null
 }
 
@@ -31,13 +32,12 @@ class EditorActions extends React.Component<Props, any> {
   }
 
   updatedocument = () => {
-    const { modifiedContent, document } = this.props
+    const { modifiedContent, document, documentId } = this.props
     if (modifiedContent && document) {
       const modifiedDocument = {
-        ...document,
         content: modifiedContent
       }
-      this.props.updateDocument(modifiedDocument)
+      this.props.updateDocument(documentId, modifiedDocument)
     }
   }
 
@@ -56,7 +56,7 @@ class EditorActions extends React.Component<Props, any> {
 
 const mapStateToProps = ({ model, state }: RootState, ownProps: any) => {
   const documentId: TextDocumentId = ownProps.match.params.documentId
-  const document: TextDocument | undefined = model.documents.byId[documentId]
+  const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
   const modifiedContent = state.editor.modifiedContent
   return {
     document,
@@ -69,7 +69,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
     getDocument: (id: TextDocumentId) => getDocument(dispatch, { id }),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
-    updateDocument: (document: TextDocument) => updateDocument(dispatch, document),
+    updateDocument: (id: TextDocumentId, document: PartialTextDocument) => updateDocument(dispatch, { id, document }),
     deleteAndRefresh: (id: TextDocumentId) => {
       dispatch(deleteAndRefresh({ id }))
     }

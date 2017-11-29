@@ -1,9 +1,11 @@
 import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
 import { createDocumentAction, getDocumentAction, getDocumentsAction } from 'actions/document-actions'
+import { ApiResource, ResourceStatus } from 'service/common'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 
-type DocumentMap = { [id: string]: TextDocument }
+type DocumentMap = { [id: string]: ApiResource<TextDocument> }
+
 export type DocumentReducerState = {
   byId: DocumentMap,
   all: Array<TextDocument>
@@ -49,6 +51,27 @@ export default function documentReducer(state: DocumentReducerState = initialSta
       ...state,
       byId,
       all: documents
+    }
+  }
+  if (isType(action, getDocumentAction.started)) {
+    const id = action.payload.id
+    return {
+      ...state,
+      byId: {
+        ...state.byId,
+        [id]: ResourceStatus.Loading
+      }
+    }
+  }
+  if (isType(action, getDocumentAction.failed)) {
+    const id = action.payload.params.id
+    const error = action.payload.error
+    return {
+      ...state,
+      byId: {
+        ...state.byId,
+        [id]: ResourceStatus.NotFound
+      }
     }
   }
   if (isType(action, getDocumentAction.done)) {
