@@ -36,6 +36,10 @@ class Editor extends React.PureComponent<EditorProps> {
     }
   }
 
+  componentDidMount() {
+    this.props.resetDocumentChanges()
+  }
+
   render() {
     const { resource, updateDocumentContent, modifiedContent } = this.props
     return <CodeMirror

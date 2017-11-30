@@ -10,6 +10,7 @@ export const initialState: PageState = {
   navigationOpen: false
 }
 
+
 export default function pageReducer(state: PageState = initialState, action: Action): PageState {
   if (isType(action, toggleMenu)) {
     if (action.payload.menu === 'navigation') {

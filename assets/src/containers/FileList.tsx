@@ -2,7 +2,7 @@ import * as React from 'react'
 import { Route, Switch } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
-import { createDocument } from 'actions/document-actions'
+import { createAndSelect } from 'actions/editor-actions'
 import FileList from 'components/FileList'
 
 type Props = {
@@ -30,7 +30,7 @@ const mapStateToProps = ({ model }: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    createDocument: () => createDocument(dispatch, undefined)
+    createDocument: () => dispatch(createAndSelect())
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(FileListContainer)

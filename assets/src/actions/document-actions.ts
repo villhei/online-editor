@@ -8,7 +8,6 @@ import {
 
 import actionCreatorFactory from 'typescript-fsa'
 import { wrapAsyncWorker } from './async'
-import { bindThunkAction, isSuccess, isFailure } from 'typescript-fsa-redux-thunk'
 
 import {
   update,
@@ -46,8 +45,3 @@ export const getDocument = wrapAsyncWorker(getDocumentAction, (params: DocumentB
 export const getDocuments = wrapAsyncWorker(getDocumentsAction, getAll)
 export const updateDocument = wrapAsyncWorker(updateDocumentAction, (params: UpdateDocumentParams) => update(params.id, params.document))
 export const deleteDocument = wrapAsyncWorker(deleteDocumentAction, (params: DocumentByIdParams) => deleteById(params.id))
-
-export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (params, dispatch): Promise<void> => {
-  await deleteById(params.id)
-  getDocuments(dispatch, undefined)
-})

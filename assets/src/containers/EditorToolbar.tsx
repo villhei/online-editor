@@ -1,8 +1,8 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
-import { resetDocumentChanges } from 'actions/editor-actions'
-import { updateDocument, getDocument, deleteAndRefresh } from 'actions/document-actions'
+import { resetDocumentChanges, deleteAndRefresh } from 'actions/editor-actions'
+import { updateDocument, getDocument } from 'actions/document-actions'
 import { ApiResource } from 'service/common'
 import { TextDocument, PartialTextDocument, TextDocumentId } from 'service/document-service'
 
