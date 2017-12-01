@@ -3,10 +3,11 @@ defmodule OnlineEditorWeb.DocumentController do
 
   alias OnlineEditor.Document
   alias OnlineEditor.Repo
+  alias OnlineEditor.Document.Query
   alias OnlineEditorWeb.ErrorView
 
   def index(conn, _params) do
-    documents = Repo.all(Document)
+    documents = Query.descriptions()
     render(conn, "index.json", documents: documents)
   end
 

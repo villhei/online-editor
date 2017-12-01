@@ -35,7 +35,7 @@ export default class FileList extends React.Component<Props, any> {
               <Link className='ui padded card' key={document.id} to={`/edit/${document.id}`} >
                 <div className='ui left aligned small header'><i className='file icon' />{document.name}</div>
                 <div className='ui divider' />
-                {document.updated_at}
+                {new Date(document.updated_at).toLocaleString()}
               </Link>))
           }
         </div>

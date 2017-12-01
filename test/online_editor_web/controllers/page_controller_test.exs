@@ -1,6 +1,5 @@
 defmodule OnlineEditorWeb.PageControllerTest do
   use OnlineEditorWeb.ConnCase
-  import OnlineEditorWeb.PageController
 
   test "GET /", %{conn: conn} do
     conn = get conn, "/"

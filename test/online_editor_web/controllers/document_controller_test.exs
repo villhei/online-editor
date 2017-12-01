@@ -34,7 +34,7 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
   test "GET 200 - index path returns the list of all documents", %{conn: conn} do
     document = insert(:document)
     conn = get(conn, "/api/documents/")
-    assert json_response(conn, 200) == render_json("index.json", documents: [document])
+    assert json_response(conn, 200) == render_json("index.json", documents: [%{document | content: ""}])
   end
 
   test "GET 200 - show path returns a single document", %{conn: conn} do
@@ -88,7 +88,7 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
   test "DELETE 204 - delete path allows deleting documents", %{conn: conn} do
     document = insert(:document)
     conn = delete(conn, "/api/documents/#{document.id}")
-    body = response(conn, 204)
+    assert response(conn, 204)
   end
 
   test "DELETE 404 - delete path returns an error on missing document", %{conn: conn} do
