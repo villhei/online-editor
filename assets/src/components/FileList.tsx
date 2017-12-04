@@ -23,7 +23,6 @@ function sortDocuments(documents: Array<TextDocument>, descending = true): Array
 
 export default class FileList extends React.Component<Props, any> {
   render() {
-    console.log('FileList rnrd')
     const { documents, createDocument } = this.props
     const sortedDocuments = sortDocuments(documents)
     return (

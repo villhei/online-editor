@@ -1,24 +1,26 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
-import { resetDocumentChanges, deleteAndRefresh } from 'actions/editor-actions'
-import { updateDocument, getDocument } from 'actions/document-actions'
+import { resetDocumentChanges, deleteAndRefresh, updateAndRefresh, updateDocumentName } from 'actions/editor-actions'
+import { getDocument } from 'actions/document-actions'
 import { ApiResource, ResourceStatus } from 'service/common'
 import { TextDocument, PartialTextDocument, TextDocumentId } from 'service/document-service'
-import EditorToolbar from 'components/toolbars/Editor'
+import EditorToolbarView from 'components/toolbars/Editor'
 
 export type Props = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
   updateDocument: (id: TextDocumentId, document: PartialTextDocument) => any,
   resetDocumentChanges: () => any,
   deleteAndRefresh: (id: TextDocumentId) => any,
+  updateDocumentName: (value: string) => any,
   documentId: string,
   document: ApiResource<TextDocument>,
-  modifiedContent: string | null,
+  modifiedContent: string | undefined,
+  modifiedName: string | undefined,
   documents: Array<TextDocument>
 }
 
-class EditorActions extends React.Component<Props, any> {
+class EditorToolbar extends React.Component<Props, any> {
   componentDidMount() {
     const { documentId, getDocument } = this.props
     getDocument(documentId)
@@ -33,42 +35,53 @@ class EditorActions extends React.Component<Props, any> {
     this.props.deleteAndRefresh(this.props.documentId)
   }
 
-  updateDocument = () => {
-    const { modifiedContent, document, documentId } = this.props
-    if (modifiedContent && document) {
+  updateDocumentContent = () => {
+    const { modifiedContent, modifiedName, document, documentId } = this.props
+    if (document && (modifiedContent || modifiedName)) {
       const modifiedDocument = {
-        content: modifiedContent
+        content: modifiedContent,
+        name: modifiedName
       }
       this.props.updateDocument(documentId, modifiedDocument)
     }
   }
 
+  updateDocumentName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    this.props.updateDocumentName(event.target.value)
+  }
+
   render() {
-    const { documentId, document, modifiedContent } = this.props
-    const saveDisabled = Boolean(!document || !modifiedContent)
+    const { documentId, document, modifiedContent, modifiedName, updateDocumentName } = this.props
+    const saveDisabled = Boolean(!document || !(modifiedContent || modifiedName))
     const commonProps = {
       refreshDocument: this.refreshDocument,
-      updateDocument: this.updateDocument,
-      deleteDocument: this.deleteDocument
+      updateDocument: this.updateDocumentContent,
+      deleteDocument: this.deleteDocument,
+      updateDocumentName: this.updateDocumentName,
+      saveDisabled,
     }
     if (document === ResourceStatus.Loading) {
-      return <EditorToolbar
+      return <EditorToolbarView
         title={'Loading...'}
+        disabled={true}
         {...commonProps}
       />
     } else if (document === ResourceStatus.NotFound) {
-      return <EditorToolbar
+      return <EditorToolbarView
         title={'Not found'}
+        disabled={true}
         {...commonProps}
       />
-    } else if (document.name) {
-      return <EditorToolbar
-        title={document.name}
+    } else if (document && document.name) {
+      return <EditorToolbarView
+        title={modifiedName === undefined ? document.name : modifiedName}
+        disabled={false}
         {...commonProps}
       />
     } else {
-      return <EditorToolbar
+      return <EditorToolbarView
         title={'Error'}
+        disabled={true}
         {...commonProps}
       />
     }
@@ -78,12 +91,13 @@ class EditorActions extends React.Component<Props, any> {
 const mapStateToProps = ({ model, state }: RootState, ownProps: any) => {
   const documentId: TextDocumentId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
-  const modifiedContent = state.editor.modifiedContent
+  const { modifiedContent, modifiedName } = state.editor
   const { documents } = ownProps
   return {
     document,
     documentId,
-    modifiedContent
+    modifiedContent,
+    modifiedName
   }
 }
 
@@ -91,11 +105,12 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
     getDocument: (id: TextDocumentId) => getDocument(dispatch, { id }),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
-    updateDocument: (id: TextDocumentId, document: PartialTextDocument) => updateDocument(dispatch, { id, document }),
+    updateDocument: (id: TextDocumentId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
+    updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
     deleteAndRefresh: (id: TextDocumentId) => {
       dispatch(deleteAndRefresh({ id }))
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditorActions)
+export default connect(mapStateToProps, mapDispatchToProps)(EditorToolbar)

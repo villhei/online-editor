@@ -43,13 +43,8 @@ function updateSingle(state: DocumentReducerState, document: TextDocument): Docu
 export default function documentReducer(state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
   if (isType(action, getDocumentsAction.done)) {
     const documents = action.payload.result
-    const byId: DocumentMap = documents.reduce((acc, document) => ({
-      ...acc,
-      [document.id]: document
-    }), {})
     return {
       ...state,
-      byId,
       all: documents
     }
   }

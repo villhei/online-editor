@@ -10,20 +10,14 @@ import Editor from 'containers/Editor'
 import { TextDocument } from 'service/document-service'
 
 type Props = {
-  documents: TextDocument[],
-  navigationOpen: boolean,
-  toggleNavigation: () => any,
+  documents: TextDocument[]
 }
 
 export default (props: Props) => {
-  const { documents, navigationOpen, toggleNavigation } = props
+  const { documents } = props
   return (<div className='ui main full height with padding'>
     <ConnectedSwitch>
-      <Route exact path='/' render={() => (
-        <MainToolbar documents={documents}
-          showNavigation={navigationOpen}
-          toggleNavigation={toggleNavigation} />)
-      } />} />
+      <Route exact path='/' component={MainToolbar} />
       <Route path={'/edit/:documentId'} component={EditorToolbar} />
     </ConnectedSwitch>
     <div className='ui padded equal full height grid'>

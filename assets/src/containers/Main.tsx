@@ -8,10 +8,8 @@ import { RootState } from '../reducer'
 import Main from 'components/Main'
 
 type Props = {
-  documents: RootState['model']['documents']['all'],
-  navigationOpen: boolean,
-  getDocuments: () => any,
-  toggleNavigation: () => any
+  documents: Array<TextDocument>,
+  getDocuments: () => any
 }
 
 class MainContainer extends React.Component<Props, any> {
@@ -19,32 +17,21 @@ class MainContainer extends React.Component<Props, any> {
     this.props.getDocuments()
   }
 
-  toggleNavigation = () => {
-    this.props.toggleNavigation()
-  }
-
   render() {
-    const { documents, navigationOpen } = this.props
-    return <Main
-      documents={documents}
-      toggleNavigation={this.toggleNavigation}
-      navigationOpen={navigationOpen} />
+    const { documents } = this.props
+    return <Main documents={documents} />
   }
 }
 
-
-
 const mapStateToProps = ({ model, ui }: RootState) => {
   return {
-    documents: model.documents.all,
-    navigationOpen: ui.page.navigationOpen
+    documents: model.documents.all
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getDocuments: () => getDocuments(dispatch, undefined),
-    toggleNavigation: (menu: string) => dispatch(toggleMenu({ menu: 'navigation' }))
+    getDocuments: () => getDocuments(dispatch, undefined)
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(MainContainer)

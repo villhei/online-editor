@@ -26,7 +26,7 @@ export type EditorProps = {
   resetDocumentChanges: () => any,
   resourceId: string,
   resource: TextDocument,
-  modifiedContent: string
+  modifiedContent: string | undefined
 }
 
 class Editor extends React.PureComponent<EditorProps> {
@@ -44,6 +44,7 @@ class Editor extends React.PureComponent<EditorProps> {
     const { resource, updateDocumentContent, modifiedContent } = this.props
     return <CodeMirror
       className='ui full height without padding'
+      autoFocus={true}
       value={modifiedContent || resource.content}
       onBeforeChange={(editor, data, value) => {
         updateDocumentContent(value)
