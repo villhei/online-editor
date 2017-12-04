@@ -50,9 +50,7 @@ defmodule OnlineEditorWeb.DocumentController do
          do
           conn |> respond_show(document)
     else
-       {:error, _} -> conn |> respond_with_error(400, "400.json")
-       nil         -> conn |> respond_with_error(404, "404.json")
-       _           -> conn |> respond_with_error(500, "500.json")
+      error -> handle_update_error(conn, error)
     end
   end
 
@@ -62,9 +60,15 @@ defmodule OnlineEditorWeb.DocumentController do
          do
             send_resp(conn, :no_content, "")
     else
-      {:error, _} -> conn |> respond_with_error(400, "400.json")
-      nil         -> conn |> respond_with_error(404, "404.json")
-      _           -> conn |> respond_with_error(500, "500.json")
+      error -> handle_update_error(conn, error)
+    end
+  end
+
+  defp handle_update_error(conn, cause) do
+    case cause do
+      {:error, _} -> respond_with_error(conn, 400, "400.json")
+      nil         -> respond_with_error(conn, 404, "404.json")
+      _           -> respond_with_error(conn, 500, "500.json")
     end
   end
 
