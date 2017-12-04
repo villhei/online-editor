@@ -30,6 +30,19 @@ defmodule OnlineEditorWeb.DocumentController do
     end
   end
 
+  def update(conn, %{"id" => id, "overwrite" => "false", "updated_at" => updated_at} = params) do
+    document = Repo.get(Document, id)
+    if(document.updated_at != updated_at) do
+      respond_with_error(conn, 409, "409.json")
+    else
+      update(conn, Map.drop(params, ["overwrite", "updated_at"]))
+    end
+  end
+
+  def update(conn, %{"overwrite" => "false"}) do
+    respond_with_error(conn, 400, "400.json", error: "updated_at is a required timestamp in document body")
+  end
+
   def update(conn, %{"id" => id} = params) do
     with %Document{} = document <- Repo.get(Document, id),
          changeset              <- Document.changeset(document, params),
@@ -45,7 +58,7 @@ defmodule OnlineEditorWeb.DocumentController do
 
   def delete(conn, %{"id" => id}) do
     with %Document{} = document <- Repo.get(Document, id),
-         {:ok, document} <- Repo.delete(document)
+         {:ok, _} <- Repo.delete(document)
          do
             send_resp(conn, :no_content, "")
     else

@@ -79,10 +79,34 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     assert json_response(conn, 404) == ErrorView.render("404.json")
   end
 
-  test "PUT 400 - update path returns an error on bad argumentsr", %{conn: conn} do
+  test "PUT 400 - update path returns an error on bad arguments", %{conn: conn} do
     document = insert(:document)
     conn = put(conn, "/api/documents/#{document.id}", @invalid_document)
     assert json_response(conn, 400) == ErrorView.render("400.json")
+  end
+
+  test "PUT 409 - update path returns an error if a newer version exists and overwrite is not wanted", %{conn: conn} do
+    document = insert(:document)
+    updated = %{content: "updated content"}
+    Repo.update(Document.changeset(document, updated))
+    payload =  %{content: "should no be allowed", updated_at: document.updated_at}
+    conn = put(conn, "/api/documents/#{document.id}?overwrite=false", payload)
+    assert json_response(conn, 409) == ErrorView.render("409.json")
+  end
+
+  test "PUT 200 - update path allows to update a document for which a later version does not exist", %{conn: conn} do
+    document = insert(:document)
+    updated = %{content: "updated content", updated_at: document.updated_at}
+    conn = put(conn, "/api/documents/#{document.id}?overwrite=false", updated)
+    body = json_response(conn, 200)
+    assert body["content"] == "updated content"
+  end
+
+  test "PUT 400 - update path requires updated_at on overwrite", %{conn: conn} do
+    document = insert(:document)
+    payload =  %{content: "should no be allowed"}
+    conn = put(conn, "/api/documents/#{document.id}?overwrite=false", payload)
+    assert json_response(conn, 400) == ErrorView.render("400.json", error: "updated_at is a required timestamp in document body")
   end
 
   test "DELETE 204 - delete path allows deleting documents", %{conn: conn} do

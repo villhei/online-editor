@@ -13,6 +13,10 @@ defmodule OnlineEditorWeb.ErrorView do
     %{"code" => 404, "message" => error}
   end
 
+  def render("409.json", _) do
+    %{"code" => 409, "message" => "A newer version of the resource exists"}
+  end
+
   def render("400.json", _) do
     render("400.json", %{error: "Bad request"})
   end
