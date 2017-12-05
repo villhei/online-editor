@@ -5,7 +5,7 @@ import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
 import { updatedocumentContent, resetDocumentChanges } from 'actions/editor-actions'
 import { ApiResource } from 'service/common'
-import { TextDocument, TextDocumentId } from 'service/document-service'
+import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
 import wrapApiResource, { ApiResourceProps } from 'containers/ApiResourceHOC'
 import 'codemirror/mode/markdown/markdown'
 
@@ -75,4 +75,4 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)
-  (wrapApiResource<TextDocument, EditorProps>(Editor))
+  (wrapApiResource<TextDocument, EditorProps>(isDocument)(Editor))

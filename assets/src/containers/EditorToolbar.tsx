@@ -4,7 +4,7 @@ import { RootState } from '../reducer'
 import { resetDocumentChanges, deleteAndRefresh, updateAndRefresh, updateDocumentName } from 'actions/editor-actions'
 import { getDocument } from 'actions/document-actions'
 import { ApiResource, ResourceStatus } from 'service/common'
-import { TextDocument, PartialTextDocument, TextDocumentId } from 'service/document-service'
+import { TextDocument, PartialTextDocument, TextDocumentId, isDocument } from 'service/document-service'
 import EditorToolbarView from 'components/toolbars/Editor'
 
 export type Props = {
@@ -37,10 +37,11 @@ class EditorToolbar extends React.Component<Props, any> {
 
   updateDocumentContent = () => {
     const { modifiedContent, modifiedName, document, documentId } = this.props
-    if (document && (modifiedContent || modifiedName)) {
+    if (isDocument(document) && (modifiedContent || modifiedName)) {
       const modifiedDocument = {
         content: modifiedContent,
-        name: modifiedName
+        name: modifiedName,
+        updated_at: document.updated_at
       }
       this.props.updateDocument(documentId, modifiedDocument)
     }

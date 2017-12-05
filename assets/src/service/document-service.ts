@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { AxiosResponse } from 'axios'
+import { ApiResource } from './common'
 
 export type TextDocumentId = string
 export type TextDocument = {
@@ -11,8 +12,24 @@ export type TextDocument = {
   readonly updated_at: string
 }
 
-export type PartialTextDocument = {
-  [P in keyof TextDocument]?: TextDocument[P]
+export type UpdatedStamp = {
+  readonly updated_at: string
+}
+export type P<T> = {
+  [P in keyof T]?: T[P]
+}
+
+export type PartialTextDocument = P<TextDocument> & UpdatedStamp
+
+export function isDocument(candidate: ApiResource<TextDocument>): candidate is TextDocument {
+  const document = <TextDocument>candidate
+  return Boolean(document &&
+    document.id &&
+    document.name &&
+    document.content &&
+    document.owner &&
+    document.inserted_at &&
+    document.updated_at)
 }
 
 export function create(): Promise<TextDocument> {
@@ -24,7 +41,7 @@ export function create(): Promise<TextDocument> {
 }
 
 export function update(id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {
-  return axios.put<TextDocument>('/api/documents/' + id, document).then(res => res.data)
+  return axios.put<TextDocument>(`/api/documents/${id}?overwrite=false`, document).then(res => res.data)
 }
 
 export function getAll(): Promise<Array<TextDocument>> {
