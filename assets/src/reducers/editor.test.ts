@@ -1,8 +1,13 @@
 import { Action } from 'redux'
 import actionCreatorFactory from 'typescript-fsa'
 import { LOCATION_CHANGE } from 'react-router-redux'
-import { UPDATE_DOCUMENT_CONTENT, UPDATE_DOCUMENT_NAME } from 'constants/editor'
-import { updatedocumentContent, updateDocumentName, resetDocumentChanges } from 'actions/editor-actions'
+import {
+  UPDATE_DOCUMENT_CONTENT,
+  UPDATE_DOCUMENT_NAME,
+  updatedocumentContent,
+  updateDocumentName,
+  resetDocumentChanges
+} from 'actions/editor-actions'
 import editorReducer, { initialState } from './editor'
 
 const updateContentAction = updatedocumentContent({ value: 'updated value' })

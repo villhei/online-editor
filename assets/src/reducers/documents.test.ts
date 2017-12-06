@@ -1,7 +1,7 @@
 import { Action } from 'redux'
 import { TextDocument } from 'service/document-service'
 import actionCreatorFactory from 'typescript-fsa'
-import { ACTION_GET_DOCUMENT, ACTION_GET_DOCUMENTS, ACTION_CREATE_DOCUMENT } from 'constants/document'
+import { ACTION_GET_DOCUMENT, ACTION_GET_DOCUMENTS, ACTION_CREATE_DOCUMENT } from 'actions/document-actions'
 import documentReducer, { initialState, DocumentReducerState } from './documents'
 
 const actionFactory = actionCreatorFactory()

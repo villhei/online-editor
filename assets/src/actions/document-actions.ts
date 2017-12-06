@@ -1,11 +1,3 @@
-import {
-  ACTION_CREATE_DOCUMENT,
-  ACTION_GET_DOCUMENT,
-  ACTION_GET_DOCUMENTS,
-  ACTION_UPDATE_DOCUMENT,
-  ACTION_DELETE_DOCUMENT
-} from 'constants/document'
-
 import actionCreatorFactory from 'typescript-fsa'
 import { wrapAsyncWorker } from './async'
 
@@ -23,6 +15,12 @@ import {
 export type DocumentByIdParams = { id: TextDocumentId }
 export type UpdateDocumentParams = { id: TextDocumentId, document: PartialTextDocument }
 
+export const ACTION_GET_DOCUMENT = 'ACTION_GET_DOCUMENT'
+export const ACTION_GET_DOCUMENTS = 'ACTION_GET_DOCUMENTS'
+export const ACTION_CREATE_DOCUMENT = 'ACTION_CREATE_DOCUMENT'
+export const ACTION_UPDATE_DOCUMENT = 'ACTION_UPDATE_DOCUMENT'
+export const ACTION_DELETE_DOCUMENT = 'ACTION_DELETE_DOCUMENT'
+
 const actionCreator = actionCreatorFactory()
 
 export const createDocumentAction = actionCreator
@@ -35,7 +33,7 @@ export const getDocumentsAction = actionCreator
   .async<undefined, Array<TextDocument>, {}>(ACTION_GET_DOCUMENTS)
 
 export const updateDocumentAction = actionCreator
-  .async<UpdateDocumentParams, PartialTextDocument, {}>(ACTION_UPDATE_DOCUMENT)
+  .async<UpdateDocumentParams, TextDocument, {}>(ACTION_UPDATE_DOCUMENT)
 
 export const deleteDocumentAction = actionCreator
   .async<DocumentByIdParams, void>(ACTION_DELETE_DOCUMENT)

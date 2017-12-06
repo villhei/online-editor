@@ -4,11 +4,10 @@ import { push } from 'react-router-redux'
 import { deleteDocumentAction, createDocumentAction, getDocuments, updateDocumentAction } from './document-actions'
 import { TextDocument, deleteById, create, update } from 'service/document-service'
 
-import {
-  UPDATE_DOCUMENT_CONTENT,
-  UPDATE_DOCUMENT_NAME,
-  RESET_DOCUMENT_CHANGES
-} from 'constants/editor'
+export const UPDATE_DOCUMENT_CONTENT = 'UPDATE_DOCUMENT_CONTENT'
+export const UPDATE_DOCUMENT_NAME = 'UPDATE_DOCUMENT_NAME'
+export const RESET_DOCUMENT_CHANGES = 'RESET_DOCUMENT_CHANGES'
+export const TOGGLE_DOCUMENT_RENAME = 'TOGGLE_DOCUMENT_RENAME'
 
 const actionCreator = actionCreatorFactory()
 
