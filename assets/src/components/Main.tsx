@@ -28,9 +28,8 @@ export default (props: Props) => {
     <div className='ui padded equal full height grid'>
       {error.message &&
         <div className='ui row'>
-          <div className='ui sixteen wide red nag column'>
+          <div className='ui sixteen wide orange nag column'>
             <span className='title'>{error.message}</span>
-            <p>{error.stack}</p>
             <i onClick={clearError} className='close icon'></i>
           </div>
         </div>

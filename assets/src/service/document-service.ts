@@ -1,5 +1,4 @@
-import axios from 'axios'
-import { AxiosResponse } from 'axios'
+import axios, { AxiosResponse, AxiosError } from 'axios'
 import { ApiResource } from './common'
 
 export type TextDocumentId = string
@@ -39,8 +38,21 @@ export function create(): Promise<TextDocument> {
   }).then(response => response.data)
 }
 
+function isAxiosError(err: any): err is AxiosError {
+  return typeof (<AxiosError>err).response !== 'undefined'
+}
+
 export function update(id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {
-  return axios.put<TextDocument>(`/api/documents/${id}?overwrite=false`, document).then(res => res.data)
+  return axios.put<TextDocument>(`/api/documents/${id}?overwrite=false`, document)
+    .then(res => res.data)
+    .catch(err => {
+      if (isAxiosError(err) && err.response && err.response.status === 409) {
+        console.log('rejecting')
+        return Promise.reject(new Error('An updated version of the document exists, please reload the document'))
+      } else {
+        return Promise.reject(err)
+      }
+    })
 }
 
 export function getAll(): Promise<Array<TextDocument>> {
