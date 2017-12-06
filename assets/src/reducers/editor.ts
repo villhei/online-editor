@@ -1,6 +1,7 @@
 import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
 import { LOCATION_CHANGE } from 'react-router-redux'
+import { updateDocumentAction } from 'actions/document-actions'
 import { updatedocumentContent, updateDocumentName, resetDocumentChanges } from 'actions/editor-actions'
 
 export type EditorState = {
@@ -26,7 +27,7 @@ export default function editorReducer(state: EditorState = initialState, action:
       modifiedName: action.payload.value
     }
   }
-  if (isType(action, resetDocumentChanges)) {
+  if (isType(action, resetDocumentChanges) || isType(action, updateDocumentAction.done)) {
     return {
       ...state,
       modifiedContent: undefined,

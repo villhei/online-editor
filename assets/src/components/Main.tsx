@@ -10,17 +10,31 @@ import Editor from 'containers/Editor'
 import { TextDocument } from 'service/document-service'
 
 type Props = {
-  documents: TextDocument[]
+  documents: TextDocument[],
+  error: {
+    message: string | undefined,
+    stack: string | undefined
+  },
+  clearError: () => any
 }
 
 export default (props: Props) => {
-  const { documents } = props
+  const { documents, error, clearError } = props
   return (<div className='ui main full height with padding'>
     <ConnectedSwitch>
       <Route exact path='/' component={MainToolbar} />
       <Route path={'/edit/:documentId'} component={EditorToolbar} />
     </ConnectedSwitch>
     <div className='ui padded equal full height grid'>
+      {error.message &&
+        <div className='ui row'>
+          <div className='ui sixteen wide red nag column'>
+            <span className='title'>{error.message}</span>
+            <p>{error.stack}</p>
+            <i onClick={clearError} className='close icon'></i>
+          </div>
+        </div>
+      }
       <div className='ui full height row'>
         <section className='ui twelve wide computer sixteen wide tablet centered column without padding'>
           <ConnectedSwitch>

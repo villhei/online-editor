@@ -5,6 +5,7 @@ import documentReducer, { DocumentReducerState } from 'reducers/documents'
 import { history, router } from 'reducers/router'
 import pageReducer, { PageState } from 'reducers/page'
 import editorReducer, { EditorState } from 'reducers/editor'
+import errorReducer, { ErrorState } from 'reducers/error'
 
 const reactRouterMiddleware = routerMiddleware(history)
 
@@ -17,7 +18,8 @@ export type RootState = {
     documents: DocumentReducerState
   },
   state: {
-    editor: EditorState
+    editor: EditorState,
+    error: ErrorState
   }
 }
 
@@ -30,7 +32,8 @@ export const rootReducer: Reducer<RootState> = combineReducers({
     documents: documentReducer
   }),
   state: combineReducers({
-    editor: editorReducer
+    editor: editorReducer,
+    error: errorReducer
   })
 })
 

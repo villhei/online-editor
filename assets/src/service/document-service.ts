@@ -26,10 +26,9 @@ export function isDocument(candidate: ApiResource<TextDocument>): candidate is T
   return Boolean(document &&
     document.id &&
     document.name &&
-    document.content &&
+    typeof document.content !== undefined &&
     document.owner &&
-    document.inserted_at &&
-    document.updated_at)
+    document.inserted_at)
 }
 
 export function create(): Promise<TextDocument> {

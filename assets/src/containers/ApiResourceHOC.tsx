@@ -14,7 +14,10 @@ export default function wrapApiResource<T, P>
   return function (Component: React.ComponentClass<P & ApiResourceProps<T>>) {
     return class ApiResourceWrapper extends React.Component<P & ApiResourceProps<T>> {
       componentDidMount() {
-        this.props.getResource(this.props.resourceId)
+        const { resource } = this.props
+        if (!isValueResolved(resource)) {
+          this.props.getResource(this.props.resourceId)
+        }
       }
 
       componentWillReceiveProps(nextProps: ApiResourceProps<T>) {

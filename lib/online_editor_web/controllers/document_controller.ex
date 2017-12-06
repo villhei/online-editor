@@ -32,10 +32,11 @@ defmodule OnlineEditorWeb.DocumentController do
 
   def update(conn, %{"id" => id, "overwrite" => "false", "updated_at" => updated_at} = params) do
     document = Repo.get(Document, id)
-    if(document.updated_at != updated_at) do
-      respond_with_error(conn, 409, "409.json")
-    else
-      update(conn, Map.drop(params, ["overwrite", "updated_at"]))
+    {:ok, incoming} = NaiveDateTime.from_iso8601(updated_at)
+
+    case NaiveDateTime.compare(document.updated_at, incoming) do
+      :gt -> respond_with_error(conn, 409, "409.json")
+      _   -> update(conn, Map.drop(params, ["overwrite", "updated_at"]))
     end
   end
 

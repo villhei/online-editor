@@ -8,6 +8,7 @@ import {
   updateDocumentName,
   resetDocumentChanges
 } from 'actions/editor-actions'
+import { updateDocumentAction } from 'actions/document-actions'
 import editorReducer, { initialState } from './editor'
 
 const updateContentAction = updatedocumentContent({ value: 'updated value' })
@@ -15,6 +16,8 @@ const updateContentAction = updatedocumentContent({ value: 'updated value' })
 const updateNameAction = updateDocumentName({ value: 'updated name' })
 
 const resetAction = resetDocumentChanges()
+
+const modifiedState = { ...initialState, modifiedContent: 'foo', modifiedName: 'bar' }
 
 describe('Editor reducer', () => {
   it('should return the state as-is if action is not recognized', () => {
@@ -34,8 +37,13 @@ describe('Editor reducer', () => {
   })
 
   it('should reset the modifications to document', () => {
-    const state = editorReducer({ ...initialState, modifiedContent: 'foo', modifiedName: 'bar' }, resetAction)
+    const state = editorReducer(modifiedState, resetAction)
     expect(state).toEqual(initialState)
+  })
+
+  it('should reset the modifications on document update', () => {
+    const action = updateDocumentAction.done({})
+    expect(editorReducer(modifiedState, action)).toEqual(initialState)
   })
 
 })

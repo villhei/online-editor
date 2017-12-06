@@ -89,14 +89,14 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     document = insert(:document)
     updated = %{content: "updated content"}
     Repo.update(Document.changeset(document, updated))
-    payload =  %{content: "should no be allowed", updated_at: document.updated_at}
+    payload =  %{content: "should no be allowed", updated_at: NaiveDateTime.to_iso8601(document.updated_at)}
     conn = put(conn, "/api/documents/#{document.id}?overwrite=false", payload)
     assert json_response(conn, 409) == ErrorView.render("409.json")
   end
 
   test "PUT 200 - update path allows to update a document for which a later version does not exist", %{conn: conn} do
     document = insert(:document)
-    updated = %{content: "updated content", updated_at: document.updated_at}
+    updated = %{content: "updated content", updated_at: NaiveDateTime.to_iso8601(document.updated_at)}
     conn = put(conn, "/api/documents/#{document.id}?overwrite=false", updated)
     body = json_response(conn, 200)
     assert body["content"] == "updated content"

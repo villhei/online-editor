@@ -1,6 +1,11 @@
 import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
-import { createDocumentAction, getDocumentAction, getDocumentsAction } from 'actions/document-actions'
+import {
+  createDocumentAction,
+  getDocumentAction,
+  getDocumentsAction,
+  updateDocumentAction
+} from 'actions/document-actions'
 import { ApiResource, ResourceStatus } from 'service/common'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 
@@ -68,6 +73,9 @@ export default function documentReducer(state: DocumentReducerState = initialSta
         [id]: ResourceStatus.NotFound
       }
     }
+  }
+  if (isType(action, updateDocumentAction.done)) {
+    return updateSingle(state, action.payload.result)
   }
   if (isType(action, getDocumentAction.done)) {
     return updateSingle(state, action.payload.result)

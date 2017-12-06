@@ -26,6 +26,7 @@ export type EditorProps = {
   resetDocumentChanges: () => any,
   resourceId: string,
   resource: TextDocument,
+  saving: boolean,
   modifiedContent: string | undefined
 }
 
@@ -41,7 +42,7 @@ class Editor extends React.PureComponent<EditorProps> {
   }
 
   render() {
-    const { resource, updateDocumentContent, modifiedContent } = this.props
+    const { resource, updateDocumentContent, modifiedContent, saving } = this.props
     return <CodeMirror
       className='ui full height without padding'
       autoFocus={true}
@@ -51,18 +52,23 @@ class Editor extends React.PureComponent<EditorProps> {
       }}
       onChange={(editor, metadata, value) => {
       }}
-      options={EDITOR_OPTIONS} />
+      options={{
+        ...EDITOR_OPTIONS,
+        readOnly: saving
+      }} />
   }
 }
 
-const mapStateToProps = ({ model, state }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any) => {
   const resourceId: TextDocumentId = ownProps.match.params.documentId
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   const { modifiedContent } = state.editor
+  const { saving } = ui.page.editorToolbar
   return {
     resource,
     resourceId,
-    modifiedContent
+    modifiedContent,
+    saving
   }
 }
 
