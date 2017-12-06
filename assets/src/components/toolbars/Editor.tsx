@@ -8,6 +8,9 @@ type Props = {
   title: string,
   disabled: boolean,
   saveDisabled: boolean,
+  saving: boolean,
+  refreshing: boolean,
+  deleting: boolean,
   refreshDocument: () => void
   updateDocument: () => void,
   deleteDocument: () => void,
@@ -15,12 +18,18 @@ type Props = {
 }
 
 export default (props: Props) => {
-  const actionItemClass = classNames('ui item', {
+  const refreshClass = classNames('ui item', {
+    'loading': props.refreshing,
     'disabled': props.disabled
-  })
+  }, 'button')
   const saveClass = classNames('ui item', {
+    'loading': props.saving,
     'disabled': Boolean(props.disabled || props.saveDisabled)
-  })
+  }, 'button')
+  const deleteClass = classNames('ui item', {
+    'loading': props.deleting,
+    'disabled': props.disabled
+  }, 'button')
   return (
     <div className='ui fixed inverted massive menu'>
       <Link to='/' className='ui item'>
@@ -30,15 +39,15 @@ export default (props: Props) => {
         <input type='text' value={props.title} onChange={props.updateDocumentName} />
       </div>
       <FileDropdown />
-      <a className={actionItemClass} onClick={props.refreshDocument}>
+      <button className={refreshClass} onClick={props.refreshDocument}>
         <i className='ui icon refresh text outline' />
-      </a>
-      <a className={saveClass} onClick={props.updateDocument}>
+      </button>
+      <button className={saveClass} onClick={props.updateDocument}>
         <i className='ui icon save text outline' />
-      </a>
-      <a className={actionItemClass} onClick={props.deleteDocument}>
+      </button>
+      <button className={deleteClass} onClick={props.deleteDocument}>
         <i className='ui icon delete text outline' />
-      </a>
+      </button>
     </div>
   )
 }

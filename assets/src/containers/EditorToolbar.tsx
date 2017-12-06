@@ -17,7 +17,10 @@ export type Props = {
   document: ApiResource<TextDocument>,
   modifiedContent: string | undefined,
   modifiedName: string | undefined,
-  documents: Array<TextDocument>
+  documents: Array<TextDocument>,
+  deleting: boolean,
+  refreshing: boolean,
+  saving: boolean
 }
 
 class EditorToolbar extends React.Component<Props, any> {
@@ -52,7 +55,7 @@ class EditorToolbar extends React.Component<Props, any> {
   }
 
   render() {
-    const { documentId, document, modifiedContent, modifiedName, updateDocumentName } = this.props
+    const { documentId, document, modifiedContent, modifiedName, updateDocumentName, deleting, saving, refreshing } = this.props
     const saveDisabled = Boolean(!document || !(modifiedContent || modifiedName))
     const commonProps = {
       refreshDocument: this.refreshDocument,
@@ -60,6 +63,9 @@ class EditorToolbar extends React.Component<Props, any> {
       deleteDocument: this.deleteDocument,
       updateDocumentName: this.updateDocumentName,
       saveDisabled,
+      deleting,
+      saving,
+      refreshing
     }
     if (document === ResourceStatus.Loading) {
       return <EditorToolbarView
@@ -89,16 +95,18 @@ class EditorToolbar extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ model, state }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any) => {
   const documentId: TextDocumentId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
   const { modifiedContent, modifiedName } = state.editor
+  const { editorToolbar } = ui.page
   const { documents } = ownProps
   return {
     document,
     documentId,
     modifiedContent,
-    modifiedName
+    modifiedName,
+    ...editorToolbar
   }
 }
 

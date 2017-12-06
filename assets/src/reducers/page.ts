@@ -61,10 +61,10 @@ export default function pageReducer(state: PageState = initialState, action: Act
     return updateToolbarItem(state, 'refreshing', false)
   }
   if (isType(action, updateDocumentAction.started)) {
-    return updateToolbarItem(state, 'updating', true)
+    return updateToolbarItem(state, 'saving', true)
   }
   if (isType(action, updateDocumentAction.done) || isType(action, updateDocumentAction.failed)) {
-    return updateToolbarItem(state, 'updating', false)
+    return updateToolbarItem(state, 'saving', false)
   }
   return state
 }

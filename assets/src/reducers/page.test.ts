@@ -55,7 +55,7 @@ describe('Page reducer', () => {
       action: deleteDocument, name: 'delete', field: 'deleting'
     },
     {
-      action: updateDocument, name: 'update', field: 'updating'
+      action: updateDocument, name: 'update', field: 'saving'
     },
     {
       action: getDocument, name: 'get', field: 'refreshing'
