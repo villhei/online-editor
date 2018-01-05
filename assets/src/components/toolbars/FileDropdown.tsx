@@ -14,7 +14,7 @@ const stopPropagation = (event: React.MouseEvent<HTMLDivElement>) => { event.sto
 const FileDropdown = (props: Props) => {
   const { toggleNavigation, documents, showNavigation } = props
 
-  const dropdownClass = classNames('ui dropdown item', {
+  const dropdownClass = classNames('ui dropdown item grid', {
     'active visible': showNavigation
   })
   const itemClasses = classNames('menu', {
@@ -22,10 +22,14 @@ const FileDropdown = (props: Props) => {
   })
   return (
     <div onClick={toggleNavigation} className={dropdownClass}>
-      <i className='ui icon share folder' />My Files <i className='dropdown icon'></i>
-      <div className={itemClasses} onClick={stopPropagation} >
-        {!documents.length && <div className='item'>No documents</div>}
-        {documents.map(({ id, name }) => <Link key={id} to={`/edit/${id}`} className='item'>{name}</Link>)}
+      <div className='ui row'>
+        <i className='ui icon share folder' />
+        <span className='ui computer tablet only'>My Files</span>
+        <i className='dropdown icon'></i>
+        <div className={itemClasses} onClick={stopPropagation} >
+          {!documents.length && <div className='item'>No documents</div>}
+          {documents.map(({ id, name }) => <Link key={id} to={`/edit/${id}`} className='item'>{name}</Link>)}
+        </div>
       </div>
     </div>)
 }

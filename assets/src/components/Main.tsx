@@ -34,7 +34,7 @@ export default (props: Props) => {
           </div>
         </div>
       }
-      <div className='ui full height row'>
+      <div className='ui full height row content'>
         <section className='ui twelve wide computer sixteen wide tablet centered column without padding'>
           <ConnectedSwitch>
             <Route path={'/edit/:documentId'} component={Editor} />
