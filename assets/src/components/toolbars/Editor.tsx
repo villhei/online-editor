@@ -31,7 +31,7 @@ export default (props: Props) => {
     'disabled': props.disabled
   })
   return (
-    <div className='ui fixed inverted massive borderless grid menu'>
+    <div className='ui fixed inverted borderless grid menu'>
       <div className='ui computer tablet only row'>
         <Link to='/' className='ui item'>
           <i className='ui icon home outline' />
