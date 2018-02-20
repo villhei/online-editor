@@ -119,4 +119,13 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     conn = delete(conn, "/api/documents/#{UUID.uuid4()}")
     assert json_response(conn, 404) == ErrorView.render("404.json")
   end
+
+  test "GET 404 - does not fetch deleted document", %{conn: conn} do
+    document = insert(:document)
+    conn = delete(conn, "/api/documents/#{document.id}")
+    assert response(conn, 204)
+    conn = get(conn, "/api/documents/#{document.id}")
+    assert response(conn, 404)
+  end
+
 end

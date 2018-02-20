@@ -12,7 +12,7 @@ defmodule OnlineEditorWeb.DocumentController do
   end
 
   def show(conn, %{"id" => id}) do
-    case Repo.get(Document, id) do
+    case Query.get_by_id(id) do
       nil      -> conn
                   |> respond_with_error(404, "404.json")
       document -> conn
@@ -31,7 +31,7 @@ defmodule OnlineEditorWeb.DocumentController do
   end
 
   def update(conn, %{"id" => id, "overwrite" => "false", "updated_at" => updated_at} = params) do
-    document = Repo.get(Document, id)
+    document = Query.get_by_id(id)
     {:ok, incoming} = NaiveDateTime.from_iso8601(updated_at)
 
     case NaiveDateTime.compare(document.updated_at, incoming) do
@@ -45,7 +45,7 @@ defmodule OnlineEditorWeb.DocumentController do
   end
 
   def update(conn, %{"id" => id} = params) do
-    with %Document{} = document <- Repo.get(Document, id),
+    with %Document{} = document <- Query.get_by_id(id),
          changeset              <- Document.changeset(document, params),
          {:ok, document}        <- Repo.update(changeset)
          do
@@ -56,11 +56,8 @@ defmodule OnlineEditorWeb.DocumentController do
   end
 
   def delete(conn, %{"id" => id}) do
-    with %Document{} = document <- Repo.get(Document, id),
-         {:ok, _} <- Repo.delete(document)
-         do
-            send_resp(conn, :no_content, "")
-    else
+    case Query.delete(id) do
+      {:ok, _ } -> send_resp(conn, :no_content, "")
       error -> handle_update_error(conn, error)
     end
   end

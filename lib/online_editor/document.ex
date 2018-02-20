@@ -10,6 +10,8 @@ defmodule OnlineEditor.Document do
     field :content, :string, default: ""
     field :name, :string
     field :owner, :string
+    field :deleted, :boolean
+    field :deleted_at, :naive_datetime
 
     timestamps()
   end
@@ -21,5 +23,12 @@ defmodule OnlineEditor.Document do
     |> Map.put(:empty_values, [""])
     |> cast(attrs, [:name, :owner, :content])
     |> validate_required([:name, :owner])
+  end
+
+  def delete_changeset(%Document{} = document) do
+    deletion = %{deleted: true, deleted_at: Ecto.DateTime.utc()}
+    document
+      |> change(deletion)
+      |> validate_required([:deleted, :deleted_at])
   end
 end
