@@ -6,6 +6,7 @@ import FileDropdown from 'containers/FileDropdown'
 
 type Props = {
   title: string,
+  documentId: string,
   disabled: boolean,
   saveDisabled: boolean,
   saving: boolean,
@@ -31,7 +32,7 @@ const MenuButton = ({ loading, disabled, onClick, icon }: MenuButtonProps) => {
   })
   return (<div className={'ui item'}>
     <div className={classes} onClick={onClick}>
-      <i className={'icon ' + icon + ' text outline'} />
+      <i className={'icon ' + icon} />
     </div>
   </div>)
 }
@@ -41,7 +42,7 @@ export default (props: Props) => {
     <div className='ui fixed inverted borderless grid menu'>
       <div className='ui computer tablet only row'>
         <Link to='/' className='ui item'>
-          <i className='ui icon home outline' />
+          <i className='ui icon home' />
         </Link>
         <div className='ui transparent inverted title field input'>
           <input type='text' value={props.title} onChange={props.updateDocumentName} />
@@ -51,39 +52,47 @@ export default (props: Props) => {
           onClick={props.refreshDocument}
           loading={props.refreshing}
           disabled={props.disabled}
-          icon='refresh' />
+          icon='sync' />
+        <Link className='ui item'
+          to={'/view/' + props.documentId}>
+          <i className='ui icon share alternate' />
+        </Link>
         <MenuButton
           onClick={props.updateDocument}
           loading={props.saving}
           disabled={props.disabled}
-          icon='save' />
+          icon='save outline' />
         <MenuButton
           onClick={props.deleteDocument}
           loading={props.deleting}
           disabled={props.disabled}
-          icon='delete' />
+          icon='trash alternate' />
       </div>
       <div className='ui mobile only row'>
         <div className='ui inverted borderless menu'>
           <Link to='/' className='ui item'>
-            <i className='ui icon home outline' />
+            <i className='ui icon home' />
           </Link>}
           <FileDropdown />
           <MenuButton
             onClick={props.refreshDocument}
             loading={props.refreshing}
             disabled={props.disabled}
-            icon='refresh' />
+            icon='sync alternate' />
+          <Link className='ui item'
+            to={'/view/' + props.documentId}>
+            <i className='ui icon share alternate' />
+          </Link>
           <MenuButton
             onClick={props.updateDocument}
             loading={props.saving}
             disabled={props.disabled}
-            icon='save' />
+            icon='save outline' />
           <MenuButton
             onClick={props.deleteDocument}
             loading={props.deleting}
             disabled={props.disabled}
-            icon='delete' />
+            icon='trash alternate' />
         </div>
       </div>
     </div >

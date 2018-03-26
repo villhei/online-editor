@@ -23,7 +23,7 @@ const FileDropdown = (props: Props) => {
   return (
     <div onClick={toggleNavigation} className={dropdownClass}>
       <div className='ui row'>
-        <i className='ui icon share folder' />
+        <i className='ui icon folder' />
         <span className='ui computer tablet only'>My Files</span>
         <i className='dropdown icon'></i>
         <div className={itemClasses} onClick={stopPropagation} >

@@ -65,7 +65,8 @@ class EditorToolbar extends React.Component<Props, any> {
       saveDisabled,
       deleting,
       saving,
-      refreshing
+      refreshing,
+      documentId
     }
     if (document === ResourceStatus.Loading) {
       return <EditorToolbarView
