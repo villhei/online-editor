@@ -13,7 +13,7 @@ export default (props: Props) => {
         <Link to='/' className='ui item'>
           <i className='ui icon home' />
         </Link>
-        <div className='header item title field'>{props.title || 'Loading...'}</div>
+        <div className='header item large title field'><h3>{props.title}</h3></div>
       </div>
     </div >
   )

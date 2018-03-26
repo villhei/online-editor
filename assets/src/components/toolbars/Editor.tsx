@@ -60,7 +60,7 @@ export default (props: Props) => {
         <MenuButton
           onClick={props.updateDocument}
           loading={props.saving}
-          disabled={props.disabled}
+          disabled={props.disabled || props.saveDisabled}
           icon='save outline' />
         <MenuButton
           onClick={props.deleteDocument}
