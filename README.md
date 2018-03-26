@@ -9,6 +9,10 @@ Dependencies
 
 ## Description
 
+This is a text editor for the web. The aim of the editor is to be fast, programmer-friendly text editor for the web with markdown highlight and publish support. The aim of this project is to build a personal text editor service for storing daily files such as, such as shopping lists, food recipes, link collections and similar.
+
+The motivation behind this editor was the destructive writes of Google Keep, which makes it very unusable for situations, where notes need to be shared.
+
 ### Frontend stack
 * TypeScript
 * React (with redux, react-router)
@@ -19,18 +23,6 @@ Dependencies
 ### Backend stack
 * Elixir
 * Phoenix Framework
-
-### TODO / stackwise
-
-* Set up Webpack Hot Module Reload
-* Optimize the build
-* Setup webpack-phoenix signals if needed
-* Optimized roduction build
-* PWA manifest generation
-
-## Code style
-
-Run `mix credo` or `mix credo --strict` for code style checks.
 
 ## Running in development
 
@@ -45,10 +37,32 @@ Now you can visit [`localhost:4040`](http://localhost:4040) from your browser fo
 
 Use the webpack-dev-server provided [`localhost:4001`](http://localhost:4001) for live reload. Useful for client-side development.
 
+## Running in production
+
+This app is set up for deployment to [Gigalixir](https://gigalixir.com/). In order to deploy to Gigalixir, you must first set up an Gigalixir account and set up the provided gigalixir git repository as a target.
+
+### Roughly
+1. Register a gigalixir app
+2. Set up gigalixir as git remote
+3. `git push gigalixir master`
+4. `gigalixir migrate <app-name>`
+5. Profit
+
+## Code style
+
+Run `mix credo` or `mix credo --strict` for code style checks.
+
 ### Done / working
-* Document DB entity
-* Create, Read, Update endpoints for Document
+* Create, Read, Update endpoints for document with overwrite protection
+* Sharing documents as rendered markdowns
 * Placeholder client
+
+### Not working, epics
+* Collaborative editing (operational transform for backend + client)
+* User management
+* Websocket connections
+* PWA application
+* Offline use
 
 ### TODO / stackwise
 
