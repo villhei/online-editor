@@ -13,6 +13,20 @@ This is a text editor for the web. The aim of the editor is to be fast, programm
 
 The motivation behind this editor was the destructive writes of Google Keep, which makes it very unusable for situations, where notes need to be shared.
 
+### Views
+
+What the program looks like in current condition.
+
+#### Main
+![Main view](img/small_main.png "Main view")
+
+#### Editor
+![Editor view](img/small_editor.png "Editor view")
+
+#### Publish
+![Publish view](img/small_publish.png "Publish view")
+
+
 ### Frontend stack
 * TypeScript
 * React (with redux, react-router)
@@ -62,6 +76,7 @@ Run `mix credo` or `mix credo --strict` for code style checks.
 * User management
 * Websocket connections
 * PWA application
+* Nice UI
 * Offline use
 
 ### TODO / stackwise
