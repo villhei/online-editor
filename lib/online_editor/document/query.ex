@@ -9,6 +9,7 @@ defmodule OnlineEditor.Document.Query do
             select: %{id: d.id,
                       name: d.name,
                       owner: d.owner,
+                      folder_id: d.folder_id,
                       updated_at: d.updated_at,
                       inserted_at: d.inserted_at}
     query |> Repo.all()

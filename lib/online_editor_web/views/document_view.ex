@@ -15,6 +15,7 @@ defmodule OnlineEditorWeb.DocumentView do
       name: document.name,
       content: document.content,
       owner: document.owner,
+      folder_id: document.folder_id,
       inserted_at: document.inserted_at,
       updated_at: document.updated_at
     }
