@@ -37,6 +37,21 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     assert json_response(conn, 200) == render_json("index.json", documents: [%{document | content: ""}])
   end
 
+  test "GET 200 - index path returns the list of documents in a folder", %{conn: conn} do
+    folder = insert(:folder)
+    insert(:document)
+    documents = 1..2 |> Enum.map(fn n -> %Document{
+      name: "document_#{n}",
+      folder: folder,
+      content: "Nonempty"
+    } end)
+    |> Enum.map(&insert(&1))
+    |> Enum.map(&Map.put(&1, :content, ""))
+
+    conn = get(conn, "/api/documents/?folder=#{folder.id}")
+    assert json_response(conn, 200) == render_json("index.json", documents: documents)
+  end
+
   test "GET 200 - show path returns a single document", %{conn: conn} do
     document = insert(:document)
     conn = get(conn, "/api/documents/#{document.id}")

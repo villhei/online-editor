@@ -5,6 +5,12 @@ defmodule OnlineEditorWeb.DocumentController do
   alias OnlineEditor.Repo
   alias OnlineEditor.Document.Query
 
+  def index(%Plug.Conn{query_params: %{"folder" => folder_id}} = conn, _params) do
+    case Query.get_by_folder(folder_id) do
+      documents -> conn |> render("index.json", documents: documents)
+    end
+  end
+
   def index(conn, _params) do
     documents = Query.descriptions()
     render(conn, "index.json", documents: documents)
@@ -12,20 +18,27 @@ defmodule OnlineEditorWeb.DocumentController do
 
   def show(conn, %{"id" => id}) do
     case Query.get_by_id(id) do
-      nil      -> conn
-                  |> respond_with_error(404, "404.json")
-      document -> conn
-                  |> respond_show(document)
+      nil ->
+        conn
+        |> respond_with_error(404, "404.json")
+
+      document ->
+        conn
+        |> respond_show(document)
     end
   end
 
   def create(conn, params) do
     changeset = Document.changeset(%Document{}, params)
+
     case Repo.insert(changeset) do
-      {:ok, document}       -> conn
-                               |> respond_show(document)
-      {:error, _changeset}  -> conn
-                               |> respond_with_error(400, "400.json", error: "Unable to create document")
+      {:ok, document} ->
+        conn
+        |> respond_show(document)
+
+      {:error, _changeset} ->
+        conn
+        |> respond_with_error(400, "400.json", error: "Unable to create document")
     end
   end
 
@@ -35,20 +48,24 @@ defmodule OnlineEditorWeb.DocumentController do
 
     case NaiveDateTime.compare(document.updated_at, incoming) do
       :gt -> respond_with_error(conn, 409, "409.json")
-      _   -> update(conn, Map.drop(params, ["overwrite", "updated_at"]))
+      _ -> update(conn, Map.drop(params, ["overwrite", "updated_at"]))
     end
   end
 
   def update(conn, %{"overwrite" => "false"}) do
-    respond_with_error(conn, 400, "400.json", error: "updated_at is a required timestamp in document body")
+    respond_with_error(
+      conn,
+      400,
+      "400.json",
+      error: "updated_at is a required timestamp in document body"
+    )
   end
 
   def update(conn, %{"id" => id} = params) do
     with %Document{} = document <- Query.get_by_id(id),
-         changeset              <- Document.changeset(document, params),
-         {:ok, document}        <- Repo.update(changeset)
-         do
-          conn |> respond_show(document)
+         changeset <- Document.changeset(document, params),
+         {:ok, document} <- Repo.update(changeset) do
+      conn |> respond_show(document)
     else
       error -> handle_update_error(conn, error)
     end
@@ -56,7 +73,7 @@ defmodule OnlineEditorWeb.DocumentController do
 
   def delete(conn, %{"id" => id}) do
     case Query.delete(id) do
-      {:ok, _ } -> send_resp(conn, :no_content, "")
+      {:ok, _} -> send_resp(conn, :no_content, "")
       error -> handle_update_error(conn, error)
     end
   end
@@ -64,8 +81,8 @@ defmodule OnlineEditorWeb.DocumentController do
   defp handle_update_error(conn, cause) do
     case cause do
       {:error, _} -> respond_with_error(conn, 400, "400.json")
-      nil         -> respond_with_error(conn, 404, "404.json")
-      _           -> respond_with_error(conn, 500, "500.json")
+      nil -> respond_with_error(conn, 404, "404.json")
+      _ -> respond_with_error(conn, 500, "500.json")
     end
   end
 
@@ -74,5 +91,4 @@ defmodule OnlineEditorWeb.DocumentController do
     |> put_status(200)
     |> render("show.json", document: document)
   end
-
 end

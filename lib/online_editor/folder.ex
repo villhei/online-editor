@@ -2,15 +2,14 @@ defmodule OnlineEditor.Folder do
   use OnlineEditor.Schema
   import Ecto.Changeset
   alias OnlineEditor.Folder
-  alias OnlineEditor.Document
   alias OnlineEditor.Repo
 
   schema "folders" do
-    field :name, :string
-    field :deleted, :boolean
-    field :deleted_at, :naive_datetime
-    has_many :children, Folder, foreign_key: :parent_id
-    belongs_to :parent, Folder
+    field(:name, :string)
+    field(:deleted, :boolean)
+    field(:deleted_at, :naive_datetime)
+    has_many(:children, Folder, foreign_key: :parent_id)
+    belongs_to(:parent, Folder)
     timestamps()
   end
 
@@ -24,6 +23,6 @@ defmodule OnlineEditor.Folder do
   end
 
   def load_children(%Folder{} = model) do
-    model = model |> Repo.preload(:children)
+    model |> Repo.preload(:children)
   end
 end
