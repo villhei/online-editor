@@ -16,6 +16,12 @@ defmodule OnlineEditorWeb.FolderController do
     end
   end
 
+  def index(%Plug.Conn{query_params: %{"children" => folder_id}} = conn, _params) do
+    case Query.get_by_parent(folder_id) do
+      folders -> conn |> render("index.json", folders: folders)
+    end
+  end
+
   def index(conn, _params) do
     folders = Query.all()
     render(conn, "index.json", folders: folders)
