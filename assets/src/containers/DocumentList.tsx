@@ -2,7 +2,7 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { createAndSelect } from 'actions/editor-actions'
-import FileList from 'components/FileList'
+import DocumentList from 'components/DocumentList'
 
 type Props = {
   documents: RootState['model']['documents']['all'],
@@ -15,7 +15,7 @@ class FileListContainer extends React.Component<Props, any> {
   }
   render() {
     const { documents } = this.props
-    return <FileList
+    return <DocumentList
       documents={documents}
       createDocument={this.createDocument} />
   }

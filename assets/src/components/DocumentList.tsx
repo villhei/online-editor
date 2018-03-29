@@ -21,7 +21,7 @@ function sortDocuments(documents: Array<TextDocument>, descending = true): Array
   }
 }
 
-export default class FileList extends React.Component<Props, any> {
+export default class DocumentList extends React.Component<Props, any> {
   render() {
     const { documents, createDocument } = this.props
     const sortedDocuments = sortDocuments(documents as TextDocument[])

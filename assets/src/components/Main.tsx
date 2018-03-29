@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom'
 import MainToolbar from 'containers/MainToolbar'
 import EditorToolbar from 'containers/EditorToolbar'
 import ViewToolbar from 'containers/ViewToolbar'
-import FileList from 'containers/FileList'
+import DocumentList from 'containers/DocumentList'
 import Editor from 'containers/Editor'
 import DocumentView from 'containers/DocumentView'
 
@@ -39,7 +39,7 @@ export default (props: Props) => {
             <ConnectedSwitch>
               <Route path={'/view/:documentId'} component={DocumentView} />
               <Route path={'/edit/:documentId'} component={Editor} />
-              <Route exact path='/' component={FileList} />
+              <Route exact path='/' component={DocumentView} />
             </ConnectedSwitch>
           </section>
         </div>

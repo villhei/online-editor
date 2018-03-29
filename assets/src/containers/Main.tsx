@@ -34,7 +34,7 @@ class MainContainer extends React.Component<Props, any> {
   componentDidUpdate(prevProps: Props) {
     const { folder } = this.props
     if (isFolder(folder)) {
-      if (prevProps.folder != this.props.folder) {
+      if (prevProps.folder !== this.props.folder) {
         this.props.getDocumentsByFolder(folder.id)
         this.props.getChildren(folder.id)
       }
