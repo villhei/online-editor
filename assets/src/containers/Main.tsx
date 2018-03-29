@@ -1,17 +1,16 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { TextDocument } from 'service/document-service'
-import { Folder, isFolder } from 'service/folder-service'
+import { Folder, isFolder, FolderId } from 'service/folder-service'
 import { ApiResource, ResourceStatus } from 'service/common'
 import { getDocumentsByFolder } from 'actions/document-actions'
-import { getRootFolder } from 'actions/folder-actions'
+import { getRootFolder, getChildren } from 'actions/folder-actions'
 import { toggleMenu, ToggleMenu, clearError } from 'actions/page-actions'
 import { RootState } from '../reducer'
 import Main from 'components/Main'
 
 type StateProps = {
   folder: ApiResource<Folder>
-  documents: Array<TextDocument>
   error: {
     message: string | undefined,
     stack: string | undefined
@@ -20,6 +19,7 @@ type StateProps = {
 
 type DispatchProps = {
   getFolder: () => any,
+  getChildren: (id: FolderId) => any,
   getDocumentsByFolder: (folder: string) => any,
   clearError: () => any
 }
@@ -33,9 +33,11 @@ class MainContainer extends React.Component<Props, any> {
 
   componentDidUpdate(prevProps: Props) {
     const { folder } = this.props
-    if (prevProps.folder === ResourceStatus.Loading
-      && isFolder(folder)) {
-      this.props.getDocumentsByFolder(folder.name)
+    if (isFolder(folder)) {
+      if (prevProps.folder != this.props.folder) {
+        this.props.getDocumentsByFolder(folder.id)
+        this.props.getChildren(folder.id)
+      }
     }
   }
 
@@ -47,8 +49,7 @@ class MainContainer extends React.Component<Props, any> {
 
 const mapStateToProps = ({ model, ui, state }: RootState): StateProps => {
   return {
-    folder: model.navigator.folder,
-    documents: model.documents.all,
+    folder: model.navigator.byId[model.navigator.current],
     error: state.error
   }
 }
@@ -56,6 +57,7 @@ const mapStateToProps = ({ model, ui, state }: RootState): StateProps => {
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
     getFolder: () => getRootFolder(dispatch, undefined),
+    getChildren: (id: FolderId) => getChildren(dispatch, id),
     getDocumentsByFolder: (folder: string) => getDocumentsByFolder(dispatch, folder),
     clearError: () => dispatch(clearError(undefined))
   }

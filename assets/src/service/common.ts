@@ -1,5 +1,7 @@
 import axios, { AxiosError } from 'axios'
 
+export type DocumentMap<T> = { [id: string]: ApiResource<T> }
+
 export enum ResourceStatus {
   Loading = 'API_RESOURCE:LOADING',
   NotFound = 'API_RESOURCE:NOT_FOUND'
@@ -41,4 +43,38 @@ export function isResourceAvailable(resource: ApiResource<HasId>): boolean {
 export function isAxiosError(err: any): err is AxiosError {
   const candidate = (err as AxiosError)
   return Boolean(candidate.message && candidate.name && candidate.config)
+}
+
+type Identifiable = {
+  id: string
+}
+
+export function updateOrJoin<T>(array: Array<T>, entityId: string, entity: T): Array<T> {
+  // TODO, any-hack
+  const index = array.findIndex(({ id }: any) => entityId === id)
+  if (index > -1) {
+    const modified = Array.from(array)
+    modified.splice(index, 1, entity)
+    return modified
+  } else {
+    return array.concat(entity)
+  }
+}
+
+export type MappedModel<T> = {
+  byId: DocumentMap<T>,
+  all: Array<T>
+}
+
+export function updateSingle<T>(state: MappedModel<T>, id: string, entity: T): MappedModel<T> {
+  const byId = {
+    ...state.byId,
+    [id]: entity
+  }
+  const all = updateOrJoin(state.all, id, entity)
+  return {
+    ...state,
+    byId,
+    all
+  }
 }

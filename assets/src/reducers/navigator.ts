@@ -1,31 +1,38 @@
 import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
 import {
-  getRootAction
+  getRootAction, getChildrenAction
 } from 'actions/folder-actions'
-import { ApiResource, ResourceStatus } from 'service/common'
+import { ApiResource, ResourceStatus, MappedModel, updateSingle } from 'service/common'
 import { Folder, FolderId } from 'service/folder-service'
 
 type FolderMap = { [id: string]: ApiResource<Folder> }
 
 export type NavigatorState = {
   current: FolderId,
-  folder: ApiResource<Folder>
-  dictionary: FolderMap
-}
+} & MappedModel<ApiResource<Folder>>
 
 export const initialState: NavigatorState = {
-  current: 'Root',
-  folder: ResourceStatus.Loading,
-  dictionary: {}
+  current: '',
+  byId: {},
+  all: []
 }
 
 export default function navigatorReducer(state: NavigatorState = initialState, action: Action): NavigatorState {
   if (isType(action, getRootAction.done)) {
+    const { result } = action.payload
     return {
       ...state,
-      folder: action.payload.result
+      ...updateSingle(state, result.id, result),
+      current: result.id
     }
+  }
+  if (isType(action, getChildrenAction.done)) {
+    const { result } = action.payload
+    return result.reduce((acc, folder) => ({
+      ...acc,
+      ...updateSingle(acc, folder.id, folder)
+    }), state)
   }
   return state
 }

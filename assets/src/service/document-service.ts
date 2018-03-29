@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios'
 import { ApiResource, isAxiosError } from './common'
+import { FolderId } from 'service/folder-service'
 
 export type TextDocumentId = string
-export type FolderId = string
 
 export type TextDocument = {
   readonly id: TextDocumentId,
@@ -11,12 +11,6 @@ export type TextDocument = {
   readonly owner: string,
   readonly inserted_at: string,
   readonly updated_at: string
-}
-
-export type Folder = {
-  readonly id: FolderId
-  readonly name: string,
-  readonly children: Folder[]
 }
 
 export type UpdatedStamp = {
@@ -59,10 +53,8 @@ export function update(id: TextDocumentId, document: PartialTextDocument): Promi
     })
 }
 
-export function getAllByFolder(folderName: string): Promise<Array<TextDocument>> {
-  return axios.get<Folder>('/api/folders?find=' + folderName)
-    .then(res => res.data)
-    .then((folder: Folder) => axios.get<Array<TextDocument>>('/api/documents?folder=' + folder.id))
+export function getAllByFolder(id: FolderId): Promise<Array<TextDocument>> {
+  return axios.get<Array<TextDocument>>('/api/documents?folder=' + id)
     .then(res => res.data)
 }
 

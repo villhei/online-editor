@@ -12,10 +12,13 @@ import {
   PartialTextDocument,
   getAllByFolder
 } from 'service/document-service'
+import {
+  FolderId
+} from 'service/folder-service'
 
 export type DocumentByIdParams = { id: TextDocumentId }
 export type UpdateDocumentParams = { id: TextDocumentId, document: PartialTextDocument }
-export type GetDocumentByFolderParams = { folder: string }
+export type GetDocumentByFolderParams = { id: FolderId }
 
 export const ACTION_GET_DOCUMENT = 'ACTION_GET_DOCUMENT'
 export const ACTION_GET_DOCUMENTS = 'ACTION_GET_DOCUMENTS'
