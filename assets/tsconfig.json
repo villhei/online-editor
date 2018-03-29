@@ -8,16 +8,32 @@
     "strictNullChecks": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "baseUrl": "src",
-    "types": ["node"],
+    "baseUrl": "./src",
+    "types": [
+      "node"
+    ],
     "paths": {
-      "actions": ["actions/*"],
-      "constants": ["constants/*"],
-      "containers":["containers/*"],
-      "components": ["components/*"],
-      "service": ["service/*"],
-      "reducers": ["reducers/*"],
-      "mocks": ["mocks"]
+      "actions": [
+        "actions/*"
+      ],
+      "constants": [
+        "constants/*"
+      ],
+      "containers": [
+        "containers/*"
+      ],
+      "components": [
+        "components/*"
+      ],
+      "service": [
+        "service/*"
+      ],
+      "reducers": [
+        "reducers/*"
+      ],
+      "mocks": [
+        "mocks/*"
+      ]
     },
     "allowJs": true
   },
@@ -27,6 +43,8 @@
   "exclude": [
     "node_modules",
     "priv",
-    "ts-build"
+    "ts-build",
+    "**/*.test.ts",
+    "**/*.test.tsx"
   ]
 }

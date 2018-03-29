@@ -1,3 +1,5 @@
+import axios, { AxiosError } from 'axios'
+
 export enum ResourceStatus {
   Loading = 'API_RESOURCE:LOADING',
   NotFound = 'API_RESOURCE:NOT_FOUND'
@@ -35,4 +37,8 @@ export function isResourceAvailable(resource: ApiResource<HasId>): boolean {
     return true
   }
   return false
+}
+export function isAxiosError(err: any): err is AxiosError {
+  const candidate = (err as AxiosError)
+  return Boolean(candidate.message && candidate.name && candidate.config)
 }

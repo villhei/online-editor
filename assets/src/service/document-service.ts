@@ -1,5 +1,5 @@
-import axios, { AxiosError } from 'axios'
-import { ApiResource } from './common'
+import axios, { AxiosResponse } from 'axios'
+import { ApiResource, isAxiosError } from './common'
 
 export type TextDocumentId = string
 export type FolderId = string
@@ -44,10 +44,6 @@ export function create(): Promise<TextDocument> {
     owner: 'fooguy',
     name: 'new document'
   }).then(response => response.data)
-}
-
-function isAxiosError(err: any): err is AxiosError {
-  return typeof (err as AxiosError).response !== 'undefined'
 }
 
 export function update(id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {
