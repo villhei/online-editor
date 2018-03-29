@@ -4,7 +4,6 @@ defmodule OnlineEditorWeb.DocumentController do
   alias OnlineEditor.Document
   alias OnlineEditor.Repo
   alias OnlineEditor.Document.Query
-  alias OnlineEditorWeb.ErrorView
 
   def index(conn, _params) do
     documents = Query.descriptions()
@@ -76,9 +75,4 @@ defmodule OnlineEditorWeb.DocumentController do
     |> render("show.json", document: document)
   end
 
-  defp respond_with_error(conn, error_code, error_view, error_message \\ []) do
-    conn
-    |> put_status(error_code)
-    |> render(ErrorView, error_view, error_message)
-  end
 end

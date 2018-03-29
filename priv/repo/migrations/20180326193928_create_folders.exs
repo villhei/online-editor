@@ -5,7 +5,7 @@ defmodule OnlineEditor.Repo.Migrations.CreateFolders do
     create table(:folders, primary_key: false) do
       add :id, :uuid, primary_key: true
       add :name, :string
-      add :parent, references(:folders, type: :uuid)
+      add :parent_id, references(:folders, type: :uuid)
       add :deleted, :boolean, default: false
       add :deleted_at, :naive_datetime, null: true
       timestamps()
