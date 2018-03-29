@@ -8,9 +8,11 @@ defmodule OnlineEditorWeb.FolderController do
 
   def index(%Plug.Conn{query_params: %{"find" => name}} = conn, _params) do
     case Query.get_by_name(name) do
-      nil -> conn |> respond_with_error(404, "404.json")
+      nil ->
+        conn |> respond_with_error(404, "404.json")
+
       folder ->
-          conn |> render("folder.json", folder: folder)
+        conn |> render("folder.json", folder: folder)
     end
   end
 
@@ -21,11 +23,14 @@ defmodule OnlineEditorWeb.FolderController do
 
   def create(conn, params) do
     changeset = Folder.changeset(%Folder{}, params)
+
     case Repo.insert(changeset) do
-      {:ok, folder}       -> conn
-                               |> put_status(200) |> render("show.json", folder: folder)
-      {:error, _changeset}  -> conn
-                               |> respond_with_error(400, "400.json", error: "Unable to create document")
+      {:ok, folder} ->
+        conn |> put_status(200) |> render("show.json", folder: folder)
+
+      {:error, _changeset} ->
+        conn
+        |> respond_with_error(400, "400.json", error: "Unable to create document")
     end
   end
 end

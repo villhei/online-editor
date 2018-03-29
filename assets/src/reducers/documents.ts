@@ -4,7 +4,8 @@ import {
   createDocumentAction,
   getDocumentAction,
   getDocumentsAction,
-  updateDocumentAction
+  updateDocumentAction,
+  getDocumentsByFolderAction
 } from 'actions/document-actions'
 import { ApiResource, ResourceStatus } from 'service/common'
 import { TextDocument } from 'service/document-service'
@@ -46,7 +47,7 @@ function updateSingle(state: DocumentReducerState, document: TextDocument): Docu
 }
 
 export default function documentReducer(state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
-  if (isType(action, getDocumentsAction.done)) {
+  if (isType(action, getDocumentsAction.done) || isType(action, getDocumentsByFolderAction.done)) {
     const documents = action.payload.result
     return {
       ...state,

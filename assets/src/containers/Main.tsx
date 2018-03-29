@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { getDocuments } from 'actions/document-actions'
+import { getDocuments, getDocumentsByFolder } from 'actions/document-actions'
 import { clearError } from 'actions/page-actions'
 import { RootState } from '../reducer'
 import Main from 'components/Main'
@@ -11,12 +11,13 @@ type Props = {
     stack: string | undefined
   },
   getDocuments: () => any,
+  getDocumentsByFolder: () => any,
   clearError: () => any
 }
 
 class MainContainer extends React.Component<Props, any> {
   componentDidMount() {
-    this.props.getDocuments()
+    this.props.getDocumentsByFolder()
   }
 
   render() {
@@ -34,6 +35,7 @@ const mapStateToProps = ({ model, ui, state }: RootState) => {
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
     getDocuments: () => getDocuments(dispatch, undefined),
+    getDocumentsByFolder: () => getDocumentsByFolder(dispatch, 'Root'),
     clearError: () => dispatch(clearError(undefined))
   }
 }

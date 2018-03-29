@@ -14,7 +14,7 @@ defmodule OnlineEditor.Application do
       # Start the Ecto repository
       supervisor(OnlineEditor.Repo, []),
       # Start the endpoint when the application starts
-      supervisor(OnlineEditorWeb.Endpoint, []),
+      supervisor(OnlineEditorWeb.Endpoint, [])
       # Start your own worker by calling:
       # OnlineEditor.Worker.start_link(arg1, arg2, arg3)
       # worker(OnlineEditor.Worker, [arg1, arg2, arg3]),

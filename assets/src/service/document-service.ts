@@ -2,6 +2,8 @@ import axios, { AxiosError } from 'axios'
 import { ApiResource } from './common'
 
 export type TextDocumentId = string
+export type FolderId = string
+
 export type TextDocument = {
   readonly id: TextDocumentId,
   readonly name: string,
@@ -9,6 +11,12 @@ export type TextDocument = {
   readonly owner: string,
   readonly inserted_at: string,
   readonly updated_at: string
+}
+
+export type Folder = {
+  readonly id: FolderId
+  readonly name: string,
+  readonly children: Folder[]
 }
 
 export type UpdatedStamp = {
@@ -53,6 +61,13 @@ export function update(id: TextDocumentId, document: PartialTextDocument): Promi
         return Promise.reject(err)
       }
     })
+}
+
+export function getAllByFolder(folderName: string): Promise<Array<TextDocument>> {
+  return axios.get<Folder>('/api/folders?find=' + folderName)
+    .then(res => res.data)
+    .then((folder: Folder) => axios.get<Array<TextDocument>>('/api/documents?folder=' + folder.id))
+    .then(res => res.data)
 }
 
 export function getAll(): Promise<Array<TextDocument>> {
