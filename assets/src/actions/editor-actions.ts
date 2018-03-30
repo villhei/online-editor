@@ -5,6 +5,7 @@ import {
   deleteDocumentAction,
   createDocumentAction,
   getDocuments,
+  getDocumentsByFolder,
   updateDocumentAction
 } from './document-actions'
 
@@ -37,19 +38,18 @@ export const updateDocumentName = actionCreator<UpdateParams>(UPDATE_DOCUMENT_NA
 export const expectConfirmAction = actionCreator<ExpectConfirmAction>(EXPECT_CONFIRM_ACTION)
 
 export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (params, dispatch): Promise<void> => {
-  await deleteById(params.id)
-  await getDocuments(dispatch, undefined)
+  await deleteById(params.document.id)
+  getDocumentsByFolder(dispatch, params.document.folder)
   dispatch(push('/'))
 })
 
-export const createAndSelect = bindThunkAction(createDocumentAction, async (params, dispatch): Promise<TextDocument> => {
-  const document = await create()
+export const createAndSelect = bindThunkAction(createDocumentAction, async (folderId, dispatch): Promise<TextDocument> => {
+  const document = await create(folderId)
   dispatch(push('/edit/' + document.id))
   return document
 })
 
 export const updateAndRefresh = bindThunkAction(updateDocumentAction, async (params, dispatch): Promise<TextDocument> => {
   const document = await update(params.id, params.document)
-  getDocuments(dispatch, undefined)
   return document
 })

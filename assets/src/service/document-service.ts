@@ -9,6 +9,7 @@ export type TextDocument = {
   readonly name: string,
   readonly content: string,
   readonly owner: string,
+  readonly folder: string,
   readonly inserted_at: string,
   readonly updated_at: string
 }
@@ -32,11 +33,12 @@ export function isDocument(candidate: ApiResource<TextDocument>): candidate is T
     document.inserted_at)
 }
 
-export function create(): Promise<TextDocument> {
+export function create(folder: FolderId): Promise<TextDocument> {
   return axios.post<Promise<TextDocument>>('/api/documents', {
     content: '',
     owner: 'fooguy',
-    name: 'new document'
+    name: 'new document',
+    folder
   }).then(response => response.data)
 }
 

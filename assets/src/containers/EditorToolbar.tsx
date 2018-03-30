@@ -29,10 +29,10 @@ export type DispatchProps = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
   saveDocument: (id: TextDocumentId, document: PartialTextDocument) => any,
   resetDocumentChanges: () => any,
-  deleteAndRefresh: (id: TextDocumentId) => any,
+  deleteAndRefresh: (document: TextDocument) => any,
   updateDocumentName: (value: string) => any,
   navigate: (route: string) => any,
-  expectConfirm: (action: ConfirmActionName) => any
+  expectConfirm: (action: ConfirmActionName, icon: string, title: string, message: string) => any
 }
 
 const CONFIRM_VIEW_ICON = 'share'
@@ -131,7 +131,10 @@ class EditorToolbar extends React.Component<Props, any> {
   }
 
   deleteDocument = () => {
-    this.props.deleteAndRefresh(this.props.documentId)
+    const { document } = this.props
+    if (isDocument(document)) {
+      this.props.deleteAndRefresh(document)
+    }
   }
 
   expectConfirm = (action: ConfirmActionName) => () => {
@@ -220,8 +223,10 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
     saveDocument: (id: TextDocumentId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
-    deleteAndRefresh: (id: TextDocumentId) => dispatch(deleteAndRefresh({ id })),
-    expectConfirm: (action: ConfirmActionName) => {
+    deleteAndRefresh: (document: TextDocument) => {
+      dispatch(deleteAndRefresh({ document }))
+    },
+    expectConfirm: (action: ConfirmActionName, icon: string, title: string, message: string) => {
       dispatch(expectConfirmAction({ action }))
     },
     navigate: (route: string) => dispatch(push(route))

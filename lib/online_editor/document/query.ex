@@ -36,7 +36,7 @@ defmodule OnlineEditor.Document.Query do
     query =
       from(
         d in Document,
-        where: d.folder_id == ^folder_id,
+        where: d.folder_id == ^folder_id and d.deleted == false,
         preload: [:folder],
         select: d
       )

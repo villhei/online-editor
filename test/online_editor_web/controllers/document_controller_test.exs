@@ -87,7 +87,7 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
   test "POST 200 - create path allows creating documents with an assigned folder", %{conn: conn} do
     folder = insert(:folder)
     payload = Map.put(@no_content_document, :folder, folder.id)
-    conn = post(conn, "/api/documents", payload)
+    post(conn, "/api/documents", payload)
 
     document =
       Repo.get_by(Document, @no_content_document)
