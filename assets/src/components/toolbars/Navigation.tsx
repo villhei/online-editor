@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 const Navigation = () => {
   return (
-    <div className='ui fixed inverted borderless grid menu'>
+    <div className='ui fixed borderless grid menu'>
       <div className='ui row'>
         <Link to='/' className='ui item'>
           <i className='ui icon home' />

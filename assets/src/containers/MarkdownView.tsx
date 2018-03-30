@@ -1,9 +1,9 @@
 import * as React from 'react'
-import * as ReactMarkdown from 'react-markdown'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
 import { ApiResource } from 'service/common'
+import DocumentView from 'components/MarkdownView'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
 import wrapApiResource, { ApiResourceProps } from 'containers/ApiResourceHOC'
 
@@ -16,7 +16,7 @@ export type MarkdownViewProps = {
 class MarkdownView extends React.PureComponent<MarkdownViewProps> {
   render() {
     const { resource } = this.props
-    return <ReactMarkdown source={resource.content} />
+    return <DocumentView resource={resource} />
   }
 }
 

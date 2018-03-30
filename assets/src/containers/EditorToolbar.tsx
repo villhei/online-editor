@@ -1,5 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
+import { push } from 'react-router-redux'
 import { RootState } from '../reducer'
 import { resetDocumentChanges, deleteAndRefresh, updateAndRefresh, updateDocumentName } from 'actions/editor-actions'
 import { getDocument } from 'actions/document-actions'
@@ -13,6 +14,7 @@ export type Props = {
   resetDocumentChanges: () => any,
   deleteAndRefresh: (id: TextDocumentId) => any,
   updateDocumentName: (value: string) => any,
+  navigate: (route: string) => any,
   documentId: string,
   document: ApiResource<TextDocument>,
   modifiedContent: string | undefined,
@@ -54,6 +56,11 @@ class EditorToolbar extends React.Component<Props, any> {
     this.props.updateDocumentName(event.target.value)
   }
 
+  viewDocument = () => {
+    const { documentId, navigate } = this.props
+    navigate('/view/' + documentId)
+  }
+
   render() {
     const { documentId, document, modifiedContent, modifiedName, updateDocumentName, deleting, saving, refreshing } = this.props
     const saveDisabled = Boolean(!document || !(modifiedContent || modifiedName))
@@ -62,6 +69,7 @@ class EditorToolbar extends React.Component<Props, any> {
       updateDocument: this.updateDocumentContent,
       deleteDocument: this.deleteDocument,
       updateDocumentName: this.updateDocumentName,
+      viewDocument: this.viewDocument,
       saveDisabled,
       deleting,
       saving,
@@ -119,7 +127,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
     deleteAndRefresh: (id: TextDocumentId) => {
       dispatch(deleteAndRefresh({ id }))
-    }
+    },
+    navigate: (route: string) => dispatch(push(route))
   }
 }
 
