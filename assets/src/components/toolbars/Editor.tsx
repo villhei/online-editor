@@ -29,7 +29,6 @@ export default (props: Props) => {
         <div className='ui transparent inverted title field input'>
           <input type='text' value={props.title} onChange={props.updateDocumentName} />
         </div>
-        <FileDropdown />
         <MenuButton
           onClick={props.refreshDocument}
           loading={props.refreshing}
@@ -57,7 +56,6 @@ export default (props: Props) => {
           <Link to='/' className='ui item'>
             <i className='ui icon home' />
           </Link>}
-          <FileDropdown />
           <MenuButton
             onClick={props.refreshDocument}
             loading={props.refreshing}

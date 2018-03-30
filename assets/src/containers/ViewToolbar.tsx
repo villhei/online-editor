@@ -12,24 +12,31 @@ export type Props = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
   navigate: (route: string) => any,
   documentId: string,
-  document: ApiResource<TextDocument>
+  document: ApiResource<TextDocument>,
+  refreshing: boolean
 }
 
 class ViewToolbar extends React.Component<Props, any> {
   componentDidMount() {
-    const { documentId, getDocument } = this.props
-    getDocument(documentId)
+    this.refreshDocument()
   }
 
   editDocument = () => {
     this.props.navigate('/edit/' + this.props.documentId)
   }
 
+  refreshDocument = () => {
+    const { documentId, getDocument } = this.props
+    getDocument(documentId)
+  }
+
   render() {
-    const { documentId, document, } = this.props
+    const { documentId, document, refreshing } = this.props
     const commonProps = {
       editDisabled: document === ResourceStatus.NotFound,
-      editDocument: this.editDocument
+      editDocument: this.editDocument,
+      refreshing,
+      refreshDocument: this.refreshDocument
     }
     if (document === ResourceStatus.Loading) {
       return <ViewToolbarView
@@ -58,9 +65,11 @@ class ViewToolbar extends React.Component<Props, any> {
 const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any) => {
   const documentId: TextDocumentId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
+  const { refreshing } = ui.page.editorToolbar
   return {
     document,
-    documentId
+    documentId,
+    refreshing
   }
 }
 

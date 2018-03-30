@@ -6,22 +6,31 @@ import MenuButton from './MenuButton'
 type Props = {
   title: string,
   editDisabled: boolean,
-  editDocument: () => void
+  refreshing: boolean,
+  editDocument: () => void,
+  refreshDocument: () => void
 }
 
 export default (props: Props) => {
+  const { title, editDisabled, editDocument, refreshDocument, refreshing } = props
   return (
     <div className='ui fixed grid menu'>
       <div className='ui row'>
         <Link to='/' className='ui item'>
           <i className='ui icon home' />
         </Link>
-        <div className='header item large title field'><h3>{props.title}</h3></div>
+        <div className='header item large title field'><h3>{title}</h3></div>
+        <MenuButton
+          loading={refreshing}
+          disabled={false}
+          icon='refresh'
+          onClick={refreshDocument}>
+        </MenuButton>
         <MenuButton
           loading={false}
-          disabled={props.editDisabled}
+          disabled={editDisabled}
           icon='edit'
-          onClick={props.editDocument}>
+          onClick={editDocument}>
         </MenuButton>
       </div>
     </div >
