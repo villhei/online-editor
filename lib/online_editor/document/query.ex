@@ -29,7 +29,7 @@ defmodule OnlineEditor.Document.Query do
   end
 
   def get_by_id(id) do
-    Repo.get_by(Document, id: id, deleted: false)
+    Repo.get_by(Document, id: id, deleted: false) |> Repo.preload(:folder)
   end
 
   def get_by_folder(folder_id) do
