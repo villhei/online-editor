@@ -74,7 +74,7 @@ export default function documentReducer(state: DocumentReducerState = initialSta
       }
     }
   }
-  if (isType(action, updateDocumentAction.done)) {
+  if (isType(action, updateDocumentAction.done))  {
     return updateSingle(state, action.payload.result)
   }
   if (isType(action, getDocumentAction.done)) {
