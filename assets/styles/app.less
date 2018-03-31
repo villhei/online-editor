@@ -1,6 +1,8 @@
 /* This file is for your main application css. */
 
 @import (inline) "./semantic.flatly.min.css";
+@import (inline) "../node_modules/codemirror/lib/codemirror.css";
+@import (inline) "../node_modules/codemirror/theme/neat.css";
 
 html, body {
   height: 100%;
@@ -65,5 +67,13 @@ html, body {
   margin-bottom: 20em;
 }
 
-@import (inline) "../node_modules/codemirror/lib/codemirror.css";
-@import (inline) "../node_modules/codemirror/theme/neat.css";
+.ui.dimmer.active {
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+}
+
+.ui.modal {
+  position: initial;
+  margin: 0 !important;
+}

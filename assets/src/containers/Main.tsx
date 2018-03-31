@@ -8,7 +8,6 @@ import { RootState } from '../reducer'
 import Main from 'components/Main'
 
 type Props = {
-  documents: Array<TextDocument>,
   error: {
     message: string | undefined,
     stack: string | undefined
@@ -23,14 +22,13 @@ class MainContainer extends React.Component<Props, any> {
   }
 
   render() {
-    const { documents, error, clearError } = this.props
-    return <Main documents={documents} error={error} clearError={clearError} />
+    const { error, clearError } = this.props
+    return <Main error={error} clearError={clearError} />
   }
 }
 
 const mapStateToProps = ({ model, ui, state }: RootState) => {
   return {
-    documents: model.documents.all,
     error: state.error
   }
 }
