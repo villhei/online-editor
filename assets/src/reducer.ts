@@ -1,5 +1,5 @@
 import { createStore, combineReducers, applyMiddleware, Reducer } from 'redux'
-import { routerReducer, routerMiddleware, RouterState } from 'react-router-redux'
+import { routerMiddleware, RouterState } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import documentReducer, { DocumentReducerState } from 'reducers/documents'
 import { history, router } from 'reducers/router'

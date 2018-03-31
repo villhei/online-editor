@@ -1,14 +1,12 @@
 import * as React from 'react'
 import ConnectedSwitch from 'containers/ConnectedSwitch'
 import { Route } from 'react-router-dom'
-import { connect, Dispatch } from 'react-redux'
-import Main from 'components/Main'
 import MainToolbar from 'containers/MainToolbar'
 import EditorToolbar from 'containers/EditorToolbar'
 import ViewToolbar from 'containers/ViewToolbar'
 import FileList from 'containers/FileList'
 import Editor from 'containers/Editor'
-import MarkdownView from 'containers/MarkdownView'
+import DocumentView from 'containers/DocumentView'
 import Modal from 'containers/Modal'
 
 type Props = {
@@ -41,7 +39,7 @@ export default (props: Props) => {
           <div className='ui full height row content'>
             <section className='ui twelve wide computer sixteen wide tablet centered column without padding'>
               <ConnectedSwitch>
-                <Route path={'/view/:documentId'} component={MarkdownView} />
+                <Route path={'/view/:documentId'} component={DocumentView} />
                 <Route path={'/edit/:documentId'} component={Editor} />
                 <Route exact path='/' component={FileList} />
               </ConnectedSwitch>

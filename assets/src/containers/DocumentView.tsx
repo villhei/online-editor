@@ -3,20 +3,20 @@ import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
 import { ApiResource } from 'service/common'
-import DocumentView from 'components/MarkdownView'
+import DocumentViewComponent from 'components/DocumentView'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
-import wrapApiResource, { ApiResourceProps } from 'containers/ApiResourceHOC'
+import wrapApiResource from 'containers/ApiResourceHOC'
 
-export type MarkdownViewProps = {
+export type DocumentViewProps = {
   getResource: (id: string) => Promise<TextDocument>,
   resourceId: string,
   resource: TextDocument
 }
 
-class MarkdownView extends React.PureComponent<MarkdownViewProps> {
-  render() {
+class DocumentView extends React.PureComponent<DocumentViewProps> {
+  render () {
     const { resource } = this.props
-    return <DocumentView resource={resource} />
+    return <DocumentViewComponent resource={resource} />
   }
 }
 
@@ -25,7 +25,7 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any) => {
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   return {
     resource,
-    resourceId,
+    resourceId
   }
 }
 
@@ -35,5 +35,4 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)
-  (wrapApiResource<TextDocument, MarkdownViewProps>(isDocument)(MarkdownView))
+export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResource<TextDocument, DocumentViewProps>(isDocument)(DocumentView))

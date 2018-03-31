@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Route, Switch } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { createAndSelect } from 'actions/editor-actions'
@@ -14,7 +13,7 @@ class FileListContainer extends React.Component<Props, any> {
   createDocument = () => {
     this.props.createDocument()
   }
-  render() {
+  render () {
     const { documents } = this.props
     return <FileList
       documents={documents}

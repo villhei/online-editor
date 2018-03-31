@@ -7,7 +7,7 @@ import {
   updateDocumentAction
 } from 'actions/document-actions'
 import { ApiResource, ResourceStatus } from 'service/common'
-import { TextDocument, TextDocumentId } from 'service/document-service'
+import { TextDocument } from 'service/document-service'
 
 type DocumentMap = { [id: string]: ApiResource<TextDocument> }
 
@@ -21,7 +21,7 @@ export const initialState: DocumentReducerState = {
   all: []
 }
 
-function updateOrJoin(array: Array<TextDocument>, object: TextDocument): Array<TextDocument> {
+function updateOrJoin (array: Array<TextDocument>, object: TextDocument): Array<TextDocument> {
   const index = array.findIndex(({ id }) => object.id === id)
   if (index > -1) {
     const modified = Array.from(array)
@@ -32,7 +32,7 @@ function updateOrJoin(array: Array<TextDocument>, object: TextDocument): Array<T
   }
 }
 
-function updateSingle(state: DocumentReducerState, document: TextDocument): DocumentReducerState {
+function updateSingle (state: DocumentReducerState, document: TextDocument): DocumentReducerState {
   const byId = {
     ...state.byId,
     [document.id]: document
@@ -45,7 +45,7 @@ function updateSingle(state: DocumentReducerState, document: TextDocument): Docu
   }
 }
 
-export default function documentReducer(state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
+export default function documentReducer (state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
   if (isType(action, getDocumentsAction.done)) {
     const documents = action.payload.result
     return {
@@ -74,7 +74,7 @@ export default function documentReducer(state: DocumentReducerState = initialSta
       }
     }
   }
-  if (isType(action, updateDocumentAction.done))  {
+  if (isType(action, updateDocumentAction.done)) {
     return updateSingle(state, action.payload.result)
   }
   if (isType(action, getDocumentAction.done)) {

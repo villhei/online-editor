@@ -1,6 +1,6 @@
 
-import { connect, Dispatch } from 'react-redux'
-import { Switch, } from 'react-router-dom'
+import { connect } from 'react-redux'
+import { Switch } from 'react-router-dom'
 import { Location } from 'history'
 import { RootState } from '../reducer'
 

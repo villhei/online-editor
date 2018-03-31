@@ -6,7 +6,7 @@ import { getDocument } from 'actions/document-actions'
 import { updatedocumentContent, resetDocumentChanges } from 'actions/editor-actions'
 import { ApiResource } from 'service/common'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
-import wrapApiResource, { ApiResourceProps } from 'containers/ApiResourceHOC'
+import wrapApiResource from 'containers/ApiResourceHOC'
 import 'codemirror/mode/markdown/markdown'
 
 const EDITOR_OPTIONS = {
@@ -31,17 +31,17 @@ export type EditorProps = {
 }
 
 class Editor extends React.PureComponent<EditorProps> {
-  componentWillReceiveProps(nextProps: EditorProps) {
+  componentWillReceiveProps (nextProps: EditorProps) {
     if (nextProps.resourceId !== this.props.resourceId) {
       this.props.resetDocumentChanges()
     }
   }
 
-  componentDidMount() {
+  componentDidMount () {
     this.props.resetDocumentChanges()
   }
 
-  render() {
+  render () {
     const { resource, updateDocumentContent, modifiedContent, saving } = this.props
     return <CodeMirror
       className='ui full height without padding'
@@ -49,8 +49,6 @@ class Editor extends React.PureComponent<EditorProps> {
       value={modifiedContent || resource.content}
       onBeforeChange={(editor, data, value) => {
         updateDocumentContent(value)
-      }}
-      onChange={(editor, metadata, value) => {
       }}
       options={{
         ...EDITOR_OPTIONS,
@@ -78,7 +76,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     updateDocumentContent: (value: string) => dispatch(updatedocumentContent({ value })),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined))
   }
+
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)
-  (wrapApiResource<TextDocument, EditorProps>(isDocument)(Editor))
+export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResource<TextDocument, EditorProps>(isDocument)(Editor))

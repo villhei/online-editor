@@ -19,15 +19,13 @@ class FileDropdownContainer extends React.Component<Props, any> {
     this.props.toggleNavigation()
   }
 
-  render() {
+  render () {
     const { documents, navigationOpen } = this.props
     return <FileDropdown documents={documents}
       showNavigation={navigationOpen}
       toggleNavigation={this.toggleNavigation} />
   }
 }
-
-
 
 const mapStateToProps = ({ model, ui }: RootState) => {
   return {

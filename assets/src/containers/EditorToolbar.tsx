@@ -10,10 +10,22 @@ import {
   updateDocumentName
 } from 'actions/editor-actions'
 import { getDocument } from 'actions/document-actions'
-import { setModalVisibility, modalClear } from 'actions/page-actions'
-import { ApiResource, ResourceStatus } from 'service/common'
-import { TextDocument, PartialTextDocument, TextDocumentId, isDocument } from 'service/document-service'
-import EditorToolbarView, { Props as ViewProps } from 'components/toolbars/Editor'
+import {
+  setModalVisibility,
+  modalClear
+} from 'actions/page-actions'
+import {
+  ApiResource,
+  isResourceAvailable,
+  getResourceName
+} from 'service/common'
+import {
+  TextDocument,
+  PartialTextDocument,
+  TextDocumentId,
+  isDocument
+} from 'service/document-service'
+import EditorToolbarView from 'components/toolbars/Editor'
 
 export type DispatchProps = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
@@ -23,7 +35,7 @@ export type DispatchProps = {
   updateDocumentName: (value: string) => any,
   navigate: (route: string) => any,
   clearModal: () => any,
-  expectConfirm: (action: ActionName, icon: string, title: string, message: string) => any,
+  expectConfirm: (action: ActionName, icon: string, title: string, message: string) => any
 }
 
 export type ActionName = 'delete'
@@ -48,17 +60,18 @@ export type StateProps = {
 export type Props = DispatchProps & StateProps
 
 class EditorToolbar extends React.Component<Props, any> {
-  componentDidMount() {
+  componentDidMount () {
     const { documentId, getDocument } = this.props
     getDocument(documentId)
   }
 
-  componentDidUpdate() {
+  componentDidUpdate () {
     const { confirmation: { action, confirmed } } = this.props
     if (action && confirmed) {
       switch (action) {
         case 'delete': {
           this.deleteDocument()
+          break
         }
         default: {
           console.log('Unknown action', action)
@@ -107,7 +120,7 @@ class EditorToolbar extends React.Component<Props, any> {
     navigate('/view/' + documentId)
   }
 
-  render() {
+  render () {
     const {
       documentId,
       document,
@@ -133,34 +146,11 @@ class EditorToolbar extends React.Component<Props, any> {
     }
     return <>
       <EditorToolbarView
-        title={getViewTitle(document, modifiedName)}
-        disabled={getViewDisabledStatus(document)}
+        title={getResourceName(document, modifiedName)}
+        disabled={!isResourceAvailable(document)}
         {...commonProps}
       />
     </>
-  }
-}
-
-function getViewDisabledStatus(document: ApiResource<TextDocument>): boolean {
-  if (document === ResourceStatus.Loading) {
-    return true
-  } else if (document === ResourceStatus.NotFound) {
-    return true
-  } else if (document && document.name) {
-    return false
-  }
-  return true
-}
-
-function getViewTitle(document: ApiResource<TextDocument>, modifiedName?: string): string {
-  if (document === ResourceStatus.Loading) {
-    return 'Loading...'
-  } else if (document === ResourceStatus.NotFound) {
-    return 'Not found'
-  } else if (document && document.name) {
-    return modifiedName || document.name
-  } else {
-    return 'Error'
   }
 }
 
@@ -174,7 +164,7 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateP
     documentId,
     modifiedContent,
     modifiedName,
-    ...editorToolbar,
+    ...editorToolbar
 
   }
 }

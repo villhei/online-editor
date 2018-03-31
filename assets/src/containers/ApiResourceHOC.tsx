@@ -13,28 +13,27 @@ export default function wrapApiResource<T, P>
   (isValueResolved: (value: ApiResource<T>) => value is T) {
   return function (Component: React.ComponentClass<P & ApiResourceProps<T>>) {
     return class ApiResourceWrapper extends React.Component<P & ApiResourceProps<T>> {
-      componentDidMount() {
+      componentDidMount () {
         const { resource } = this.props
         if (!isValueResolved(resource)) {
           this.props.getResource(this.props.resourceId)
         }
       }
 
-      componentWillReceiveProps(nextProps: ApiResourceProps<T>) {
+      componentWillReceiveProps (nextProps: ApiResourceProps<T>) {
         if (nextProps.resourceId !== this.props.resourceId) {
           this.props.getResource(nextProps.resourceId)
         }
       }
 
-      render() {
+      render () {
         const { resource } = this.props
         if (isValueResolved(resource)) {
           return <Component {...this.props } />
         }
         if (resource instanceof Error) {
           return <h1>Error {(resource as Error).message}</h1>
-        }
-        else if (resource === ResourceStatus.NotFound) {
+        } else if (resource === ResourceStatus.NotFound) {
           return (<h1>Not found</h1>)
         } else {
           return (<Loading />)

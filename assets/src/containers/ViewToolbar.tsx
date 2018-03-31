@@ -2,11 +2,10 @@ import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { push } from 'react-router-redux'
-import { resetDocumentChanges, deleteAndRefresh, updateAndRefresh, updateDocumentName } from 'actions/editor-actions'
 import { getDocument } from 'actions/document-actions'
 import { ApiResource, ResourceStatus } from 'service/common'
-import { TextDocument, PartialTextDocument, TextDocumentId, isDocument } from 'service/document-service'
-import ViewToolbarView from 'components/toolbars/View'
+import { TextDocument, TextDocumentId } from 'service/document-service'
+import DocumentToolbarView from 'components/toolbars/DocumentView'
 
 export type Props = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
@@ -17,7 +16,7 @@ export type Props = {
 }
 
 class ViewToolbar extends React.Component<Props, any> {
-  componentDidMount() {
+  componentDidMount () {
     this.refreshDocument()
   }
 
@@ -30,7 +29,7 @@ class ViewToolbar extends React.Component<Props, any> {
     getDocument(documentId)
   }
 
-  render() {
+  render () {
     const { documentId, document, refreshing } = this.props
     const commonProps = {
       editDisabled: document === ResourceStatus.NotFound,
@@ -39,22 +38,22 @@ class ViewToolbar extends React.Component<Props, any> {
       refreshDocument: this.refreshDocument
     }
     if (document === ResourceStatus.Loading) {
-      return <ViewToolbarView
+      return <DocumentToolbarView
         {...commonProps}
         title={'Loading...'}
       />
     } else if (document === ResourceStatus.NotFound) {
-      return <ViewToolbarView
+      return <DocumentToolbarView
         {...commonProps}
         title={'Not found'}
       />
     } else if (document && document.name) {
-      return <ViewToolbarView
+      return <DocumentToolbarView
         {...commonProps}
         title={document.name}
       />
     } else {
-      return <ViewToolbarView
+      return <DocumentToolbarView
         {...commonProps}
         title={'Error'}
       />

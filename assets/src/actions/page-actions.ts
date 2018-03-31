@@ -25,4 +25,3 @@ export const setModalVisibility = actionCreator<SetModalVisibility>(SET_MODAL_VI
 export const clearError = actionCreator<undefined>(CLEAR_ERROR)
 export const modalConfirm = actionCreator<undefined>(MODAL_CONFIRM)
 export const modalClear = actionCreator<undefined>(MODAL_CLEAR)
-

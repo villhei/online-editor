@@ -1,9 +1,7 @@
 import * as React from 'react'
-import { Route, Switch } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
-import { TextDocument } from 'service/document-service'
 import { getDocuments } from 'actions/document-actions'
-import { toggleMenu, ToggleMenu, clearError } from 'actions/page-actions'
+import { clearError } from 'actions/page-actions'
 import { RootState } from '../reducer'
 import Main from 'components/Main'
 
@@ -17,11 +15,11 @@ type Props = {
 }
 
 class MainContainer extends React.Component<Props, any> {
-  componentDidMount() {
+  componentDidMount () {
     this.props.getDocuments()
   }
 
-  render() {
+  render () {
     const { error, clearError } = this.props
     return <Main error={error} clearError={clearError} />
   }

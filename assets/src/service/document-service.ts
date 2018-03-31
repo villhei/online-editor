@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, AxiosError } from 'axios'
+import axios, { AxiosError } from 'axios'
 import { ApiResource } from './common'
 
 export type TextDocumentId = string
@@ -20,8 +20,8 @@ export type P<T> = {
 
 export type PartialTextDocument = P<TextDocument> & UpdatedStamp
 
-export function isDocument(candidate: ApiResource<TextDocument>): candidate is TextDocument {
-  const document = <TextDocument>candidate
+export function isDocument (candidate: ApiResource<TextDocument>): candidate is TextDocument {
+  const document = candidate as TextDocument
   return Boolean(document &&
     document.id &&
     document.name &&
@@ -30,7 +30,7 @@ export function isDocument(candidate: ApiResource<TextDocument>): candidate is T
     document.inserted_at)
 }
 
-export function create(): Promise<TextDocument> {
+export function create (): Promise<TextDocument> {
   return axios.post<Promise<TextDocument>>('/api/documents', {
     content: '',
     owner: 'fooguy',
@@ -38,11 +38,11 @@ export function create(): Promise<TextDocument> {
   }).then(response => response.data)
 }
 
-function isAxiosError(err: any): err is AxiosError {
-  return typeof (<AxiosError>err).response !== 'undefined'
+function isAxiosError (err: any): err is AxiosError {
+  return typeof (err as AxiosError).response !== 'undefined'
 }
 
-export function update(id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {
+export function update (id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {
   return axios.put<TextDocument>(`/api/documents/${id}?overwrite=false`, document)
     .then(res => res.data)
     .catch(err => {
@@ -55,14 +55,14 @@ export function update(id: TextDocumentId, document: PartialTextDocument): Promi
     })
 }
 
-export function getAll(): Promise<Array<TextDocument>> {
+export function getAll (): Promise<Array<TextDocument>> {
   return axios.get<Array<TextDocument>>('/api/documents').then(res => res.data)
 }
 
-export function getById(id: TextDocumentId): Promise<TextDocument> {
+export function getById (id: TextDocumentId): Promise<TextDocument> {
   return axios.get<TextDocument>(`/api/documents/${id}`).then(res => res.data)
 }
 
-export function deleteById(id: TextDocumentId): Promise<void> {
+export function deleteById (id: TextDocumentId): Promise<void> {
   return axios.delete('/api/documents/' + id).then(res => res.data)
 }

@@ -4,7 +4,7 @@ import { LOCATION_CHANGE } from 'react-router-redux'
 import {
   getDocumentAction,
   updateDocumentAction,
-  deleteDocumentAction,
+  deleteDocumentAction
 } from 'actions/document-actions'
 import {
   toggleMenu,
@@ -54,7 +54,7 @@ export const initialState: PageState = {
   }
 }
 
-function updateToolbarItem(state: PageState, itemName: string, newStatus: boolean): PageState {
+function updateToolbarItem (state: PageState, itemName: string, newStatus: boolean): PageState {
   const editorToolbar = {
     ...state.editorToolbar,
     [itemName]: newStatus
@@ -65,7 +65,7 @@ function updateToolbarItem(state: PageState, itemName: string, newStatus: boolea
   }
 }
 
-export default function pageReducer(state: PageState = initialState, action: Action): PageState {
+export default function pageReducer (state: PageState = initialState, action: Action): PageState {
   if (isType(action, modalClear)) {
     const { editorToolbar } = state
     const { confirmation } = editorToolbar

@@ -7,7 +7,6 @@ import {
   getDocuments,
   updateDocumentAction
 } from './document-actions'
-import { setModalVisibility } from './page-actions'
 
 import { TextDocument, deleteById, create, update } from 'service/document-service'
 

@@ -1,5 +1,4 @@
 import * as React from 'react'
-import { Route, Switch } from 'react-router-dom'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { modalConfirm, modalClear } from 'actions/page-actions'
@@ -15,7 +14,7 @@ type Props = {
 }
 
 class Modal extends React.Component<Props, any> {
-  render() {
+  render () {
     const { icon, title, message, dismiss, visible, confirm } = this.props
     return <ConfirmationModal
       visible={visible}

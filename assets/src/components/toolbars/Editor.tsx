@@ -1,7 +1,5 @@
 import * as React from 'react'
 import { Link } from 'react-router-dom'
-import { TextDocument } from 'service/document-service'
-import ConfirmationModal from 'components/ConfirmationModal'
 import MenuButton from './MenuButton'
 
 export type Props = {
@@ -56,4 +54,3 @@ export default (props: Props) => {
     </>
   )
 }
-

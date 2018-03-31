@@ -1,3 +1,17 @@
 {
-  "extends": "tslint-config-standard"
+  "extends": "tslint-config-standard",
+  "no-import-side-effect": true,
+  "semicolon": [
+    true,
+    "never"
+  ],
+  "no-unused-expression": [
+    true,
+    "allow-fast-null-checks"
+  ],
+  "no-unused-variable": true,
+  "space-before-function-paren": [
+    true,
+    "never"
+  ]
 }
