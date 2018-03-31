@@ -60,12 +60,12 @@ export type StateProps = {
 export type Props = DispatchProps & StateProps
 
 class EditorToolbar extends React.Component<Props, any> {
-  componentDidMount () {
+  componentDidMount() {
     const { documentId, getDocument } = this.props
     getDocument(documentId)
   }
 
-  componentDidUpdate () {
+  componentDidUpdate() {
     const { confirmation: { action, confirmed } } = this.props
     if (action && confirmed) {
       switch (action) {
@@ -120,7 +120,7 @@ class EditorToolbar extends React.Component<Props, any> {
     navigate('/view/' + documentId)
   }
 
-  render () {
+  render() {
     const {
       documentId,
       document,
@@ -165,7 +165,6 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateP
     modifiedContent,
     modifiedName,
     ...editorToolbar
-
   }
 }
 

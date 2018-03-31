@@ -38,7 +38,7 @@ export const expectConfirmAction = actionCreator<ExpectConfirmAction>(EXPECT_CON
 
 export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (params, dispatch): Promise<void> => {
   await deleteById(params.id)
-  getDocuments(dispatch, undefined)
+  await getDocuments(dispatch, undefined)
   dispatch(push('/'))
 })
 

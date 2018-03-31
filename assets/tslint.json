@@ -1,17 +1,25 @@
 {
   "extends": "tslint-config-standard",
-  "no-import-side-effect": true,
-  "semicolon": [
-    true,
-    "never"
-  ],
-  "no-unused-expression": [
-    true,
-    "allow-fast-null-checks"
-  ],
-  "no-unused-variable": true,
-  "space-before-function-paren": [
-    true,
-    "never"
-  ]
+  "rules": {
+    "no-import-side-effect": true,
+    "semicolon": [
+      true,
+      "never"
+    ],
+    "no-unused-expression": [
+      true,
+      "allow-fast-null-checks"
+    ],
+    "no-unused-variable": true,
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always",
+        "method": "never",
+        "constructor": "never"
+      }
+    ]
+  }
 }

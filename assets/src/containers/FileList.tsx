@@ -13,7 +13,7 @@ class FileListContainer extends React.Component<Props, any> {
   createDocument = () => {
     this.props.createDocument()
   }
-  render () {
+  render() {
     const { documents } = this.props
     return <FileList
       documents={documents}

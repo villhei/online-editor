@@ -14,7 +14,7 @@ export type DocumentViewProps = {
 }
 
 class DocumentView extends React.PureComponent<DocumentViewProps> {
-  render () {
+  render() {
     const { resource } = this.props
     return <DocumentViewComponent resource={resource} />
   }

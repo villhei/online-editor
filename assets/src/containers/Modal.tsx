@@ -14,7 +14,7 @@ type Props = {
 }
 
 class Modal extends React.Component<Props, any> {
-  render () {
+  render() {
     const { icon, title, message, dismiss, visible, confirm } = this.props
     return <ConfirmationModal
       visible={visible}
