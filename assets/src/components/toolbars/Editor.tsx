@@ -50,7 +50,7 @@ export default (props: Props) => {
             onClick={props.deleteDocument}
             loading={props.deleting}
             disabled={props.disabled}
-            icon='red trash alternate' />
+            icon='trash alternate' />
         </div>
       </div >
     </>

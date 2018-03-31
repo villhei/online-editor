@@ -10,7 +10,7 @@ import {
   updateDocumentName
 } from 'actions/editor-actions'
 import { getDocument } from 'actions/document-actions'
-import { setModalVisibility } from 'actions/page-actions'
+import { setModalVisibility, modalClear } from 'actions/page-actions'
 import { ApiResource, ResourceStatus } from 'service/common'
 import { TextDocument, PartialTextDocument, TextDocumentId, isDocument } from 'service/document-service'
 import EditorToolbarView, { Props as ViewProps } from 'components/toolbars/Editor'
@@ -22,6 +22,7 @@ export type DispatchProps = {
   deleteAndRefresh: (id: TextDocumentId) => any,
   updateDocumentName: (value: string) => any,
   navigate: (route: string) => any,
+  clearModal: () => any,
   expectConfirm: (action: ActionName, icon: string, title: string, message: string) => any,
 }
 
@@ -73,6 +74,7 @@ class EditorToolbar extends React.Component<Props, any> {
   }
 
   deleteDocument = () => {
+    this.props.clearModal()
     this.props.deleteAndRefresh(this.props.documentId)
   }
 
@@ -183,13 +185,12 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
     saveDocument: (id: TextDocumentId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
-    deleteAndRefresh: (id: TextDocumentId) => {
-      dispatch(deleteAndRefresh({ id }))
-    },
+    deleteAndRefresh: (id: TextDocumentId) => dispatch(deleteAndRefresh({ id })),
     expectConfirm: (action: ActionName, icon: string, title: string, message: string) => {
       dispatch(expectConfirmAction({ action }))
       dispatch(setModalVisibility({ visible: true, icon, title, message }))
     },
+    clearModal: () => dispatch(modalClear(undefined)),
     navigate: (route: string) => dispatch(push(route))
   }
 }
