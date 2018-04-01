@@ -27,7 +27,7 @@ import { history } from 'reducers/router'
 
 const APP_ROOT: string = 'main'
 
-function render (Main: React.ComponentClass<any>) {
+function render(Main: React.ComponentClass<any>) {
   const main: HTMLElement = document.getElementById(APP_ROOT) as HTMLElement
   const reactApplication: JSX.Element = (
     <AppContainer>

@@ -21,12 +21,14 @@ export default (props: Props) => {
   return (
     <>
       <div className='ui fixed borderless grid menu'>
-        <div className='ui  row'>
+        <div className='ui row'>
           <Link to='/' className='ui item'>
             <i className='ui icon home' />
           </Link>
-          <div className='ui transparent inverted labeled input'>
-            <input type='text' value={props.title} onChange={props.updateDocumentName} />
+          <div className='item title field mobile hidden'>
+            <div className='ui transparent inverted labeled input'>
+              <input type='text' value={props.title} onChange={props.updateDocumentName} />
+            </div>
           </div>
           <MenuButton
             onClick={props.refreshDocument}

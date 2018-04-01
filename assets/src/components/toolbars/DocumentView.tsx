@@ -18,7 +18,7 @@ export default (props: Props) => {
         <Link to='/' className='ui item'>
           <i className='ui icon home' />
         </Link>
-        <div className='header item large title field'><h3>{title}</h3></div>
+        <div className='item title field mobile hidden'></div>
         <MenuButton
           loading={refreshing}
           disabled={false}

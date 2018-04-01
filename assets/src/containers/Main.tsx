@@ -15,11 +15,11 @@ type Props = {
 }
 
 class MainContainer extends React.Component<Props, any> {
-  componentDidMount () {
+  componentDidMount() {
     this.props.getDocuments()
   }
 
-  render () {
+  render() {
     const { error, clearError } = this.props
     return <Main error={error} clearError={clearError} />
   }

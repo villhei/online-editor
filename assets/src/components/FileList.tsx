@@ -8,7 +8,7 @@ type Props = {
   createDocument: () => void
 }
 
-function sortDocuments (documents: Array<TextDocument>, descending = true): Array<TextDocument> {
+function sortDocuments(documents: Array<TextDocument>, descending = true): Array<TextDocument> {
   const sorted: Array<TextDocument> = documents.slice(0)
     .sort((a, b) => {
       return new Date(a.updated_at).valueOf() - new Date(b.updated_at).valueOf()
@@ -22,7 +22,7 @@ function sortDocuments (documents: Array<TextDocument>, descending = true): Arra
 }
 
 export default class FileList extends React.Component<Props, any> {
-  render () {
+  render() {
     const { documents, createDocument } = this.props
     const sortedDocuments = sortDocuments(documents)
     return (

@@ -7,54 +7,38 @@ import {
   deleteDocumentAction
 } from 'actions/document-actions'
 import {
-  toggleMenu,
-  modalClear,
-  setModalVisibility,
-  modalConfirm
+  toggleMenu
 } from 'actions/page-actions'
 import {
-  expectConfirmAction
+  expectConfirmAction,
+  ConfirmActionName
 } from 'actions/editor-actions'
 
 export type PageState = {
   navigationOpen: boolean,
-  modal: {
-    visible: boolean,
-    title: string,
-    message: string,
-    icon: string
-  },
   editorToolbar: {
     refreshing: boolean,
     saving: boolean,
     deleting: boolean,
     confirmation: {
-      action?: string,
-      confirmed: boolean
+      action?: ConfirmActionName
     }
   }
 }
 
 export const initialState: PageState = {
   navigationOpen: false,
-  modal: {
-    visible: false,
-    title: 'Empty title',
-    message: 'Empty message',
-    icon: 'home'
-  },
   editorToolbar: {
     refreshing: false,
     saving: false,
     deleting: false,
     confirmation: {
-      action: undefined,
-      confirmed: false
+      action: undefined
     }
   }
 }
 
-function updateToolbarItem (state: PageState, itemName: string, newStatus: boolean): PageState {
+function updateToolbarItem(state: PageState, itemName: string, newStatus: boolean): PageState {
   const editorToolbar = {
     ...state.editorToolbar,
     [itemName]: newStatus
@@ -65,41 +49,7 @@ function updateToolbarItem (state: PageState, itemName: string, newStatus: boole
   }
 }
 
-export default function pageReducer (state: PageState = initialState, action: Action): PageState {
-  if (isType(action, modalClear)) {
-    const { editorToolbar } = state
-    const { confirmation } = editorToolbar
-    return {
-      ...state,
-      modal: initialState.modal,
-      editorToolbar: {
-        ...editorToolbar,
-        confirmation: initialState.editorToolbar.confirmation
-      }
-    }
-  }
-  if (isType(action, modalConfirm)) {
-    const { editorToolbar } = state
-    const { confirmation } = editorToolbar
-    return {
-      ...state,
-      modal: initialState.modal,
-      editorToolbar: {
-        ...editorToolbar,
-        confirmation: {
-          ...confirmation,
-          confirmed: true
-        }
-      }
-    }
-  }
-  if (isType(action, setModalVisibility)) {
-    const { modal, editorToolbar } = state
-    return {
-      ...state,
-      modal: action.payload
-    }
-  }
+export default function pageReducer(state: PageState = initialState, action: Action): PageState {
   if (isType(action, toggleMenu)) {
     if (action.payload.menu === 'navigation') {
       return {

@@ -12,7 +12,7 @@ export type HasId = {
 }
 export type ApiResource<T> = T | ResourceStatus | Error
 
-export function getResourceName (resource: ApiResource<HasName>, modifiedName?: string): string {
+export function getResourceName(resource: ApiResource<HasName>, modifiedName?: string): string {
   if (resource === ResourceStatus.Loading) {
     return 'Loading...'
   } else if (resource === ResourceStatus.NotFound) {
@@ -24,7 +24,7 @@ export function getResourceName (resource: ApiResource<HasName>, modifiedName?: 
   }
 }
 
-export function isResourceAvailable (resource: ApiResource<HasId>): boolean {
+export function isResourceAvailable(resource: ApiResource<HasId>): boolean {
   if (resource === ResourceStatus.Loading) {
     return false
   } else if (resource === ResourceStatus.NotFound) {

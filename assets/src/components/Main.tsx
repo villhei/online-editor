@@ -7,7 +7,6 @@ import ViewToolbar from 'containers/ViewToolbar'
 import FileList from 'containers/FileList'
 import Editor from 'containers/Editor'
 import DocumentView from 'containers/DocumentView'
-import Modal from 'containers/Modal'
 
 type Props = {
   error: {
@@ -20,34 +19,31 @@ type Props = {
 export default (props: Props) => {
   const { error, clearError } = props
   return (
-    <>
-      <div className='ui main full height with padding'>
-        <ConnectedSwitch>
-          <Route path={'/edit/:documentId'} component={EditorToolbar} />
-          <Route path={'/view/:documentId'} component={ViewToolbar} />
-          <Route path='/' component={MainToolbar} />
-        </ConnectedSwitch>
-        <div className='ui padded equal full height grid'>
-          {error.message &&
-            <div className='ui row'>
-              <div className='ui sixteen wide orange nag column'>
-                <span className='title'>{error.message}</span>
-                <i onClick={clearError} className='close icon'></i>
-              </div>
+    <div className='ui main full height with padding'>
+      <ConnectedSwitch>
+        <Route path={'/edit/:documentId'} component={EditorToolbar} />
+        <Route path={'/view/:documentId'} component={ViewToolbar} />
+        <Route path='/' component={MainToolbar} />
+      </ConnectedSwitch>
+      <div className='ui padded equal full height grid'>
+        {error.message &&
+          <div className='ui row'>
+            <div className='ui sixteen wide orange nag column'>
+              <span className='title'>{error.message}</span>
+              <i onClick={clearError} className='close icon'></i>
             </div>
-          }
-          <div className='ui full height row content'>
-            <section className='ui twelve wide computer sixteen wide tablet centered column without padding'>
-              <ConnectedSwitch>
-                <Route path={'/view/:documentId'} component={DocumentView} />
-                <Route path={'/edit/:documentId'} component={Editor} />
-                <Route exact path='/' component={FileList} />
-              </ConnectedSwitch>
-            </section>
           </div>
+        }
+        <div className='ui full height row content'>
+          <section className='ui twelve wide computer sixteen wide tablet centered column without padding'>
+            <ConnectedSwitch>
+              <Route path={'/view/:documentId'} component={DocumentView} />
+              <Route path={'/edit/:documentId'} component={Editor} />
+              <Route exact path='/' component={FileList} />
+            </ConnectedSwitch>
+          </section>
         </div>
-      </div >
-      <Modal />
-    </>
+      </div>
+    </div >
   )
 }

@@ -1,46 +1,29 @@
 import * as React from 'react'
+import * as ReactDOM from 'react-dom'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
-import { modalConfirm, modalClear } from 'actions/page-actions'
 import ConfirmationModal from 'components/ConfirmationModal'
 
-type Props = {
+export type Props = {
   icon: string,
   title: string,
   message: string,
-  visible: boolean,
-  confirm: () => any,
-  dismiss: () => any
+  onConfirm: () => any,
+  onCancel: () => any
 }
 
 class Modal extends React.Component<Props, any> {
-  render () {
-    const { icon, title, message, dismiss, visible, confirm } = this.props
-    return <ConfirmationModal
-      visible={visible}
+  render() {
+    const modalContainer = (document.getElementById('modal') as HTMLDivElement)
+    const { icon, title, message, onCancel, onConfirm } = this.props
+
+    return ReactDOM.createPortal(<ConfirmationModal
       title={title}
       icon={icon}
       message={message}
-      onConfirm={confirm}
-      onCancel={dismiss} />
+      onConfirm={onConfirm}
+      onCancel={onCancel} />, modalContainer)
   }
 }
 
-const mapStateToProps = ({ model, ui, state }: RootState) => {
-  const { icon, visible, title, message } = ui.page.modal
-  return {
-    icon,
-    title,
-    message,
-    visible
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
-  return {
-    dismiss: () => dispatch(modalClear(undefined)),
-    confirm: () => dispatch(modalConfirm(undefined))
-  }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Modal)
+export default Modal
