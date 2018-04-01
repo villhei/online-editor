@@ -7,7 +7,7 @@ defmodule OnlineEditor.Folder.Query do
     query =
       from(
         f in Folder,
-        preload: [:children],
+        preload: [:children, :documents],
         select: f
       )
 
@@ -19,7 +19,7 @@ defmodule OnlineEditor.Folder.Query do
       from(
         f in Folder,
         where: f.name == ^name,
-        preload: [:children],
+        preload: [:children, :documents],
         select: f
       )
 
@@ -31,7 +31,7 @@ defmodule OnlineEditor.Folder.Query do
       from(
         f in Folder,
         where: f.parent_id == ^parent_id,
-        preload: [:children],
+        preload: [:children, :documents],
         select: f
       )
 

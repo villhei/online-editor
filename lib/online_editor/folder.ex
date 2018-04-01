@@ -1,6 +1,7 @@
 defmodule OnlineEditor.Folder do
   use OnlineEditor.Schema
   import Ecto.Changeset
+  alias OnlineEditor.Document
   alias OnlineEditor.Folder
   alias OnlineEditor.Repo
 
@@ -8,6 +9,7 @@ defmodule OnlineEditor.Folder do
     field(:name, :string)
     field(:deleted, :boolean)
     field(:deleted_at, :naive_datetime)
+    has_many(:documents, Document, foreign_key: :folder_id)
     has_many(:children, Folder, foreign_key: :parent_id)
     belongs_to(:parent, Folder)
     timestamps()

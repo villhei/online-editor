@@ -14,14 +14,19 @@ defmodule OnlineEditorWeb.FolderView do
       id: folder.id,
       name: folder.name,
       inserted_at: folder.inserted_at,
-      updated_at: folder.updated_at
+      updated_at: folder.updated_at,
     }
-    case folder.children do
-      children when is_list(children) ->
-          ids = children |> Enum.map(fn child -> child.id end)
-          Map.put(json, :children, ids)
-      _ -> json
-    end
+    |> add_ids(folder, :children)
+    |> add_ids(folder, :documents)
+
   end
 
+  defp add_ids(json, folder, key) do
+    case Map.get(folder, key) do
+      value when is_list(value) ->
+        ids = value |> Enum.map(fn e -> e.id end)
+        Map.put(json, key, ids)
+    _ -> json
+    end
+  end
 end

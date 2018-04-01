@@ -3,6 +3,7 @@ defmodule OnlineEditorWeb.FolderControllerTest do
   import OnlineEditor.Factory
   alias OnlineEditor.Folder
   alias OnlineEditorWeb.ErrorView
+  @no_relations %{children: [], documents: []}
 
   defp render_json(template, assigns) do
     assigns = Map.new(assigns)
@@ -17,7 +18,7 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     conn = get(conn, "/api/folders/")
 
     assigns = [
-      folders: [%{folder | children: []}]
+      folders: [Map.merge(folder, @no_relations)]
     ]
 
     expected = render_json("index.json", assigns)
@@ -31,10 +32,11 @@ defmodule OnlineEditorWeb.FolderControllerTest do
       insert(%Folder{
         name: "Child",
         parent: parent,
-        children: []
+        children: [],
+        documents: []
       })
 
-    parent = %{parent | children: [child]}
+    parent = Map.merge(parent, %{children: [child], documents: []})
 
     expected = render_json("index.json", folders: [parent, child])
     conn = get(conn, "/api/folders/")
@@ -42,7 +44,7 @@ defmodule OnlineEditorWeb.FolderControllerTest do
   end
 
   test "GET 200 - find by name can return the root folder", %{conn: conn} do
-    folder = insert(:folder) |> Map.put(:children, [])
+    folder = insert(:folder) |> Map.merge(@no_relations)
     conn = get(conn, "/api/folders/?find=Root")
     assert json_response(conn, 200) == render_json("folder.json", %{folder: folder})
   end
@@ -54,7 +56,8 @@ defmodule OnlineEditorWeb.FolderControllerTest do
       insert(%Folder{
         name: "Child",
         parent: parent,
-        children: []
+        children: [],
+        documents: []
       })
 
     parent = %{parent | children: [child]}
@@ -82,7 +85,7 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     assigns = [
       folder: %{
         parent
-        | children: [child]
+        | children: [child], documents: []
       }
     ]
 
