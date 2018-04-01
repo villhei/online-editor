@@ -27,6 +27,19 @@ defmodule OnlineEditorWeb.FolderController do
     render(conn, "index.json", folders: folders)
   end
 
+  def show(conn, %{"id" => id}) do
+    case Query.get_by_id(id) do
+      nil ->
+        conn
+        |> respond_with_error(404, "404.json")
+
+      folder ->
+        conn
+        |> put_status(200)
+        |> render("show.json", folder: folder)
+    end
+  end
+
   def create(conn, params) do
     changeset = Folder.changeset(%Folder{}, params)
 

@@ -24,7 +24,9 @@ defmodule OnlineEditorWeb.FolderView do
   defp add_ids(json, folder, key) do
     case Map.get(folder, key) do
       value when is_list(value) ->
-        ids = value |> Enum.map(fn e -> e.id end)
+        ids = value
+        |> Enum.filter(fn e -> !e.deleted end)
+        |> Enum.map(fn e -> e.id end)
         Map.put(json, key, ids)
     _ -> json
     end

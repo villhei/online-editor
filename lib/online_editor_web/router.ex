@@ -18,7 +18,7 @@ defmodule OnlineEditorWeb.Router do
       pipe_through :api
 
       resources "/documents", DocumentController
-      resources "/folders", FolderController, only: [:index, :create]
+      resources "/folders", FolderController, only: [:index, :show, :create]
   end
 
   scope "/", OnlineEditorWeb do

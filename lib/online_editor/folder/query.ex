@@ -14,6 +14,10 @@ defmodule OnlineEditor.Folder.Query do
     Repo.all(query)
   end
 
+  def get_by_id(id) do
+    Repo.get_by(Folder, id: id) |> Repo.preload(:children) |> Repo.preload(:documents)
+  end
+
   def get_by_name(name) do
     query =
       from(
