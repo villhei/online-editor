@@ -7,13 +7,10 @@ import {
   resetDocumentChanges,
   deleteAndRefresh,
   updateAndRefresh,
-  updateDocumentName
+  updateDocumentName,
+  ConfirmActionName
 } from 'actions/editor-actions'
 import { getDocument } from 'actions/document-actions'
-import {
-  setModalVisibility,
-  modalClear
-} from 'actions/page-actions'
 import {
   ApiResource,
   isResourceAvailable,
@@ -26,6 +23,7 @@ import {
   isDocument
 } from 'service/document-service'
 import EditorToolbarView from 'components/toolbars/Editor'
+import Modal, { Props as ModalProps } from 'containers/Modal'
 
 export type DispatchProps = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
@@ -34,11 +32,15 @@ export type DispatchProps = {
   deleteAndRefresh: (id: TextDocumentId) => any,
   updateDocumentName: (value: string) => any,
   navigate: (route: string) => any,
-  clearModal: () => any,
-  expectConfirm: (action: ActionName, icon: string, title: string, message: string) => any
+  expectConfirm: (action: ConfirmActionName) => any
 }
 
-export type ActionName = 'delete'
+const CONFIRM_VIEW_ICON = 'share'
+const CONFIRM_ARE_YOU_SURE_TITLE = 'Are you sure?'
+const CONFIRM_VIEW_MESSAGE = 'You have unsaved changes. Viewing the document without saving will discard the changes.'
+
+const CONFIRM_RELOAD_ICON = 'reload'
+const CONFIRM_RELOAD_MESSAGE = 'You have unsaved changes. Reloading the document without saving will discard the changes.'
 
 const CONFIRM_DELETE_ICON = 'trash'
 const CONFIRM_DELETE_TITLE = 'Confirm deletion'
@@ -47,17 +49,36 @@ const CONFIRM_DELETE_MESSAGE = 'Are you sure you want to delete this document?'
 export type StateProps = {
   documentId: string,
   document: ApiResource<TextDocument>,
+  isModified: boolean,
   modifiedContent: string | undefined,
   modifiedName: string | undefined,
   deleting: boolean,
   refreshing: boolean,
   saving: boolean,
   confirmation: {
-    confirmed: boolean,
     action?: string
   }
 }
+
 export type Props = DispatchProps & StateProps
+
+const ACTIONS = {
+  'delete': {
+    icon: CONFIRM_DELETE_ICON,
+    title: CONFIRM_DELETE_TITLE,
+    message: CONFIRM_DELETE_MESSAGE
+  },
+  'refresh': {
+    icon: CONFIRM_RELOAD_ICON,
+    title: CONFIRM_ARE_YOU_SURE_TITLE,
+    message: CONFIRM_RELOAD_MESSAGE
+  },
+  'view': {
+    icon: CONFIRM_VIEW_ICON,
+    title: CONFIRM_ARE_YOU_SURE_TITLE,
+    message: CONFIRM_VIEW_MESSAGE
+  }
+}
 
 class EditorToolbar extends React.Component<Props, any> {
   componentDidMount() {
@@ -65,43 +86,61 @@ class EditorToolbar extends React.Component<Props, any> {
     getDocument(documentId)
   }
 
-  componentDidUpdate() {
-    const { confirmation: { action, confirmed } } = this.props
-    if (action && confirmed) {
-      switch (action) {
-        case 'delete': {
-          this.deleteDocument()
-          break
+  getModalProps = (): ModalProps => {
+    const { confirmation: { action } } = this.props
+    const dismissModal = this.expectConfirm(undefined)
+    switch (action) {
+      case 'view': {
+        return {
+          ...ACTIONS['view'],
+          onConfirm: this.viewDocument,
+          onCancel: dismissModal
         }
-        default: {
-          console.log('Unknown action', action)
-          return
+      }
+      case 'refresh': {
+        return {
+          ...ACTIONS['refresh'],
+          onConfirm: this.refreshDocument,
+          onCancel: dismissModal
+        }
+      }
+      case 'delete': {
+        return {
+          ...ACTIONS['delete'],
+          onConfirm: this.deleteDocument,
+          onCancel: dismissModal
+        }
+      }
+      default: {
+        console.log('Unknown action', action)
+        return {
+          title: 'foo',
+          icon: 'archive',
+          message: 'what?',
+          onConfirm: () => null,
+          onCancel: dismissModal
         }
       }
     }
   }
 
   refreshDocument = () => {
+    this.props.expectConfirm(undefined)
     this.props.getDocument(this.props.documentId)
     this.props.resetDocumentChanges()
   }
 
   deleteDocument = () => {
-    this.props.clearModal()
     this.props.deleteAndRefresh(this.props.documentId)
   }
 
-  promptConfirm = (action: ActionName) => () => {
-    this.props.expectConfirm(
-      action,
-      CONFIRM_DELETE_ICON,
-      CONFIRM_DELETE_TITLE,
-      CONFIRM_DELETE_MESSAGE)
+  expectConfirm = (action: ConfirmActionName) => () => {
+    this.props.expectConfirm(action)
   }
 
   updateDocumentContent = () => {
-    const { modifiedContent, modifiedName, document, documentId } = this.props
-    if (isDocument(document) && (modifiedContent || modifiedName)) {
+    const { isModified, document, documentId, modifiedName, modifiedContent } = this.props
+    if (isDocument(document) && isModified) {
       const modifiedDocument = {
         content: modifiedContent,
         name: modifiedName,
@@ -117,6 +156,7 @@ class EditorToolbar extends React.Component<Props, any> {
 
   viewDocument = () => {
     const { documentId, navigate } = this.props
+    this.props.expectConfirm(undefined)
     navigate('/view/' + documentId)
   }
 
@@ -124,21 +164,22 @@ class EditorToolbar extends React.Component<Props, any> {
     const {
       documentId,
       document,
+      isModified,
       modifiedContent,
       modifiedName,
       updateDocumentName,
       deleting,
       saving,
-      refreshing
+      refreshing,
+      confirmation
     } = this.props
-    const saveDisabled = Boolean(!document || !(modifiedContent || modifiedName))
     const commonProps = {
-      refreshDocument: this.refreshDocument,
+      refreshDocument: isModified ? this.expectConfirm('refresh') : this.refreshDocument,
       updateDocument: this.updateDocumentContent,
-      deleteDocument: this.promptConfirm('delete'),
+      deleteDocument: this.expectConfirm('delete'),
       updateDocumentName: this.updateDocumentName,
-      viewDocument: this.viewDocument,
-      saveDisabled,
+      viewDocument: isModified ? this.expectConfirm('view') : this.viewDocument,
+      saveDisabled: !isModified,
       deleting,
       saving,
       refreshing,
@@ -150,6 +191,9 @@ class EditorToolbar extends React.Component<Props, any> {
         disabled={!isResourceAvailable(document)}
         {...commonProps}
       />
+      {confirmation.action &&
+        <Modal {...this.getModalProps()} />
+      }
     </>
   }
 }
@@ -158,12 +202,14 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateP
   const documentId: TextDocumentId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
   const { modifiedContent, modifiedName } = state.editor
-  const { editorToolbar, modal } = ui.page
+  const { editorToolbar } = ui.page
+  const isModified = Boolean(document && (modifiedContent || modifiedName))
   return {
     document,
     documentId,
-    modifiedContent,
+    isModified,
     modifiedName,
+    modifiedContent,
     ...editorToolbar
   }
 }
@@ -175,11 +221,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     saveDocument: (id: TextDocumentId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
     deleteAndRefresh: (id: TextDocumentId) => dispatch(deleteAndRefresh({ id })),
-    expectConfirm: (action: ActionName, icon: string, title: string, message: string) => {
+    expectConfirm: (action: ConfirmActionName) => {
       dispatch(expectConfirmAction({ action }))
-      dispatch(setModalVisibility({ visible: true, icon, title, message }))
     },
-    clearModal: () => dispatch(modalClear(undefined)),
     navigate: (route: string) => dispatch(push(route))
   }
 }

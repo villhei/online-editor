@@ -18,7 +18,7 @@ export const EXPECT_CONFIRM_ACTION = 'EXPECT_CONFIRM_ACTION'
 
 const actionCreator = actionCreatorFactory()
 
-export type ConfirmActionName = 'delete'
+export type ConfirmActionName = 'home' | 'view' | 'refresh' | 'delete' | undefined
 
 export type ExpectConfirmAction = {
   action: ConfirmActionName

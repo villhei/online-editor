@@ -14,7 +14,7 @@ export const initialState: EditorState = {
   modifiedName: undefined
 }
 
-export default function editorReducer (state: EditorState = initialState, action: Action) {
+export default function editorReducer(state: EditorState = initialState, action: Action) {
   if (isType(action, updatedocumentContent)) {
     return {
       ...state,

@@ -6,7 +6,7 @@ import { getDocument } from 'actions/document-actions'
 import { updatedocumentContent, resetDocumentChanges } from 'actions/editor-actions'
 import { ApiResource } from 'service/common'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
-import wrapApiResource, { ApiResourceProps } from 'containers/ApiResourceHOC'
+import wrapApiResource from 'containers/ApiResourceHOC'
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
 

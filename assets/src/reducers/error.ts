@@ -13,7 +13,7 @@ export const initialState: ErrorState = {
   stack: undefined
 }
 
-export default function errorReducer (state: ErrorState = initialState, action: Action): ErrorState {
+export default function errorReducer(state: ErrorState = initialState, action: Action): ErrorState {
   if (isType(action, updateDocumentAction.failed)) {
     const error = action.payload.error
     return {

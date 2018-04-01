@@ -4,19 +4,16 @@ import * as classNames from 'classnames'
 type Props = {
   title: string,
   message: string,
-  visible: boolean,
   icon: string,
-  onConfirm: () => void,
-  onCancel: () => void
+  onConfirm: () => any,
+  onCancel: () => any
 }
 const ConfirmationModal = (props: Props) => {
   const iconClasses = classNames('icon', props.icon)
-  const dimmerClasses = classNames('ui dimmer', {
-    'transition visible active': props.visible
-  })
+  const dimmerClasses = classNames('ui dimmer visible active')
   return (
     <div className={dimmerClasses}>
-      <div className='ui mini basic modal transition visible active scrolling' style={{ display: 'block' }}>
+      <div className='ui mini basic modal transition visible active'>
         <div className='ui icon header'>
           <i className={iconClasses} />
           {props.title}
