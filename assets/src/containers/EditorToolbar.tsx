@@ -32,7 +32,7 @@ export type DispatchProps = {
   deleteAndRefresh: (document: TextDocument) => any,
   updateDocumentName: (value: string) => any,
   navigate: (route: string) => any,
-  expectConfirm: (action: ConfirmActionName, icon: string, title: string, message: string) => any
+  expectConfirm: (action: ConfirmActionName) => any
 }
 
 const CONFIRM_VIEW_ICON = 'share'
@@ -226,7 +226,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     deleteAndRefresh: (document: TextDocument) => {
       dispatch(deleteAndRefresh({ document }))
     },
-    expectConfirm: (action: ConfirmActionName, icon: string, title: string, message: string) => {
+    expectConfirm: (action: ConfirmActionName) => {
       dispatch(expectConfirmAction({ action }))
     },
     navigate: (route: string) => dispatch(push(route))

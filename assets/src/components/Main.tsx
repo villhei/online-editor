@@ -39,7 +39,7 @@ export default (props: Props) => {
             <ConnectedSwitch>
               <Route path={'/view/:documentId'} component={DocumentView} />
               <Route path={'/edit/:documentId'} component={Editor} />
-              <Route exact path='/' component={DocumentView} />
+              <Route exact path='/' component={DocumentList} />
             </ConnectedSwitch>
           </section>
         </div>
