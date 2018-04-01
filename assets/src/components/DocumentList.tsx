@@ -1,10 +1,16 @@
 import * as React from 'react'
-import { Link } from 'react-router-dom'
 import { RootState } from '../reducer'
-import { TextDocument } from 'service/document-service'
+import { ApiResource } from 'service/common'
+import { Folder, FolderId, isFolder } from 'service/folder-service'
+import { TextDocument, TextDocumentId } from 'service/document-service'
+import FolderCard from 'containers/FolderCard'
+import DocumentCard from 'containers/DocumentCard'
 
 type Props = {
-  documents: RootState['model']['documents']['all'],
+  documents: Array<TextDocumentId>,
+  getFolderById: (id: FolderId) => any,
+  getByDocumentId: (id: TextDocumentId) => any
+  folders: Array<FolderId>,
   createDocument: () => void
 }
 
@@ -23,22 +29,15 @@ function sortDocuments(documents: Array<TextDocument>, descending = true): Array
 
 export default class DocumentList extends React.Component<Props, any> {
   render() {
-    const { documents, createDocument } = this.props
-    const sortedDocuments = sortDocuments(documents as TextDocument[])
+    const { documents, folders, createDocument } = this.props
     return (
       <div className='ui twelve wide centered column'>
         <div className='ui four doubling cards'>
           <a className='ui padded card' onClick={createDocument} >
             <div className='ui left aligned small header'><i className='plus icon' />Add new</div>
           </a>
-          {
-            sortedDocuments.map(document => (
-              <Link className='ui padded card' key={document.id} to={`/edit/${document.id}`} >
-                <div className='ui left aligned small header'><i className='file icon' />{document.name}</div>
-                <div className='ui divider' />
-                {new Date(document.updated_at).toLocaleString()}
-              </Link>))
-          }
+          {folders.map((folderId: FolderId) => <FolderCard key={folderId} resourceId={folderId} />)}
+          {documents.map((documentId: TextDocumentId) => <DocumentCard key={documentId} resourceId={documentId} />)}
         </div>
       </div>)
   }

@@ -9,7 +9,7 @@ import { Folder, FolderId } from 'service/folder-service'
 type FolderMap = { [id: string]: ApiResource<Folder> }
 
 export type NavigatorState = {
-  current: FolderId,
+  current: FolderId
 } & MappedModel<ApiResource<Folder>>
 
 export const initialState: NavigatorState = {

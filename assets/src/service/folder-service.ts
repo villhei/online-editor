@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios'
+import { TextDocumentId } from 'service/document-service'
 import { ApiResource, isAxiosError } from './common'
 
 export type FolderId = string
@@ -6,7 +7,8 @@ export type FolderId = string
 export type Folder = {
   readonly id: FolderId
   readonly name: string,
-  readonly children: Folder[] | FolderId[]
+  readonly children: FolderId[]
+  readonly documents: TextDocumentId[]
 }
 
 export type UpdatedStamp = {
@@ -14,7 +16,7 @@ export type UpdatedStamp = {
 }
 
 export function isFolder(candidate: ApiResource<Folder>): candidate is Folder {
-  const folder = <Folder>candidate
+  const folder = (candidate as Folder)
   return Boolean(folder &&
     folder.id &&
     folder.name &&
@@ -30,6 +32,11 @@ export function create(name: string, parent: FolderId): Promise<Folder> {
 
 export function getRoot(): Promise<Folder> {
   return findByName('Root')
+}
+
+export function getByFolderId(folderId: FolderId): Promise<Folder> {
+  return axios.get<Folder>('/api/folders/' + folderId)
+    .then(res => res.data)
 }
 
 export function findByName(folderName: string): Promise<Folder> {
