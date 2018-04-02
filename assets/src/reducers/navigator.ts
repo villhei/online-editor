@@ -1,7 +1,7 @@
 import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
 import {
-  getRootAction, getChildrenAction
+  getRootAction, getChildrenAction, getFolderAction
 } from 'actions/folder-actions'
 import { ApiResource, ResourceStatus, MappedModel, updateSingle } from 'service/common'
 import { Folder, FolderId } from 'service/folder-service'
@@ -14,8 +14,7 @@ export type NavigatorState = {
 
 export const initialState: NavigatorState = {
   current: '',
-  byId: {},
-  all: []
+  byId: {}
 }
 
 export default function navigatorReducer(state: NavigatorState = initialState, action: Action): NavigatorState {
@@ -27,12 +26,40 @@ export default function navigatorReducer(state: NavigatorState = initialState, a
       current: result.id
     }
   }
+  if (isType(action, getFolderAction.started)) {
+    const { id } = action.payload
+    return {
+      ...state,
+      byId: {
+        ...state.byId,
+        [id]: ResourceStatus.Loading
+      }
+    }
+  }
+  if (isType(action, getFolderAction.failed)) {
+    const { id } = action.payload.params
+    const error = action.payload.error
+    return {
+      ...state,
+      byId: {
+        ...state.byId,
+        [id]: ResourceStatus.NotFound
+      }
+    }
+  }
   if (isType(action, getChildrenAction.done)) {
     const { result } = action.payload
     return result.reduce((acc, folder) => ({
       ...acc,
       ...updateSingle(acc, folder.id, folder)
     }), state)
+  }
+  if (isType(action, getFolderAction.done)) {
+    const { result } = action.payload
+    return {
+      ...state,
+      ...updateSingle(state, result.id, result)
+    }
   }
   return state
 }

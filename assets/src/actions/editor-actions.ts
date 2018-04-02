@@ -6,10 +6,12 @@ import {
   createDocumentAction,
   getDocuments,
   getDocumentsByFolder,
-  updateDocumentAction
+  updateDocumentAction,
+  CreateDocumentParams
 } from './document-actions'
 
 import { TextDocument, deleteById, create, update } from 'service/document-service'
+import { getFolder } from 'actions/folder-actions'
 
 export const UPDATE_DOCUMENT_CONTENT = 'UPDATE_DOCUMENT_CONTENT'
 export const UPDATE_DOCUMENT_NAME = 'UPDATE_DOCUMENT_NAME'
@@ -39,12 +41,13 @@ export const expectConfirmAction = actionCreator<ExpectConfirmAction>(EXPECT_CON
 
 export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (params, dispatch): Promise<void> => {
   await deleteById(params.document.id)
-  getDocumentsByFolder(dispatch, params.document.folder)
+  await getFolder(dispatch, { id: params.document.folder })
   dispatch(push('/'))
 })
 
-export const createAndSelect = bindThunkAction(createDocumentAction, async (folderId, dispatch): Promise<TextDocument> => {
-  const document = await create(folderId)
+export const createAndSelect = bindThunkAction(createDocumentAction, async (params: CreateDocumentParams, dispatch): Promise<TextDocument> => {
+  const document = await create(params.folder)
+  await getFolder(dispatch, { id: params.folder })
   dispatch(push('/edit/' + document.id))
   return document
 })

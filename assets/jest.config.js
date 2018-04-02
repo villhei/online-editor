@@ -10,14 +10,14 @@ module.exports = {
     'jsx',
     'json'
   ],
-  rootDir: '.',
+  rootDir: './src',
   moduleNameMapper: {
-    '^actions(.*)$': '<rootDir>/src/actions/$1',
-    '^constants(.*)$': '<rootDir>/src/constants/$1',
-    '^containers(.*)$': '<rootDir>/src/containers/$1',
-    '^components(.*)$': '<rootDir>/src/components/$1',
-    '^service(.*)$': '<rootDir>/src/service/$1',
-    '^reducers(.*)$': '<rootDir>/src/reducers/$1',
+    '^actions(.*)$': '<rootDir>/actions/$1',
+    '^constants(.*)$': '<rootDir>/constants/$1',
+    '^containers(.*)$': '<rootDir>/containers/$1',
+    '^components(.*)$': '<rootDir>/components/$1',
+    '^service(.*)$': '<rootDir>/service/$1',
+    '^reducers(.*)$': '<rootDir>/reducers/$1',
     mocks: 'mocks'
   }
 }

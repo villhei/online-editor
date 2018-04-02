@@ -6,19 +6,13 @@ import { ApiResource } from 'service/common'
 import { getDocument } from 'actions/document-actions'
 import { TextDocumentId, TextDocument, isDocument } from 'service/document-service'
 import { RootState } from '../reducer'
+import LoadingCard from 'components/LoadingCard'
 
 type Props = {
   resourceId: TextDocumentId,
   resource: TextDocument,
   getResource: (id: TextDocumentId) => any
 }
-
-const DocumentCardLoading = () => (
-  <div className='ui padded card'>
-    <div className='ui active centered inline loader'></div>
-    <div className='ui divider' />
-  </div>
-)
 
 class DocumentCard extends React.Component<Props> {
   render() {
@@ -47,4 +41,4 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResouce(isDocument)(DocumentCard, DocumentCardLoading))
+export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResouce(isDocument)(DocumentCard, LoadingCard))

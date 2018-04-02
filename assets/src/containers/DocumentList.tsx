@@ -3,50 +3,32 @@ import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { createAndSelect } from 'actions/editor-actions'
 import { ApiResource } from 'service/common'
-import { getDocumentsByFolder, getDocument } from 'actions/document-actions'
+import { getDocumentsByFolder, getDocument, GetDocumentByFolderParams } from 'actions/document-actions'
 import { getRootFolder, getChildren, getFolder } from 'actions/folder-actions'
 import { Folder, FolderId, isFolder } from 'service/folder-service'
 import DocumentList from 'components/DocumentList'
+import wrapApiResource from 'containers/ApiResourceHOC'
 import { TextDocumentId } from 'service/document-service'
 
-type DispatchProps = {
-  createDocument: (id: FolderId) => any,
+type Props = {
+  createDocument: (folder: FolderId) => any,
   getChildren: (id: FolderId) => any,
   getDocumentsByFolder: (folder: FolderId) => any,
-  getFolderById: (id: FolderId) => any,
-  getDocumentById: (id: TextDocumentId) => any
+  getDocumentById: (id: TextDocumentId) => any,
+  getResource: (id: FolderId) => any,
+  resourceId: FolderId,
+  resource: Folder
 }
-
-type StateProps = {
-  documents: Array<TextDocumentId>,
-  folder: ApiResource<Folder>,
-  children: Array<FolderId>
-}
-
-type Props = DispatchProps & StateProps
 
 class DocumentListContainer extends React.Component<Props, any> {
   createDocument = () => {
-    const { folder } = this.props
-    if (isFolder(folder)) {
-      this.props.createDocument(folder.id)
-    }
+    this.props.createDocument(this.props.resourceId)
   }
-
-  componentDidUpdate(prevProps: Props) {
-    const { folder } = this.props
-    if (isFolder(folder)) {
-      if (prevProps.folder !== this.props.folder) {
-        this.props.getDocumentsByFolder(folder.id)
-        this.props.getChildren(folder.id)
-      }
-    }
-  }
-
   render() {
-    const { documents, children, getFolderById, getDocumentById } = this.props
+    const { resource, getResource, getDocumentById } = this.props
+    const { documents, children } = resource
     return <DocumentList
-      getFolderById={getFolderById}
+      getFolderById={getResource}
       getByDocumentId={getDocumentById}
       folders={children}
       documents={documents}
@@ -54,30 +36,22 @@ class DocumentListContainer extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ model }: RootState): StateProps => {
-  const folder = model.navigator.byId[model.navigator.current]
-  if (isFolder(folder)) {
-    const { children, documents } = folder
-    return {
-      folder,
-      documents,
-      children
-    }
-  }
+const mapStateToProps = ({ model }: RootState) => {
+  const resourceId = model.folders.current
+  const resource = model.folders.byId[resourceId]
   return {
-    folder,
-    documents: [],
-    children: []
+    resourceId,
+    resource
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    createDocument: (id: FolderId) => dispatch(createAndSelect(id)),
-    getChildren: (id: FolderId) => getChildren(dispatch, id),
+    createDocument: (folder: FolderId) => dispatch(createAndSelect({ folder })),
+    getChildren: (id: FolderId) => getChildren(dispatch, { id }),
     getDocumentsByFolder: (folder: string) => getDocumentsByFolder(dispatch, folder),
     getDocumentById: (id: TextDocumentId) => getDocument(dispatch, { id }),
-    getFolderById: (id: FolderId) => getFolder(dispatch, id)
+    getResource: (id: FolderId) => getFolder(dispatch, { id })
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(DocumentListContainer)
+export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResource<Folder, Props>(isFolder)(DocumentListContainer))

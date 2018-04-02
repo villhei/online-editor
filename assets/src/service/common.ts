@@ -49,21 +49,8 @@ type Identifiable = {
   id: string
 }
 
-export function updateOrJoin<T>(array: Array<T>, entityId: string, entity: T): Array<T> {
-  // TODO, any-hack
-  const index = array.findIndex(({ id }: any) => entityId === id)
-  if (index > -1) {
-    const modified = Array.from(array)
-    modified.splice(index, 1, entity)
-    return modified
-  } else {
-    return array.concat(entity)
-  }
-}
-
 export type MappedModel<T> = {
-  byId: DocumentMap<T>,
-  all: Array<T>
+  byId: DocumentMap<T>
 }
 
 export function updateSingle<T>(state: MappedModel<T>, id: string, entity: T): MappedModel<T> {
@@ -71,10 +58,8 @@ export function updateSingle<T>(state: MappedModel<T>, id: string, entity: T): M
     ...state.byId,
     [id]: entity
   }
-  const all = updateOrJoin(state.all, id, entity)
   return {
     ...state,
-    byId,
-    all
+    byId
   }
 }

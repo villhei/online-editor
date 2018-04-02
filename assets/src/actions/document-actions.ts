@@ -13,13 +13,13 @@ import {
   getAllByFolder
 } from 'service/document-service'
 import {
-  FolderId
+  FolderId, Folder
 } from 'service/folder-service'
 
 export type DocumentByIdParams = { id: TextDocumentId }
 export type UpdateDocumentParams = { id: TextDocumentId, document: PartialTextDocument }
-export type GetDocumentByFolderParams = { id: FolderId }
-export type CreateDocumentParams = FolderId
+export type GetDocumentByFolderParams = { folder: FolderId }
+export type CreateDocumentParams = { folder: FolderId }
 export type DeleteDocumentParams = { document: TextDocument }
 
 export const ACTION_GET_DOCUMENT = 'ACTION_GET_DOCUMENT'
@@ -50,7 +50,7 @@ export const updateDocumentAction = actionCreator
 export const deleteDocumentAction = actionCreator
   .async<DeleteDocumentParams, void>(ACTION_DELETE_DOCUMENT)
 
-export const createDocument = wrapAsyncWorker(createDocumentAction, create)
+export const createDocument = wrapAsyncWorker(createDocumentAction, (params: CreateDocumentParams) => create(params.folder))
 export const getDocument = wrapAsyncWorker(getDocumentAction, (params: DocumentByIdParams) => getById(params.id))
 export const getDocuments = wrapAsyncWorker(getDocumentsAction, getAll)
 export const getDocumentsByFolder = wrapAsyncWorker(getDocumentsAction, getAllByFolder)

@@ -17,7 +17,7 @@ export type RootState = {
     page: PageState
   },
   model: {
-    navigator: NavigatorState,
+    folders: NavigatorState,
     documents: DocumentReducerState
   },
   state: {
@@ -32,7 +32,7 @@ export const rootReducer: Reducer<RootState> = combineReducers({
     page: pageReducer
   }),
   model: combineReducers({
-    navigator: navigatorReducer,
+    folders: navigatorReducer,
     documents: documentReducer
   }),
   state: combineReducers({

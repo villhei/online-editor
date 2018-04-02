@@ -6,19 +6,13 @@ import { ApiResource } from 'service/common'
 import { getFolder } from 'actions/folder-actions'
 import { FolderId, Folder, isFolder } from 'service/folder-service'
 import { RootState } from '../reducer'
+import LoadingCard from 'components/LoadingCard'
 
 type FolderCardProps = {
   resourceId: FolderId,
   resource: Folder,
   getResource: (id: FolderId) => any
 }
-
-const FolderCardLoading = () => (
-  <div className='ui padded card'>
-    <div className='ui active centered inline loader'></div>
-    <div className='ui divider'/>
-  </div>
-)
 
 class FolderCard extends React.Component<FolderCardProps> {
   render() {
@@ -34,7 +28,7 @@ class FolderCard extends React.Component<FolderCardProps> {
 
 const mapStateToProps = ({ model, state, ui }: RootState, ownProps: { resourceId: FolderId }) => {
   const { resourceId } = ownProps
-  const resource: ApiResource<Folder> = model.navigator.byId[resourceId]
+  const resource: ApiResource<Folder> = model.folders.byId[resourceId]
   return {
     resource,
     resourceId
@@ -43,8 +37,8 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: { resourceId
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getResource: (id: string) => getFolder(dispatch, id)
+    getResource: (id: FolderId) => getFolder(dispatch, { id })
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResouce(isFolder)(FolderCard, FolderCardLoading))
+export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResouce(isFolder)(FolderCard, LoadingCard))

@@ -36,8 +36,12 @@ export default class DocumentList extends React.Component<Props, any> {
           <a className='ui padded card' onClick={createDocument} >
             <div className='ui left aligned small header'><i className='plus icon' />Add new</div>
           </a>
-          {folders.map((folderId: FolderId) => <FolderCard key={folderId} resourceId={folderId} />)}
-          {documents.map((documentId: TextDocumentId) => <DocumentCard key={documentId} resourceId={documentId} />)}
+          {folders.map((folderId: FolderId) =>
+            <FolderCard key={folderId}
+              resourceId={folderId} />)}
+          {documents.map((documentId: TextDocumentId) =>
+            <DocumentCard key={documentId}
+              resourceId={documentId} />)}
         </div>
       </div>)
   }

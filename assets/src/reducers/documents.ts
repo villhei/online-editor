@@ -14,16 +14,14 @@ import { TextDocument, TextDocumentId } from 'service/document-service'
 export type DocumentReducerState = MappedModel<ApiResource<TextDocument>>
 
 export const initialState: DocumentReducerState = {
-  byId: {},
-  all: []
+  byId: {}
 }
 
 export default function documentReducer(state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
   if (isType(action, getDocumentsAction.done) || isType(action, getDocumentsByFolderAction.done)) {
     const documents = action.payload.result
     return {
-      ...state,
-      all: documents
+      ...state
     }
   }
   if (isType(action, getDocumentAction.started)) {
