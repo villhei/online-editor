@@ -81,11 +81,6 @@ const ACTIONS = {
 }
 
 class EditorToolbar extends React.Component<Props, any> {
-  componentDidMount() {
-    const { documentId, getDocument } = this.props
-    getDocument(documentId)
-  }
-
   getModalProps = (): ModalProps => {
     const { confirmation: { action } } = this.props
     const dismissModal = this.expectConfirm(undefined)

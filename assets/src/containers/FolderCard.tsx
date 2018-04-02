@@ -1,6 +1,5 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { Link } from 'react-router-dom'
 import wrapApiResouce from 'containers/ApiResourceHOC'
 import { ApiResource } from 'service/common'
 import { getFolder } from 'actions/folder-actions'

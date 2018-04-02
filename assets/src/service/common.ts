@@ -1,4 +1,4 @@
-import axios, { AxiosError } from 'axios'
+import { AxiosError } from 'axios'
 
 export type DocumentMap<T> = { [id: string]: ApiResource<T> }
 

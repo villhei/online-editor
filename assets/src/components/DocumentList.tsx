@@ -1,7 +1,5 @@
 import * as React from 'react'
-import { RootState } from '../reducer'
-import { ApiResource } from 'service/common'
-import { Folder, FolderId, isFolder } from 'service/folder-service'
+import { FolderId } from 'service/folder-service'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 import FolderCard from 'containers/FolderCard'
 import DocumentCard from 'containers/DocumentCard'

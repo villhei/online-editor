@@ -8,8 +8,8 @@ import {
   getDocumentsByFolderAction
 } from 'actions/document-actions'
 
-import { ApiResource, ResourceStatus, DocumentMap, updateSingle, MappedModel } from 'service/common'
-import { TextDocument, TextDocumentId } from 'service/document-service'
+import { ApiResource, ResourceStatus, updateSingle, MappedModel } from 'service/common'
+import { TextDocument } from 'service/document-service'
 
 export type DocumentReducerState = MappedModel<ApiResource<TextDocument>>
 

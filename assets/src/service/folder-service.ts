@@ -1,6 +1,6 @@
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import { TextDocumentId } from 'service/document-service'
-import { ApiResource, isAxiosError } from './common'
+import { ApiResource } from './common'
 
 export type FolderId = string
 

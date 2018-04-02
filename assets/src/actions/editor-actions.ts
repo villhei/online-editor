@@ -4,8 +4,6 @@ import { push } from 'react-router-redux'
 import {
   deleteDocumentAction,
   createDocumentAction,
-  getDocuments,
-  getDocumentsByFolder,
   updateDocumentAction,
   CreateDocumentParams
 } from './document-actions'

@@ -13,7 +13,7 @@ import {
   getAllByFolder
 } from 'service/document-service'
 import {
-  FolderId, Folder
+  FolderId
 } from 'service/folder-service'
 
 export type DocumentByIdParams = { id: TextDocumentId }

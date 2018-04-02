@@ -16,10 +16,6 @@ export type Props = {
 }
 
 class ViewToolbar extends React.Component<Props, any> {
-  componentDidMount() {
-    this.refreshDocument()
-  }
-
   editDocument = () => {
     this.props.navigate('/edit/' + this.props.documentId)
   }

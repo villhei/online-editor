@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import { ApiResource, isAxiosError } from './common'
 import { FolderId } from 'service/folder-service'
 

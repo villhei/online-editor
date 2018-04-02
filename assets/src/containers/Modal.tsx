@@ -1,7 +1,5 @@
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../reducer'
 import ConfirmationModal from 'components/ConfirmationModal'
 
 export type Props = {
