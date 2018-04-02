@@ -14,6 +14,18 @@ export type HasName = {
 export type HasId = {
   id: string
 }
+
+export type MappedModel<T> = {
+  byId: DocumentMap<T>
+}
+
+export type UpdatedStamp = {
+  readonly updated_at: string
+}
+export type Partial<T> = {
+  [Partial in keyof T]?: T[Partial]
+}
+
 export type ApiResource<T> = T | ResourceStatus | Error
 
 export function getResourceName(resource: ApiResource<HasName>, modifiedName?: string): string {
@@ -43,14 +55,6 @@ export function isResourceAvailable(resource: ApiResource<HasId>): boolean {
 export function isAxiosError(err: any): err is AxiosError {
   const candidate = (err as AxiosError)
   return Boolean(candidate.message && candidate.name && candidate.config)
-}
-
-type Identifiable = {
-  id: string
-}
-
-export type MappedModel<T> = {
-  byId: DocumentMap<T>
 }
 
 export function updateSingle<T>(state: MappedModel<T>, id: string, entity: T): MappedModel<T> {

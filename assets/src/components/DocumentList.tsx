@@ -9,7 +9,8 @@ type Props = {
   getFolderById: (id: FolderId) => any,
   getByDocumentId: (id: TextDocumentId) => any
   folders: Array<FolderId>,
-  createDocument: () => void
+  createDocument: () => void,
+  createFolder: () => void
 }
 
 function sortDocuments(documents: Array<TextDocument>, descending = true): Array<TextDocument> {
@@ -27,12 +28,23 @@ function sortDocuments(documents: Array<TextDocument>, descending = true): Array
 
 export default class DocumentList extends React.Component<Props, any> {
   render() {
-    const { documents, folders, createDocument } = this.props
+    const { documents, folders, createDocument, createFolder } = this.props
     return (
       <div className='ui twelve wide centered column'>
         <div className='ui four doubling cards'>
+          <a className='ui padded card' onClick={createFolder} >
+            <div className='ui left aligned small header'>
+              <i className='small plus icon' />
+              <i className='huge grey folder icon' />
+              New folder
+            </div>
+          </a>
           <a className='ui padded card' onClick={createDocument} >
-            <div className='ui left aligned small header'><i className='plus icon' />Add new</div>
+            <div className='ui left aligned small header'>
+              <i className='small plus icon' />
+              <i className='grey file icon' />
+              New file
+            </div>
           </a>
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}

@@ -8,7 +8,11 @@ import {
   CreateDocumentParams
 } from './document-actions'
 
-import { TextDocument, deleteById, create, update } from 'service/document-service'
+import {
+  createFolder, createFolderAction, CreateFolderParams
+} from './folder-actions'
+
+import { TextDocument, create, deleteById, update } from 'service/document-service'
 import { getFolder } from 'actions/folder-actions'
 
 export const UPDATE_DOCUMENT_CONTENT = 'UPDATE_DOCUMENT_CONTENT'
@@ -48,6 +52,12 @@ export const createAndSelect = bindThunkAction(createDocumentAction, async (para
   await getFolder(dispatch, { id: params.folder })
   dispatch(push('/edit/' + document.id))
   return document
+})
+
+export const createAndReload = bindThunkAction(createFolderAction, async (params: CreateFolderParams, dispatch): Promise<Folder> => {
+  const folder = await createFolder(dispatch, params)
+  getFolder(dispatch, { id: folder.parent })
+  return folder
 })
 
 export const updateAndRefresh = bindThunkAction(updateDocumentAction, async (params, dispatch): Promise<TextDocument> => {

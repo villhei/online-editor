@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ApiResource, isAxiosError } from './common'
+import { ApiResource, isAxiosError, Partial, UpdatedStamp } from './common'
 import { FolderId } from 'service/folder-service'
 
 export type TextDocumentId = string
@@ -14,14 +14,7 @@ export type TextDocument = {
   readonly updated_at: string
 }
 
-export type UpdatedStamp = {
-  readonly updated_at: string
-}
-export type P<T> = {
-  [P in keyof T]?: T[P]
-}
-
-export type PartialTextDocument = P<TextDocument> & UpdatedStamp
+export type PartialTextDocument = Partial<TextDocument> & UpdatedStamp
 
 export function isDocument(candidate: ApiResource<TextDocument>): candidate is TextDocument {
   const document = candidate as TextDocument

@@ -1,19 +1,18 @@
 import axios from 'axios'
 import { TextDocumentId } from 'service/document-service'
-import { ApiResource } from './common'
+import { ApiResource, Partial, UpdatedStamp } from './common'
 
 export type FolderId = string
 
 export type Folder = {
   readonly id: FolderId
   readonly name: string,
+  readonly parent: FolderId,
   readonly children: FolderId[]
   readonly documents: TextDocumentId[]
 }
 
-export type UpdatedStamp = {
-  readonly updated_at: string
-}
+export type PartialFolder = Partial<Folder>
 
 export function isFolder(candidate: ApiResource<Folder>): candidate is Folder {
   const folder = (candidate as Folder)
@@ -23,11 +22,9 @@ export function isFolder(candidate: ApiResource<Folder>): candidate is Folder {
     Array.isArray(folder.children))
 }
 
-export function create(name: string, parent: FolderId): Promise<Folder> {
-  return axios.post<Promise<Folder>>('/api/folders', {
-    name,
-    parent
-  }).then(response => response.data)
+export function create(folder: PartialFolder): Promise<Folder> {
+  return axios.post<Promise<Folder>>('/api/folders', folder
+  ).then(response => response.data)
 }
 
 export function getRoot(): Promise<Folder> {
