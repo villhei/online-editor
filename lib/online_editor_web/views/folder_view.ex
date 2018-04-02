@@ -13,6 +13,7 @@ defmodule OnlineEditorWeb.FolderView do
     json = %{
       id: folder.id,
       name: folder.name,
+      parent: folder.parent_id,
       inserted_at: folder.inserted_at,
       updated_at: folder.updated_at,
     }

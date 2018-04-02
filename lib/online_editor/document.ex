@@ -18,6 +18,7 @@ defmodule OnlineEditor.Document do
   end
 
   @doc false
+
   def changeset(%Document{} = document, %{"folder" => folder_id} = attrs) do
     with_folder_id =
       attrs

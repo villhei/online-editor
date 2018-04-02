@@ -16,11 +16,19 @@ defmodule OnlineEditor.Folder do
   end
 
   @doc false
+  def changeset(%Folder{} = folder, %{"parent" => parent_id} = attrs) do
+    with_parent_id =
+      attrs
+      |> Map.drop(["parent"])
+      |> Map.put("parent_id", parent_id)
+    changeset(folder, with_parent_id)
+  end
+
   def changeset(%Folder{} = folder, attrs) do
     folder
     |> change(%{})
     |> Map.put(:empty_values, [""])
-    |> cast(attrs, [:name])
+    |> cast(attrs, [:name, :parent_id])
     |> validate_required([:name])
   end
 

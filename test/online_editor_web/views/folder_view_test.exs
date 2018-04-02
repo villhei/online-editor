@@ -11,6 +11,7 @@ defmodule OnlineEditorWeb.FolderViewTest do
     folder = %Folder{
       id: "1",
       name: "Root",
+      parent: nil,
       inserted_at: "now",
       updated_at: "never",
       documents: [%Document{
@@ -22,9 +23,36 @@ defmodule OnlineEditorWeb.FolderViewTest do
            %{
              id: "1",
              name: "Root",
+             parent: nil,
              inserted_at: "now",
              updated_at: "never",
              documents: ["d1"]
+           }
+  end
+
+  test "renders folder.json with parent folder" do
+    parent = %Folder{
+      id: "1",
+      name: "Root",
+      parent: nil,
+      inserted_at: "now",
+      updated_at: "never",
+      documents: []
+    }
+
+    child = parent |> Map.merge(%{
+      parent_id: parent.id,
+      id: "2",
+      name: "Child"
+    })
+    assert FolderView.render("folder.json", %{folder: child }) ==
+           %{
+             id: "2",
+             name: "Child",
+             parent: "1",
+             inserted_at: "now",
+             updated_at: "never",
+             documents: []
            }
   end
 end
