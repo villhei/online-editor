@@ -24,7 +24,6 @@ export default (props: Props) => {
   const { document, editDocument } = props
   return (<CardDisplay
     header={document.name}
-    buttonText='Edit'
     icon={{
       name: 'file',
       color: 'teal'

@@ -10,7 +10,6 @@ export default (props: Props) => {
   const { buttonAction } = props
   return (<CardDisplay
     header={'New document'}
-    buttonText='New document'
     icon={{
       name: 'file',
       color: 'blue'

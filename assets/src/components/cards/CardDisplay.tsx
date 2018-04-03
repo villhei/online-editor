@@ -3,7 +3,7 @@ import * as classNames from 'classnames'
 
 type Props = {
   header: string
-  buttonText: string,
+  disabled?: boolean,
   children?: JSX.Element | string | any,
   icon: {
     name: string,
@@ -13,10 +13,13 @@ type Props = {
 }
 
 export default (props: Props) => {
-  const { header, buttonText, icon: { name, color }, buttonAction } = props
-  const iconClasses = classNames('huge right floated', color, name, 'icon')
+  const { header, icon: { name, color }, buttonAction, disabled } = props
+  const iconClasses = classNames('huge right floated', color, name, {
+    'disabled': disabled
+  }, 'icon')
+  const action = !disabled ? buttonAction : () => null
   return (
-    <div className='ui card'>
+    <a className='ui card' onClick={action}>
       <div className='content'>
         <i className={iconClasses}></i>
         <div className='small header'>
@@ -24,9 +27,6 @@ export default (props: Props) => {
         </div>
         {props.children}
       </div>
-      <div className='ui bottom attached blue basic button' onClick={buttonAction}>
-        {buttonText}
-      </div>
-    </div >
+    </a >
   )
 }
