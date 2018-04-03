@@ -1,7 +1,7 @@
 import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
 import {
-  getRootAction, getChildrenAction, getFolderAction
+  getRootAction, getChildrenAction, getFolderAction, selectFolder
 } from 'actions/folder-actions'
 import { ApiResource, ResourceStatus, MappedModel, updateSingle } from 'service/common'
 import { Folder, FolderId } from 'service/folder-service'
@@ -18,6 +18,12 @@ export const initialState: NavigatorState = {
 }
 
 export default function navigatorReducer(state: NavigatorState = initialState, action: Action): NavigatorState {
+  if (isType(action, selectFolder)) {
+    return {
+      ...state,
+      current: action.payload.id
+    }
+  }
   if (isType(action, getRootAction.done)) {
     const { result } = action.payload
     return {

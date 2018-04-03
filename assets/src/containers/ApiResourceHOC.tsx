@@ -9,20 +9,28 @@ export interface ApiResourceProps<T> {
   getResource: (id: string) => any
 }
 
-export default function wrapApiResource<T, P>(isValueResolved: (value: ApiResource<T>) => value is T) {
-  return function (Component: React.ComponentClass<P & ApiResourceProps<T>>,
-    Loading: () => JSX.Element = LoadingComponent) {
+type TypeChecker<T> = (value: ApiResource<T>) => value is T
+
+type ApiResourceContainer<T, P> = React.ComponentClass<P & ApiResourceProps<T>>
+
+type ElementFn = () => JSX.Element
+
+export default function wrapApiResource<T, P>(isValueResolved: TypeChecker<T>) {
+  return function (Component: ApiResourceContainer<T, P>,
+    Loading: ElementFn = LoadingComponent) {
     return class ApiResourceWrapper extends React.Component<P & ApiResourceProps<T>> {
       componentDidMount() {
-        const { resource } = this.props
-        if (!isValueResolved(resource)) {
-          this.props.getResource(this.props.resourceId)
-        }
+        this.handleGetResource()
       }
 
-      componentWillReceiveProps(nextProps: ApiResourceProps<T>) {
-        if (nextProps.resourceId !== this.props.resourceId) {
-          this.props.getResource(nextProps.resourceId)
+      componentDidUpdate() {
+        this.handleGetResource()
+      }
+
+      handleGetResource = () => {
+        const { resource, resourceId, getResource } = this.props
+        if (!isValueResolved(resource)) {
+          this.props.getResource(resourceId)
         }
       }
 

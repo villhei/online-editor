@@ -13,6 +13,8 @@ import {
 } from './folder-actions'
 
 import { TextDocument, create, deleteById, update } from 'service/document-service'
+import { Folder } from 'service/folder-service'
+
 import { getFolder } from 'actions/folder-actions'
 
 export const UPDATE_DOCUMENT_CONTENT = 'UPDATE_DOCUMENT_CONTENT'

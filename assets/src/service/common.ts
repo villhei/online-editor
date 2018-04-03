@@ -7,6 +7,12 @@ export enum ResourceStatus {
   NotFound = 'API_RESOURCE:NOT_FOUND'
 }
 
+export type ApiResourceId = string
+
+export type ByIdParams = {
+  id: ApiResourceId
+}
+
 export type HasName = {
   name: string
 }

@@ -1,8 +1,8 @@
 import axios from 'axios'
 import { TextDocumentId } from 'service/document-service'
-import { ApiResource, Partial, UpdatedStamp } from './common'
+import { ApiResource, ApiResourceId, Partial, UpdatedStamp } from './common'
 
-export type FolderId = string
+export type FolderId = ApiResourceId
 
 export type Folder = {
   readonly id: FolderId

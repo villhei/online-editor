@@ -3,6 +3,8 @@ import { FolderId } from 'service/folder-service'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 import FolderCard from 'containers/FolderCard'
 import DocumentCard from 'containers/DocumentCard'
+import NewFolderCard from 'components/cards/NewFolderCard'
+import NewDocumentCard from 'components/cards/NewDocumentCard'
 
 type Props = {
   documents: Array<TextDocumentId>,
@@ -31,21 +33,13 @@ export default class DocumentList extends React.Component<Props, any> {
     const { documents, folders, createDocument, createFolder } = this.props
     return (
       <div className='ui twelve wide centered column'>
-        <div className='ui four doubling cards'>
-          <a className='ui padded card' onClick={createFolder} >
-            <div className='ui left aligned small header'>
-              <i className='small plus icon' />
-              <i className='huge grey folder icon' />
-              New folder
-            </div>
-          </a>
-          <a className='ui padded card' onClick={createDocument} >
-            <div className='ui left aligned small header'>
-              <i className='small plus icon' />
-              <i className='grey file icon' />
-              New file
-            </div>
-          </a>
+        <div className='ui six doubling cards'>
+          <NewFolderCard
+            buttonAction={createFolder}
+          />
+          <NewDocumentCard
+            buttonAction={createDocument}
+          />
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}
               resourceId={folderId} />)}
