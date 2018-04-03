@@ -27,31 +27,18 @@ export default function navigatorReducer(state: NavigatorState = initialState, a
   if (isType(action, getRootAction.done)) {
     const { result } = action.payload
     return {
-      ...state,
       ...updateSingle(state, result.id, result),
       current: result.id
     }
   }
   if (isType(action, getFolderAction.started)) {
     const { id } = action.payload
-    return {
-      ...state,
-      byId: {
-        ...state.byId,
-        [id]: ResourceStatus.Loading
-      }
-    }
+    return updateSingle(state, id, ResourceStatus.Loading)
   }
   if (isType(action, getFolderAction.failed)) {
     const { id } = action.payload.params
     const error = action.payload.error
-    return {
-      ...state,
-      byId: {
-        ...state.byId,
-        [id]: ResourceStatus.NotFound
-      }
-    }
+    return updateSingle(state, id, error)
   }
   if (isType(action, getChildrenAction.done)) {
     const { result } = action.payload
@@ -62,10 +49,7 @@ export default function navigatorReducer(state: NavigatorState = initialState, a
   }
   if (isType(action, getFolderAction.done)) {
     const { result } = action.payload
-    return {
-      ...state,
-      ...updateSingle(state, result.id, result)
-    }
+    return updateSingle(state, result.id, result)
   }
   return state
 }

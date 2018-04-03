@@ -1,12 +1,13 @@
 
 import * as React from 'react'
 import LoadingComponent from 'components/Loading'
-import { ApiResource, ResourceStatus } from 'service/common'
+import { ApiResource, ResourceStatus, isAxiosError } from 'service/common'
 
 export interface ApiResourceProps<T> {
   resource: ApiResource<T>,
   resourceId: string,
-  getResource: (id: string) => any
+  getResource: (id: string) => any,
+  error?: any
 }
 
 type TypeChecker<T> = (value: ApiResource<T>) => value is T
@@ -22,29 +23,37 @@ export default function wrapApiResource<T, P>(isValueResolved: TypeChecker<T>) {
       componentDidMount() {
         this.handleGetResource()
       }
-
       componentDidUpdate() {
         this.handleGetResource()
       }
 
       handleGetResource = () => {
         const { resource, resourceId, getResource } = this.props
-        if (!isValueResolved(resource)) {
+        if (!isValueResolved(resource) && !isAxiosError(resource)) {
           this.props.getResource(resourceId)
         }
       }
 
       render() {
-        const { resource } = this.props
+        const { resource, error } = this.props
         if (isValueResolved(resource)) {
           return <Component {...this.props} />
         }
-        if (resource instanceof Error) {
-          return <h1>Error {(resource).message}</h1>
+        if (isAxiosError(resource)) {
+          return (
+            <div className='ui container'>
+              <h1>Error</h1> {resource.message}
+            </div>
+          )
         } else if (resource === ResourceStatus.NotFound) {
           return (<h1>Not found</h1>)
         } else {
-          return (<Loading />)
+          return (
+            <div className='ui container'>
+              <h1>Unknown error</h1>
+              {error}
+            </div>
+          )
         }
       }
     }

@@ -58,18 +58,15 @@ export function isResourceAvailable(resource: ApiResource<HasId>): boolean {
   }
   return false
 }
-export function isAxiosError(err: any): err is AxiosError {
+export function isAxiosError(err?: any): err is AxiosError {
   const candidate = (err as AxiosError)
-  return Boolean(candidate.message && candidate.name && candidate.config)
+  return Boolean(candidate && candidate.config && candidate.message && candidate.name)
 }
 
-export function updateSingle<T>(state: MappedModel<T>, id: string, entity: T): MappedModel<T> {
+export function updateSingle<T, S extends Object>(state: S & MappedModel<T>, id: string, entity: T): S & MappedModel<T> {
   const byId = {
     ...state.byId,
     [id]: entity
   }
-  return {
-    ...state,
-    byId
-  }
+  return Object.assign({}, state, { byId })
 }

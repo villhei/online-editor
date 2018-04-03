@@ -45,7 +45,3 @@ export function findByParent(id: FolderId): Promise<Array<Folder>> {
   return axios.get<Array<Folder>>('/api/folders/?children=' + id)
     .then(res => res.data)
 }
-
-export function getAll(): Promise<Array<Folder>> {
-  return axios.get<Array<Folder>>('/api/folders').then(res => res.data)
-}
