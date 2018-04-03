@@ -9,12 +9,13 @@ type Props = {
 export default (props: Props) => {
   const { buttonAction } = props
   return (<CardDisplay
-    header={''}
+    header={'New document'}
     buttonText='New document'
     icon={{
       name: 'file',
       color: 'blue'
     }}
-    buttonAction={buttonAction} />
+    buttonAction={buttonAction}>
+  </CardDisplay>
   )
 }

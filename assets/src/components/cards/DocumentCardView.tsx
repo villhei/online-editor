@@ -7,6 +7,19 @@ type Props = {
   editDocument: () => any
 }
 
+function formatDate(isoString: string): string {
+  const date = new Date(isoString)
+  return [
+    date.getDate(),
+    date.getMonth() + 1,
+    date.getFullYear()
+  ].join('.') + ' ' +
+    [
+      date.getHours(),
+      ('0' + date.getMinutes()).slice(-2)
+    ].join(':')
+}
+
 export default (props: Props) => {
   const { document, editDocument } = props
   return (<CardDisplay
@@ -16,6 +29,13 @@ export default (props: Props) => {
       name: 'file',
       color: 'teal'
     }}
-    buttonAction={editDocument} />
+    buttonAction={editDocument}>
+    <>
+      <div className='meta'>
+        Last modified {formatDate(document.updated_at)}
+      </div>
+      <div className='ui divider' />
+    </>
+  </CardDisplay >
   )
 }

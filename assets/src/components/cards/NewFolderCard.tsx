@@ -9,7 +9,7 @@ type Props = {
 export default (props: Props) => {
   const { buttonAction } = props
   return (<CardDisplay
-    header={''}
+    header={'Add new'}
     buttonText='New folder'
     icon={{
       name: 'folder',

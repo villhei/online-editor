@@ -33,7 +33,7 @@ export default class DocumentList extends React.Component<Props, any> {
     const { documents, folders, createDocument, createFolder } = this.props
     return (
       <div className='ui twelve wide centered column'>
-        <div className='ui six doubling cards'>
+        <div className='ui four doubling cards'>
           <NewFolderCard
             buttonAction={createFolder}
           />

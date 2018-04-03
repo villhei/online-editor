@@ -4,6 +4,7 @@ import * as classNames from 'classnames'
 type Props = {
   header: string
   buttonText: string,
+  children?: JSX.Element | string | any,
   icon: {
     name: string,
     color: string
@@ -13,14 +14,15 @@ type Props = {
 
 export default (props: Props) => {
   const { header, buttonText, icon: { name, color }, buttonAction } = props
-  const iconClasses = classNames('large', color, name, 'icon')
+  const iconClasses = classNames('huge right floated', color, name, 'icon')
   return (
     <div className='ui card'>
       <div className='content'>
-        <div className='header'>
-          <i className={iconClasses} />
+        <i className={iconClasses}></i>
+        <div className='small header'>
           {header}
         </div>
+        {props.children}
       </div>
       <div className='ui bottom attached blue basic button' onClick={buttonAction}>
         {buttonText}

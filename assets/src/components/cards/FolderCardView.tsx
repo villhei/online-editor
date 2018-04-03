@@ -16,6 +16,13 @@ export default (props: Props) => {
       name: 'folder',
       color: 'blue'
     }}
-    buttonAction={selectFolder} />
+    buttonAction={selectFolder}>
+    <>
+      <div className='meta'>
+        {folder.documents.length} documents
+      </div>
+      <div className='ui divider' />
+    </>
+  </CardDisplay>
   )
 }
