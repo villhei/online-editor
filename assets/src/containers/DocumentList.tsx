@@ -1,17 +1,16 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
-import { createAndSelect, createAndReload } from 'actions/editor-actions'
+import { createAndSelect, createFolderAndRefresh } from 'actions/editor-actions'
 import { getDocumentsByFolder, getDocument } from 'actions/document-actions'
 import { getChildren, getFolder, createFolder, selectFolder } from 'actions/folder-actions'
 import { Folder, FolderId, isFolder, PartialFolder } from 'service/folder-service'
 import DocumentList from 'components/DocumentList'
+import LoadingComponent from 'components/Loading'
 import wrapApiResource from 'containers/ApiResourceHOC'
 import { TextDocumentId } from 'service/document-service'
 
 type Props = {
-  createDocument: (folder: FolderId) => any,
-  createFolder: (folder: PartialFolder) => any,
   getChildren: (id: FolderId) => any,
   getDocumentsByFolder: (folder: FolderId) => any,
   getDocumentById: (id: TextDocumentId) => any,
@@ -22,15 +21,6 @@ type Props = {
 }
 
 class DocumentListContainer extends React.Component<Props, any> {
-  createDocument = () => {
-    this.props.createDocument(this.props.resourceId)
-  }
-  createFolder = () => {
-    this.props.createFolder({
-      name: 'New folder',
-      parent: this.props.resourceId
-    })
-  }
   parentFolder = () => {
     const { resource, selectFolder } = this.props
     selectFolder(resource.parent)
@@ -44,7 +34,6 @@ class DocumentListContainer extends React.Component<Props, any> {
       folder={resource}
       folders={children}
       documents={documents}
-      createDocument={this.createDocument}
       parentFolder={this.parentFolder} />
   }
 }
@@ -60,8 +49,6 @@ const mapStateToProps = ({ model }: RootState) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    createDocument: (folder: FolderId) => dispatch(createAndSelect({ folder })),
-    createFolder: (folder: PartialFolder) => dispatch(createAndReload({ folder })),
     getChildren: (id: FolderId) => getChildren(dispatch, { id }),
     getDocumentsByFolder: (folder: string) => getDocumentsByFolder(dispatch, folder),
     getDocumentById: (id: TextDocumentId) => getDocument(dispatch, { id }),
@@ -69,4 +56,6 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     selectFolder: (id: FolderId) => dispatch(selectFolder({ id }))
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResource<Folder, Props>(isFolder)(DocumentListContainer))
+
+const wrappedResource = wrapApiResource<Folder, Props>(isFolder)(DocumentListContainer, LoadingComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

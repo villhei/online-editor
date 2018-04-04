@@ -21,7 +21,7 @@ import {
 
 export type UpdateDocumentParams = ByIdParams & { document: PartialTextDocument }
 export type GetDocumentByFolderParams = { folder: FolderId }
-export type CreateDocumentParams = { folder: FolderId }
+export type CreateDocumentParams = { document: PartialTextDocument & { folder: FolderId } }
 export type DeleteDocumentParams = { document: TextDocument }
 
 export const ACTION_GET_DOCUMENT = 'ACTION_GET_DOCUMENT'

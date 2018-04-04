@@ -3,6 +3,7 @@ import { connect, Dispatch } from 'react-redux'
 import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
 import { ApiResource } from 'service/common'
+import LoadingComponent from 'components/Loading'
 import DocumentViewComponent from 'components/DocumentView'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
 import wrapApiResource from 'containers/ApiResourceHOC'
@@ -34,5 +35,5 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     getResource: (id: string) => getDocument(dispatch, { id })
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResource<TextDocument, DocumentViewProps>(isDocument)(DocumentView))
+const wrappedResource = wrapApiResource<TextDocument, DocumentViewProps>(isDocument)(DocumentView, LoadingComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

@@ -8,16 +8,16 @@ import { Folder, FolderId } from 'service/folder-service'
 
 type FolderMap = { [id: string]: ApiResource<Folder> }
 
-export type NavigatorState = {
+export type FolderState = {
   current: FolderId
-} & MappedModel<ApiResource<Folder>>
+} & MappedModel<Folder>
 
-export const initialState: NavigatorState = {
+export const initialState: FolderState = {
   current: '',
   byId: {}
 }
 
-export default function navigatorReducer(state: NavigatorState = initialState, action: Action): NavigatorState {
+export default function folderReducer(state: FolderState = initialState, action: Action): FolderState {
   if (isType(action, selectFolder)) {
     return {
       ...state,
@@ -33,7 +33,7 @@ export default function navigatorReducer(state: NavigatorState = initialState, a
   }
   if (isType(action, getFolderAction.started)) {
     const { id } = action.payload
-    return updateSingle(state, id, ResourceStatus.Loading)
+    return updateSingle<Folder, FolderState>(state, id, ResourceStatus.Loading)
   }
   if (isType(action, getFolderAction.failed)) {
     const { id } = action.payload.params

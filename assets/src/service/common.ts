@@ -34,13 +34,13 @@ export type Partial<T> = {
 
 export type ApiResource<T> = T | ResourceStatus | Error
 
-export function getResourceName(resource: ApiResource<HasName>, modifiedName?: string): string {
+export function getResourceName(resource: ApiResource<HasName>): string {
   if (resource === ResourceStatus.Loading) {
     return 'Loading...'
   } else if (resource === ResourceStatus.NotFound) {
     return 'Not found'
   } else if (resource && resource.name) {
-    return modifiedName || resource.name
+    return resource.name
   } else {
     return 'Error'
   }
@@ -63,10 +63,10 @@ export function isAxiosError(err?: any): err is AxiosError {
   return Boolean(candidate && candidate.config && candidate.message && candidate.name)
 }
 
-export function updateSingle<T, S extends Object>(state: S & MappedModel<T>, id: string, entity: T): S & MappedModel<T> {
+export function updateSingle<T, S extends Object>(state: S & MappedModel<ApiResource<T>>, id: string, updatedEntity: ApiResource<T>): S & MappedModel<ApiResource<T>> {
   const byId = {
     ...state.byId,
-    [id]: entity
+    [id]: updatedEntity
   }
   return Object.assign({}, state, { byId })
 }

@@ -22,7 +22,7 @@ import {
   TextDocumentId,
   isDocument
 } from 'service/document-service'
-import EditorToolbarView from 'components/toolbars/Editor'
+import EditorToolbarView from 'components/toolbars/EditorToolbarView'
 import Modal, { Props as ModalProps } from 'containers/Modal'
 
 export type DispatchProps = {
@@ -183,9 +183,10 @@ class EditorToolbar extends React.Component<Props, any> {
       refreshing,
       documentId
     }
+    const resourceName = modifiedName !== undefined ? modifiedName : getResourceName(document)
     return <>
       <EditorToolbarView
-        title={getResourceName(document, modifiedName)}
+        title={resourceName}
         disabled={!isResourceAvailable(document)}
         {...commonProps}
       />

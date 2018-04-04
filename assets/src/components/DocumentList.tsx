@@ -5,7 +5,6 @@ import FolderCard from 'containers/FolderCard'
 import DocumentCard from 'containers/DocumentCard'
 import CurrentFolderCard from 'components/cards/CurrentFolderCard'
 import ParentFolderCard from 'components/cards/ParentFolderCard'
-import NewDocumentCard from 'components/cards/NewDocumentCard'
 
 type Props = {
   documents: Array<TextDocumentId>,
@@ -13,7 +12,6 @@ type Props = {
   folder: Folder,
   getFolderById: (id: FolderId) => any,
   getByDocumentId: (id: TextDocumentId) => any
-  createDocument: () => void,
   parentFolder: () => void
 }
 
@@ -32,7 +30,7 @@ function sortDocuments(documents: Array<TextDocument>, descending = true): Array
 
 export default class DocumentList extends React.Component<Props, any> {
   render() {
-    const { documents, folder, folders, createDocument, parentFolder } = this.props
+    const { documents, folder, folders, parentFolder } = this.props
     return (
       <div className='ui twelve wide centered column'>
         <div className='ui four doubling cards'>
@@ -40,9 +38,6 @@ export default class DocumentList extends React.Component<Props, any> {
           <ParentFolderCard
             disabled={!folder.parent}
             buttonAction={parentFolder}
-          />
-          <NewDocumentCard
-            buttonAction={createDocument}
           />
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}

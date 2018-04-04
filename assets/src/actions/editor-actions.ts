@@ -5,7 +5,9 @@ import {
   deleteDocumentAction,
   createDocumentAction,
   updateDocumentAction,
-  CreateDocumentParams
+  CreateDocumentParams,
+  UpdateDocumentParams,
+  updateDocument
 } from './document-actions'
 
 import {
@@ -51,18 +53,19 @@ export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (par
 
 export const createAndSelect = bindThunkAction(createDocumentAction, async (params: CreateDocumentParams, dispatch): Promise<TextDocument> => {
   const document = await create(params.folder)
-  await getFolder(dispatch, { id: params.folder })
+  getFolder(dispatch, { id: params.folder })
   dispatch(push('/edit/' + document.id))
   return document
 })
 
-export const createAndReload = bindThunkAction(createFolderAction, async (params: CreateFolderParams, dispatch): Promise<Folder> => {
+export const createFolderAndRefresh = bindThunkAction(createFolderAction, async (params: CreateFolderParams, dispatch): Promise<Folder> => {
   const folder = await createFolder(dispatch, params)
   getFolder(dispatch, { id: folder.parent })
   return folder
 })
 
-export const updateAndRefresh = bindThunkAction(updateDocumentAction, async (params, dispatch): Promise<TextDocument> => {
-  const document = await update(params.id, params.document)
+export const updateAndRefresh = bindThunkAction(updateDocumentAction, async (params: UpdateDocumentParams, dispatch): Promise<TextDocument> => {
+  const document = await updateDocument(dispatch, params)
+  getFolder(dispatch, { id: document.folder })
   return document
 })

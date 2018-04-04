@@ -1,11 +1,10 @@
 
 import * as React from 'react'
-import LoadingComponent from 'components/Loading'
-import { ApiResource, ResourceStatus, isAxiosError } from 'service/common'
+import { ApiResource, ApiResourceId, ResourceStatus, isAxiosError } from 'service/common'
 
 export interface ApiResourceProps<T> {
   resource: ApiResource<T>,
-  resourceId: string,
+  resourceId: ApiResourceId,
   getResource: (id: string) => any,
   error?: any
 }
@@ -14,11 +13,14 @@ type TypeChecker<T> = (value: ApiResource<T>) => value is T
 
 type ApiResourceContainer<T, P> = React.ComponentClass<P & ApiResourceProps<T>>
 
-type ElementFn = () => JSX.Element
+type ElementFn = () => JSX.Element | undefined
 
-export default function wrapApiResource<T, P>(isValueResolved: TypeChecker<T>) {
+type ComponentWrapper<T, P> = (component: ApiResourceContainer<T, P>, Loading: ElementFn) => any
+
+export default function wrapApiResource<T, P>(
+  isValueResolved: TypeChecker<T>): ComponentWrapper<T, P> {
   return function (Component: ApiResourceContainer<T, P>,
-    Loading: ElementFn = LoadingComponent) {
+    Loading: ElementFn) {
     return class ApiResourceWrapper extends React.Component<P & ApiResourceProps<T>> {
       componentDidMount() {
         this.handleGetResource()
@@ -29,8 +31,11 @@ export default function wrapApiResource<T, P>(isValueResolved: TypeChecker<T>) {
 
       handleGetResource = () => {
         const { resource, resourceId, getResource } = this.props
-        if (!isValueResolved(resource) && !isAxiosError(resource)) {
-          this.props.getResource(resourceId)
+        const isResourceLoaded = !(isValueResolved(resource) || isAxiosError(resource))
+        if (isResourceLoaded) {
+          if (resourceId) {
+            this.props.getResource(resourceId)
+          }
         }
       }
 
@@ -48,12 +53,7 @@ export default function wrapApiResource<T, P>(isValueResolved: TypeChecker<T>) {
         } else if (resource === ResourceStatus.NotFound) {
           return (<h1>Not found</h1>)
         } else {
-          return (
-            <div className='ui container'>
-              <h1>Unknown error</h1>
-              {error}
-            </div>
-          )
+          return null
         }
       }
     }

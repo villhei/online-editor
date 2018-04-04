@@ -2,7 +2,7 @@ import { createStore, combineReducers, applyMiddleware, Reducer } from 'redux'
 import { routerMiddleware, RouterState } from 'react-router-redux'
 import thunk from 'redux-thunk'
 import documentReducer, { DocumentReducerState } from 'reducers/documents'
-import navigatorReducer, { NavigatorState } from 'reducers/navigator'
+import folderReducer, { FolderState } from 'reducers/folder'
 
 import { history, router } from 'reducers/router'
 import pageReducer, { PageState } from 'reducers/page'
@@ -17,7 +17,7 @@ export type RootState = {
     page: PageState
   },
   model: {
-    folders: NavigatorState,
+    folders: FolderState,
     documents: DocumentReducerState
   },
   state: {
@@ -32,7 +32,7 @@ export const rootReducer: Reducer<RootState> = combineReducers({
     page: pageReducer
   }),
   model: combineReducers({
-    folders: navigatorReducer,
+    folders: folderReducer,
     documents: documentReducer
   }),
   state: combineReducers({

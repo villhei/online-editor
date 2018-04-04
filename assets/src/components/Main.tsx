@@ -20,11 +20,13 @@ export default (props: Props) => {
   const { error, clearError } = props
   return (
     <div className='ui main full height with padding'>
-      <ConnectedSwitch>
-        <Route path={'/edit/:documentId'} component={EditorToolbar} />
-        <Route path={'/view/:documentId'} component={ViewToolbar} />
-        <Route path='/' component={MainToolbar} />
-      </ConnectedSwitch>
+      <div className='ui fixed borderless grid menu'>
+        <ConnectedSwitch>
+          <Route path={'/edit/:documentId'} component={EditorToolbar} />
+          <Route path={'/view/:documentId'} component={ViewToolbar} />
+          <Route path='/' component={MainToolbar} />
+        </ConnectedSwitch>
+      </div>
       <div className='ui padded equal full height grid'>
         {error.message &&
           <div className='ui row'>
