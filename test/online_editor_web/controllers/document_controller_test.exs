@@ -31,6 +31,10 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
     |> Poison.decode!()
   end
 
+  defp with_folder(document, folder) do
+    Map.put(document, :folder, folder.id)
+  end
+
   test "GET 200 - index path returns the list of all documents", %{conn: conn} do
     document = insert(:document)
     conn = get(conn, "/api/documents/")
@@ -71,14 +75,16 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
   end
 
   test "POST 200 - create path allows creating documents", %{conn: conn} do
-    conn = post(conn, "/api/documents", @example_document)
+    payload = with_folder(@example_document, insert(:folder))
+    conn = post(conn, "/api/documents", payload)
     document = Repo.get_by(Document, @example_document)
     assert document
     assert json_response(conn, 200) == render_json("show.json", document: document)
   end
 
   test "POST 200 - create path allows creating documents without content", %{conn: conn} do
-    conn = post(conn, "/api/documents", @no_content_document)
+    payload = with_folder(@no_content_document, insert(:folder))
+    conn = post(conn, "/api/documents", payload)
     document = Repo.get_by(Document, @no_content_document)
     assert document
     assert json_response(conn, 200) == render_json("show.json", document: document)
@@ -94,6 +100,20 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
       |> Repo.preload(:folder)
 
     assert document.folder == folder
+  end
+
+  test "POST 200 - create path allows creating documents with only folder and name", %{conn: conn} do
+    folder = insert(:folder)
+    payload = %{
+      :name => "title",
+      :folder => folder.id}
+    conn = post(conn, "/api/documents", payload)
+
+    document =
+      Repo.get_by(Document, %{:name => "title"})
+      |> Repo.preload(:folder)
+
+    assert json_response(conn, 200) == render_json("show.json", document: document)
   end
 
   test "POST 400 - does not accept invalid attrs", %{conn: conn} do

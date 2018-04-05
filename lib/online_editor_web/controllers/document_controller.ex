@@ -29,7 +29,7 @@ defmodule OnlineEditorWeb.DocumentController do
   end
 
   def create(conn, params) do
-    changeset = Document.changeset(%Document{}, params)
+    changeset = Document.create_changeset(%Document{}, params)
 
     case Repo.insert(changeset) do
       {:ok, document} ->

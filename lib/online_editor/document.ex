@@ -19,21 +19,27 @@ defmodule OnlineEditor.Document do
 
   @doc false
 
-  def changeset(%Document{} = document, %{"folder" => folder_id} = attrs) do
+  def create_changeset(%Document{} = document, %{"folder" => folder_id} = attrs) do
     with_folder_id =
       attrs
       |> Map.drop(["folder"])
       |> Map.put("folder_id", folder_id)
 
-    changeset(document, with_folder_id)
+    create_changeset(document, with_folder_id)
+  end
+
+  def create_changeset(%Document{} = document, attrs) do
+    document
+    |> change(%{})
+    |> Map.put(:empty_values, [""])
+    |> cast(attrs, [:name, :owner, :content, :folder_id])
+    |> validate_required([:name, :folder_id])
   end
 
   def changeset(%Document{} = document, attrs) do
     document
     |> change(%{})
-    |> Map.put(:empty_values, [""])
-    |> cast(attrs, [:name, :owner, :content, :folder_id])
-    |> validate_required([:name, :owner])
+    |> cast(attrs, [:name, :content, :folder_id])
   end
 
   def delete_changeset(%Document{} = document) do
