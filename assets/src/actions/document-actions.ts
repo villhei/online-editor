@@ -52,7 +52,7 @@ export const updateDocumentAction = actionCreator
 export const deleteDocumentAction = actionCreator
   .async<DeleteDocumentParams, void>(ACTION_DELETE_DOCUMENT)
 
-export const createDocument = wrapAsyncWorker(createDocumentAction, (params: CreateDocumentParams) => create(params.folder))
+export const createDocument = wrapAsyncWorker(createDocumentAction, (params: CreateDocumentParams) => create(params.document))
 export const getDocument = wrapAsyncWorker(getDocumentAction, (params: ByIdParams) => getById(params.id))
 export const getDocuments = wrapAsyncWorker(getDocumentsAction, getAll)
 export const getDocumentsByFolder = wrapAsyncWorker(getDocumentsAction, getAllByFolder)

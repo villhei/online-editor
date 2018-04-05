@@ -52,8 +52,8 @@ export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (par
 })
 
 export const createAndSelect = bindThunkAction(createDocumentAction, async (params: CreateDocumentParams, dispatch): Promise<TextDocument> => {
-  const document = await create(params.folder)
-  getFolder(dispatch, { id: params.folder })
+  const document = await create(params.document)
+  getFolder(dispatch, { id: document.folder })
   dispatch(push('/edit/' + document.id))
   return document
 })

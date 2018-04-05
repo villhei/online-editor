@@ -25,9 +25,6 @@ export type MappedModel<T> = {
   byId: DocumentMap<T>
 }
 
-export type UpdatedStamp = {
-  readonly updated_at: string
-}
 export type Partial<T> = {
   [Partial in keyof T]?: T[Partial]
 }

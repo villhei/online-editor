@@ -13,7 +13,7 @@ type TypeChecker<T> = (value: ApiResource<T>) => value is T
 
 type ApiResourceContainer<T, P> = React.ComponentClass<P & ApiResourceProps<T>>
 
-type ElementFn = () => JSX.Element | undefined
+type ElementFn = () => JSX.Element
 
 type ComponentWrapper<T, P> = (component: ApiResourceContainer<T, P>, Loading: ElementFn) => any
 
@@ -52,6 +52,8 @@ export default function wrapApiResource<T, P>(
           )
         } else if (resource === ResourceStatus.NotFound) {
           return (<h1>Not found</h1>)
+        } else if (resource === ResourceStatus.Loading) {
+          return (<Loading />)
         } else {
           return null
         }

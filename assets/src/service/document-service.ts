@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { ApiResource, ApiResourceId, isAxiosError, Partial, UpdatedStamp } from './common'
+import { ApiResource, ApiResourceId, isAxiosError, Partial } from './common'
 import { FolderId } from 'service/folder-service'
 
 export type TextDocumentId = ApiResourceId
@@ -14,25 +14,19 @@ export type TextDocument = {
   readonly updated_at: string
 }
 
-export type PartialTextDocument = Partial<TextDocument> & UpdatedStamp
+export type PartialTextDocument = Partial<TextDocument>
 
 export function isDocument(candidate: ApiResource<TextDocument>): candidate is TextDocument {
   const document = candidate as TextDocument
   return Boolean(document &&
-    document.id &&
-    document.name &&
-    typeof document.content !== undefined &&
-    document.owner &&
-    document.inserted_at)
+    typeof document.id === 'string' &&
+    typeof document.name === 'string' &&
+    typeof document.content === 'string')
 }
 
-export function create(folder: FolderId): Promise<TextDocument> {
-  return axios.post<Promise<TextDocument>>('/api/documents', {
-    content: '',
-    owner: 'fooguy',
-    name: 'new document',
-    folder
-  }).then(response => response.data)
+export function create(document: PartialTextDocument): Promise<TextDocument> {
+  return axios.post<Promise<TextDocument>>('/api/documents', document)
+    .then(response => response.data)
 }
 
 export function update(id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {

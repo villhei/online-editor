@@ -23,7 +23,7 @@ import {
   isDocument
 } from 'service/document-service'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
-import Modal, { Props as ModalProps } from 'containers/Modal'
+import ConfirmationModal, { Props as ModalProps } from 'containers/modals/ConfirmationModal'
 
 export type DispatchProps = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
@@ -191,7 +191,7 @@ class EditorToolbar extends React.Component<Props, any> {
         {...commonProps}
       />
       {confirmation.action &&
-        <Modal {...this.getModalProps()} />
+        <ConfirmationModal {...this.getModalProps()} />
       }
     </>
   }
