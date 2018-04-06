@@ -24,7 +24,7 @@ export default (props: Props) => {
         <i className='ui icon home' />
       </Link>
       <div className='item title field mobile hidden'>
-        <div className='ui transparent inverted labeled input'>
+        <div className='ui basic inverted labeled input'>
           <input type='text' value={props.title} onChange={props.updateDocumentName} />
         </div>
       </div>

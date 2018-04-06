@@ -18,7 +18,9 @@ export default (props: Props) => {
         <Link to='/' className='ui item'>
           <i className='ui icon home' />
         </Link>
-        <div className='item title field mobile hidden'></div>
+        <div className='item title field mobile hidden'>
+          <h3>{title}</h3>
+        </div>
         <MenuButton
           loading={refreshing}
           disabled={false}

@@ -5,6 +5,7 @@ import { getDocument } from 'actions/document-actions'
 import { ApiResource } from 'service/common'
 import LoadingComponent from 'components/Loading'
 import DocumentViewComponent from 'components/DocumentView'
+import DocumentViewEmpty from 'components/DocumentViewEmpty'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
 import wrapApiResource from 'containers/ApiResourceHOC'
 
@@ -17,7 +18,11 @@ export type DocumentViewProps = {
 class DocumentView extends React.PureComponent<DocumentViewProps> {
   render() {
     const { resource } = this.props
-    return <DocumentViewComponent resource={resource} />
+    if (resource.content.length > 0) {
+      return <DocumentViewComponent resource={resource} />
+    } else {
+      return <DocumentViewEmpty />
+    }
   }
 }
 
