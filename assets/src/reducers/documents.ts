@@ -4,53 +4,24 @@ import {
   createDocumentAction,
   getDocumentAction,
   getDocumentsAction,
-  updateDocumentAction
+  updateDocumentAction,
+  getDocumentsByFolderAction
 } from 'actions/document-actions'
-import { ApiResource, ResourceStatus } from 'service/common'
+
+import { ApiResource, ResourceStatus, updateSingle, MappedModel } from 'service/common'
 import { TextDocument } from 'service/document-service'
 
-type DocumentMap = { [id: string]: ApiResource<TextDocument> }
-
-export type DocumentReducerState = {
-  byId: DocumentMap,
-  all: Array<TextDocument>
-}
+export type DocumentReducerState = MappedModel<ApiResource<TextDocument>>
 
 export const initialState: DocumentReducerState = {
-  byId: {},
-  all: []
-}
-
-function updateOrJoin(array: Array<TextDocument>, object: TextDocument): Array<TextDocument> {
-  const index = array.findIndex(({ id }) => object.id === id)
-  if (index > -1) {
-    const modified = Array.from(array)
-    modified.splice(index, 1, object)
-    return modified
-  } else {
-    return array.concat(object)
-  }
-}
-
-function updateSingle(state: DocumentReducerState, document: TextDocument): DocumentReducerState {
-  const byId = {
-    ...state.byId,
-    [document.id]: document
-  }
-  const all = updateOrJoin(state.all, document)
-  return {
-    ...state,
-    byId,
-    all
-  }
+  byId: {}
 }
 
 export default function documentReducer(state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
-  if (isType(action, getDocumentsAction.done)) {
+  if (isType(action, getDocumentsAction.done) || isType(action, getDocumentsByFolderAction.done)) {
     const documents = action.payload.result
     return {
-      ...state,
-      all: documents
+      ...state
     }
   }
   if (isType(action, getDocumentAction.started)) {
@@ -74,14 +45,11 @@ export default function documentReducer(state: DocumentReducerState = initialSta
       }
     }
   }
-  if (isType(action, updateDocumentAction.done)) {
-    return updateSingle(state, action.payload.result)
-  }
-  if (isType(action, getDocumentAction.done)) {
-    return updateSingle(state, action.payload.result)
-  }
-  if (isType(action, createDocumentAction.done)) {
-    return updateSingle(state, action.payload.result)
+  if (isType(action, updateDocumentAction.done)
+    || isType(action, getDocumentAction.done)
+    || isType(action, createDocumentAction.done)) {
+    const { result } = action.payload
+    return updateSingle(state, result.id, result)
   }
   return state
 }

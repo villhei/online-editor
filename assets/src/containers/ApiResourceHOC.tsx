@@ -1,41 +1,61 @@
 
 import * as React from 'react'
-import Loading from 'components/Loading'
-import { ApiResource, ResourceStatus } from 'service/common'
+import { ApiResource, ApiResourceId, ResourceStatus, isAxiosError } from 'service/common'
 
 export interface ApiResourceProps<T> {
   resource: ApiResource<T>,
-  resourceId: string,
-  getResource: (id: string) => void
+  resourceId: ApiResourceId,
+  getResource: (id: string) => any,
+  error?: any
 }
 
-export default function wrapApiResource<T, P>(isValueResolved: (value: ApiResource<T>) => value is T) {
-  return function (Component: React.ComponentClass<P & ApiResourceProps<T>>) {
+type TypeChecker<T> = (value: ApiResource<T>) => value is T
+
+type ApiResourceContainer<T, P> = React.ComponentClass<P & ApiResourceProps<T>>
+
+type ElementFn = () => JSX.Element
+
+type ComponentWrapper<T, P> = (component: ApiResourceContainer<T, P>, Loading: ElementFn) => any
+
+export default function wrapApiResource<T, P>(
+  isValueResolved: TypeChecker<T>): ComponentWrapper<T, P> {
+  return function (Component: ApiResourceContainer<T, P>,
+    Loading: ElementFn) {
     return class ApiResourceWrapper extends React.Component<P & ApiResourceProps<T>> {
       componentDidMount() {
-        const { resource } = this.props
-        if (!isValueResolved(resource)) {
-          this.props.getResource(this.props.resourceId)
-        }
+        this.handleGetResource()
+      }
+      componentDidUpdate() {
+        this.handleGetResource()
       }
 
-      componentWillReceiveProps(nextProps: ApiResourceProps<T>) {
-        if (nextProps.resourceId !== this.props.resourceId) {
-          this.props.getResource(nextProps.resourceId)
+      handleGetResource = () => {
+        const { resource, resourceId, getResource } = this.props
+        const isResourceLoaded = !(isValueResolved(resource) || isAxiosError(resource))
+        if (isResourceLoaded) {
+          if (resourceId) {
+            this.props.getResource(resourceId)
+          }
         }
       }
 
       render() {
-        const { resource } = this.props
+        const { resource, error } = this.props
         if (isValueResolved(resource)) {
-          return <Component {...this.props } />
+          return <Component {...this.props} />
         }
-        if (resource instanceof Error) {
-          return <h1>Error {(resource).message}</h1>
+        if (isAxiosError(resource)) {
+          return (
+            <div className='ui container'>
+              <h1>Error</h1> {resource.message}
+            </div>
+          )
         } else if (resource === ResourceStatus.NotFound) {
           return (<h1>Not found</h1>)
-        } else {
+        } else if (resource === ResourceStatus.Loading) {
           return (<Loading />)
+        } else {
+          return null
         }
       }
     }

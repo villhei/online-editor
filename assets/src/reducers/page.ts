@@ -61,7 +61,8 @@ export default function pageReducer(state: PageState = initialState, action: Act
   if (action.type === LOCATION_CHANGE) {
     return {
       ...state,
-      navigationOpen: false
+      navigationOpen: false,
+      editorToolbar: initialState.editorToolbar
     }
   }
   if (isType(action, expectConfirmAction)) {

@@ -11,7 +11,7 @@ class DocumentView extends React.PureComponent<MarkdownViewProps> {
     const { resource } = this.props
     return <div className='ui container'>
       <div className='ui very padded segment'>
-        <ReactMarkdown source={resource.content}/>
+        <ReactMarkdown className='markdown' source={resource.content}/>
       </div>
     </div >
   }

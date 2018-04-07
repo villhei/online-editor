@@ -1,39 +1,43 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { getDocuments } from 'actions/document-actions'
+import { getRootFolder } from 'actions/folder-actions'
 import { clearError } from 'actions/page-actions'
 import { RootState } from '../reducer'
 import Main from 'components/Main'
 
-type Props = {
+type StateProps = {
   error: {
     message: string | undefined,
     stack: string | undefined
-  },
-  getDocuments: () => any,
+  }
+}
+
+type DispatchProps = {
+  getRootFolder: () => any,
   clearError: () => any
 }
 
+type Props = StateProps & DispatchProps
+
 class MainContainer extends React.Component<Props, any> {
   componentDidMount() {
-    this.props.getDocuments()
+    this.props.getRootFolder()
   }
-
   render() {
     const { error, clearError } = this.props
     return <Main error={error} clearError={clearError} />
   }
 }
 
-const mapStateToProps = ({ model, ui, state }: RootState) => {
+const mapStateToProps = ({ model, ui, state }: RootState): StateProps => {
   return {
     error: state.error
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
-    getDocuments: () => getDocuments(dispatch, undefined),
+    getRootFolder: () => getRootFolder(dispatch, undefined),
     clearError: () => dispatch(clearError(undefined))
   }
 }

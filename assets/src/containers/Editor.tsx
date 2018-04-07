@@ -7,6 +7,7 @@ import { updatedocumentContent, resetDocumentChanges } from 'actions/editor-acti
 import { ApiResource } from 'service/common'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
 import wrapApiResource from 'containers/ApiResourceHOC'
+import Loading from 'components/Loading'
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
 
@@ -79,4 +80,5 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(wrapApiResource<TextDocument, EditorProps>(isDocument)(Editor))
+const wrappedResource = wrapApiResource<TextDocument, EditorProps>(isDocument)(Editor, Loading)
+export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

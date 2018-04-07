@@ -10,9 +10,19 @@
 # We recommend using the bang functions (`insert!`, `update!`
 # and so on) as they will fail if something goes wrong.
 
+alias OnlineEditor.Repo
+alias OnlineEditor.Folder
 alias OnlineEditor.Document
-mock_documents = [
+
+root_folder = %Folder{
+        name: "Root",
+        parent: nil
+}
+
+inserted_root_folder = Repo.insert!(root_folder)
+initial_documents = [
   %Document{
+    folder: inserted_root_folder,
     name: "TODO.md",
     owner: "nobody",
     content:
@@ -27,6 +37,7 @@ EPICS
 """
   },
   %Document{
+    folder: inserted_root_folder,
     name: "Shopping list",
     owner: "foobody",
     content:
@@ -41,6 +52,7 @@ EPICS
 """
 },
 %Document{
+    folder: inserted_root_folder,
     name: "Meeting memo.md",
     owner: "barbody",
     content:
@@ -54,6 +66,7 @@ Aenean suscipit aliquam odio non bibendum. Fusce pretium mattis dolor, eget blan
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla ac porta nisi. Donec urna nunc, tempor vitae posuere ut, cursus at eros. In hendrerit dolor sed magna suscipit, in placerat tellus imperdiet. Integer volutpat arcu lectus. Aenean ut vulputate lacus, vitae efficitur mi. Donec vulputate, augue vel ultrices volutpat, lorem sapien posuere nulla, sit amet gravida purus lorem in lorem. Duis leo augue, ullamcorper nec diam vitae, tincidunt hendrerit dolor. Quisque a ullamcorper dui. Suspendisse potenti. Mauris ornare ante risus, vitae rutrum metus commodo quis.
 """},
 %Document{
+    folder: inserted_root_folder,
     name: "fizzbuzz.js",
     owner: "maybebody",
     content:
@@ -73,4 +86,5 @@ for (var i=1; i <= 20; i++)
   }
 ]
 
-mock_documents |> Enum.each(&(OnlineEditor.Repo.insert(&1)))
+
+initial_documents |> Enum.each(&(Repo.insert(&1)))

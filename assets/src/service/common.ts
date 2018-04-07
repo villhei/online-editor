@@ -1,6 +1,16 @@
+import { AxiosError } from 'axios'
+
+export type DocumentMap<T> = { [id: string]: ApiResource<T> }
+
 export enum ResourceStatus {
   Loading = 'API_RESOURCE:LOADING',
   NotFound = 'API_RESOURCE:NOT_FOUND'
+}
+
+export type ApiResourceId = string
+
+export type ByIdParams = {
+  id: ApiResourceId
 }
 
 export type HasName = {
@@ -10,15 +20,24 @@ export type HasName = {
 export type HasId = {
   id: string
 }
+
+export type MappedModel<T> = {
+  byId: DocumentMap<T>
+}
+
+export type Partial<T> = {
+  [Partial in keyof T]?: T[Partial]
+}
+
 export type ApiResource<T> = T | ResourceStatus | Error
 
-export function getResourceName(resource: ApiResource<HasName>, modifiedName?: string): string {
+export function getResourceName(resource: ApiResource<HasName>): string {
   if (resource === ResourceStatus.Loading) {
     return 'Loading...'
   } else if (resource === ResourceStatus.NotFound) {
     return 'Not found'
   } else if (resource && resource.name) {
-    return modifiedName || resource.name
+    return resource.name
   } else {
     return 'Error'
   }
@@ -35,4 +54,16 @@ export function isResourceAvailable(resource: ApiResource<HasId>): boolean {
     return true
   }
   return false
+}
+export function isAxiosError(err?: any): err is AxiosError {
+  const candidate = (err as AxiosError)
+  return Boolean(candidate && candidate.config && candidate.message && candidate.name)
+}
+
+export function updateSingle<T, S extends Object>(state: S & MappedModel<ApiResource<T>>, id: string, updatedEntity: ApiResource<T>): S & MappedModel<ApiResource<T>> {
+  const byId = {
+    ...state.byId,
+    [id]: updatedEntity
+  }
+  return Object.assign({}, state, { byId })
 }

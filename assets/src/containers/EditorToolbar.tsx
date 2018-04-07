@@ -22,14 +22,14 @@ import {
   TextDocumentId,
   isDocument
 } from 'service/document-service'
-import EditorToolbarView from 'components/toolbars/Editor'
-import Modal, { Props as ModalProps } from 'containers/Modal'
+import EditorToolbarView from 'components/toolbars/EditorToolbarView'
+import ConfirmationModal, { Props as ModalProps } from 'containers/modals/ConfirmationModal'
 
 export type DispatchProps = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,
   saveDocument: (id: TextDocumentId, document: PartialTextDocument) => any,
   resetDocumentChanges: () => any,
-  deleteAndRefresh: (id: TextDocumentId) => any,
+  deleteAndRefresh: (document: TextDocument) => any,
   updateDocumentName: (value: string) => any,
   navigate: (route: string) => any,
   expectConfirm: (action: ConfirmActionName) => any
@@ -81,11 +81,6 @@ const ACTIONS = {
 }
 
 class EditorToolbar extends React.Component<Props, any> {
-  componentDidMount() {
-    const { documentId, getDocument } = this.props
-    getDocument(documentId)
-  }
-
   getModalProps = (): ModalProps => {
     const { confirmation: { action } } = this.props
     const dismissModal = this.expectConfirm(undefined)
@@ -131,7 +126,10 @@ class EditorToolbar extends React.Component<Props, any> {
   }
 
   deleteDocument = () => {
-    this.props.deleteAndRefresh(this.props.documentId)
+    const { document } = this.props
+    if (isDocument(document)) {
+      this.props.deleteAndRefresh(document)
+    }
   }
 
   expectConfirm = (action: ConfirmActionName) => () => {
@@ -185,14 +183,15 @@ class EditorToolbar extends React.Component<Props, any> {
       refreshing,
       documentId
     }
+    const resourceName = modifiedName !== undefined ? modifiedName : getResourceName(document)
     return <>
       <EditorToolbarView
-        title={getResourceName(document, modifiedName)}
+        title={resourceName}
         disabled={!isResourceAvailable(document)}
         {...commonProps}
       />
       {confirmation.action &&
-        <Modal {...this.getModalProps()} />
+        <ConfirmationModal {...this.getModalProps()} />
       }
     </>
   }
@@ -220,7 +219,9 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
     saveDocument: (id: TextDocumentId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
-    deleteAndRefresh: (id: TextDocumentId) => dispatch(deleteAndRefresh({ id })),
+    deleteAndRefresh: (document: TextDocument) => {
+      dispatch(deleteAndRefresh({ document }))
+    },
     expectConfirm: (action: ConfirmActionName) => {
       dispatch(expectConfirmAction({ action }))
     },
