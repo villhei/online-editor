@@ -3,11 +3,13 @@ import CardDisplay from './CardDisplay'
 import { Folder } from 'service/folder-service'
 
 type Props = {
-  folder: Folder
+  folder: Folder,
+  disabled: boolean,
+  buttonAction: () => any
 }
 
 export default (props: Props) => {
-  const { folder } = props
+  const { folder, buttonAction, disabled } = props
   return (<CardDisplay
     disabled={true}
     header={folder.name}
@@ -16,10 +18,17 @@ export default (props: Props) => {
       color: 'blue'
     }}
     buttonAction={() => null}>
-    <div className='meta'>
-      <p>{folder.children.length} folders</p>
-      <p>{folder.documents.length} documents</p>
-    </div>
+    <>
+      <div className='meta'>
+        {folder.children.length} folders<br />
+        {folder.documents.length} documents
+      </div>
+      <button className='ui right floated basic button'
+        disabled={disabled}
+        onClick={buttonAction}>
+        <i className='ui right floated huge ellipsis horizontal icon'></i>
+      </button>
+    </>
   </CardDisplay>
   )
 }

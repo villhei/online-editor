@@ -4,7 +4,6 @@ import { TextDocument, TextDocumentId } from 'service/document-service'
 import FolderCard from 'containers/FolderCard'
 import DocumentCard from 'containers/DocumentCard'
 import CurrentFolderCard from 'components/cards/CurrentFolderCard'
-import ParentFolderCard from 'components/cards/ParentFolderCard'
 
 type Props = {
   documents: Array<TextDocumentId>,
@@ -34,11 +33,9 @@ export default class DocumentList extends React.Component<Props, any> {
     return (
       <div className='ui twelve wide centered column'>
         <div className='ui four doubling cards'>
-          <CurrentFolderCard folder={folder} />
-          <ParentFolderCard
+          <CurrentFolderCard folder={folder}
             disabled={!folder.parent}
-            buttonAction={parentFolder}
-          />
+            buttonAction={parentFolder} />
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}
               resourceId={folderId} />)}
