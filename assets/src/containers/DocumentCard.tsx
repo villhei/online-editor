@@ -17,8 +17,13 @@ import {
 
 import { RootState } from '../reducer'
 
-type Props = {
+type OwnProps = {
   resourceId: TextDocumentId,
+  selected: boolean,
+  selectDocument: (id: TextDocumentId) => void
+}
+
+type Props = OwnProps & {
   resource: TextDocument,
   getResource: (id: TextDocumentId) => any,
   editResource: (id: TextDocumentId) => any
@@ -29,16 +34,28 @@ class DocumentCard extends React.Component<Props> {
     const { resourceId, editResource } = this.props
     editResource(resourceId)
   }
+
+  selectDocument = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation()
+    const { resourceId, selectDocument } = this.props
+    selectDocument(resourceId)
+  }
   render() {
-    const document = this.props.resource
-    return <DocumentCardView document={document} editDocument={this.editDocument} />
+    const { resource, selected } = this.props
+    return <DocumentCardView
+      selected={selected}
+      document={resource}
+      selectDocument={this.selectDocument}
+      editDocument={this.editDocument} />
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: { resourceId: TextDocumentId }) => {
-  const { resourceId } = ownProps
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: OwnProps) => {
+  const { resourceId, selected, selectDocument } = ownProps
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   return {
+    selected,
+    selectDocument,
     resource,
     resourceId
   }

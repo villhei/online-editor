@@ -10,6 +10,8 @@ type Props = {
   documents: Array<ApiResourceId>,
   folders: Array<FolderId>,
   folder: Folder,
+  selected: Set<ApiResourceId>,
+  selectResource: (id: ApiResourceId) => any,
   getFolderById: (id: FolderId) => any,
   getByDocumentId: (id: ApiResourceId) => any
   parentFolder: () => void
@@ -17,7 +19,13 @@ type Props = {
 
 export default class DocumentList extends React.Component<Props, any> {
   render() {
-    const { documents, folder, folders, parentFolder } = this.props
+    const { documents,
+      folder,
+      folders,
+      selectResource,
+      selected,
+      parentFolder
+    } = this.props
     return (
       <div className='ui twelve wide centered column'>
         <div className='ui four doubling cards'>
@@ -26,9 +34,13 @@ export default class DocumentList extends React.Component<Props, any> {
             buttonAction={parentFolder} />
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}
+              selectFolder={selectResource}
+              selected={selected.has(folderId)}
               resourceId={folderId} />)}
           {documents.map((documentId: TextDocumentId) =>
             <DocumentCard key={documentId}
+              selectDocument={selectResource}
+              selected={selected.has(documentId)}
               resourceId={documentId} />)}
         </div>
       </div>)

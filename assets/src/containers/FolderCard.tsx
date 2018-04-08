@@ -1,6 +1,6 @@
 import {
   getFolder,
-  selectFolder
+  showFolder
 } from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderCardView from 'components/cards/FolderCardView'
@@ -16,30 +16,42 @@ import {
 
 import { RootState } from '../reducer'
 
-type Props = {
+type OwnProps = {
   resourceId: FolderId,
+  selected: boolean,
+  selectFolder: (id: FolderId) => any
+}
+type Props = OwnProps & {
   resource: Folder,
   getResource: (id: FolderId) => any,
-  selectFolder: (id: FolderId) => any
+  showFolder: (id: FolderId) => any
 }
 
 class FolderCard extends React.Component<Props> {
-  handleSelectFolder = () => {
+  handleShowFolder = () => {
+    const { resourceId, showFolder } = this.props
+    showFolder(resourceId)
+  }
+  handleSelectFolder = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation()
     const { resourceId, selectFolder } = this.props
     selectFolder(resourceId)
   }
   render() {
-    const folder = this.props.resource
+    const { resource, selected } = this.props
     return <FolderCardView
-      folder={folder}
-      selectFolder={this.handleSelectFolder} />
+      folder={resource}
+      selected={selected}
+      selectFolder={this.handleSelectFolder}
+      showFolder={this.handleShowFolder} />
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: { resourceId: FolderId }) => {
-  const { resourceId } = ownProps
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: OwnProps) => {
+  const { resourceId, selected } = ownProps
   const resource: ApiResource<Folder> = model.folders.byId[resourceId]
   return {
+    selected,
     resource,
     resourceId
   }
@@ -48,7 +60,7 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: { resourceId
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
     getResource: (id: FolderId) => getFolder(dispatch, { id }),
-    selectFolder: (id: FolderId) => dispatch(selectFolder({ id }))
+    showFolder: (id: FolderId) => dispatch(showFolder({ id }))
   }
 }
 

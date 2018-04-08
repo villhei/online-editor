@@ -2,7 +2,7 @@ import {
   getChildrenAction,
   getFolderAction,
   getRootAction,
-  selectFolder
+  showFolder
 } from 'actions/folder-actions'
 import { Action } from 'redux'
 import {

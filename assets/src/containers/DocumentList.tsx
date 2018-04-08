@@ -10,16 +10,21 @@ import {
   createFolder,
   getChildren,
   getFolder,
-  selectFolder
+  showFolder
 } from 'actions/folder-actions'
 import DocumentList from 'components/DocumentList'
 import LoadingComponent from 'components/Loading'
 import wrapApiResource from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
+  DragSource,
+  DropTarget
+} from 'react-dnd'
+import {
   Dispatch,
   connect
 } from 'react-redux'
+
 import { ApiResourceId } from 'service/common'
 import { TextDocumentId } from 'service/document-service'
 import {
@@ -36,9 +41,13 @@ type Props = {
   getDocumentsByFolder: (folder: FolderId) => any,
   getDocumentById: (id: TextDocumentId) => any,
   getResource: (id: FolderId) => any,
-  selectFolder: (id: FolderId) => any,
+  showFolder: (id: FolderId) => any,
   resourceId: FolderId,
   resource: Folder
+}
+
+type State = {
+  selected: Set<ApiResourceId>
 }
 
 function sortResource(documents: Array<ApiResourceId>, descending = true): Array<ApiResourceId> {
@@ -50,9 +59,25 @@ function sortResource(documents: Array<ApiResourceId>, descending = true): Array
 }
 
 class DocumentListContainer extends React.Component<Props, any> {
+  state = {
+    selected: new Set()
+  }
+
   parentFolder = () => {
-    const { resource, selectFolder } = this.props
-    selectFolder(resource.parent)
+    const { resource, showFolder } = this.props
+    showFolder(resource.parent)
+  }
+
+  selectResource = (id: ApiResourceId) => {
+    const { selected } = this.state
+    if (selected.has(id)) {
+      selected.delete(id)
+    } else {
+      selected.add(id)
+    }
+    this.setState({
+      selected: new Set(selected)
+    })
   }
   render() {
     const {
@@ -64,13 +89,18 @@ class DocumentListContainer extends React.Component<Props, any> {
       documents,
       children
     } = resource
+    const {
+      selected
+    } = this.state
 
     const sortedDocuments = sortResource(documents)
     const sortedFolders = sortResource(children)
 
     return <DocumentList
       getFolderById={getResource}
+      selected={selected}
       getByDocumentId={getDocumentById}
+      selectResource={this.selectResource}
       folder={resource}
       folders={sortedFolders}
       documents={sortedDocuments}
@@ -93,7 +123,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     getDocumentsByFolder: (folder: string) => getDocumentsByFolder(dispatch, folder),
     getDocumentById: (id: TextDocumentId) => getDocument(dispatch, { id }),
     getResource: (id: FolderId) => getFolder(dispatch, { id }),
-    selectFolder: (id: FolderId) => dispatch(selectFolder({ id }))
+    showFolder: (id: FolderId) => dispatch(showFolder({ id }))
   }
 }
 

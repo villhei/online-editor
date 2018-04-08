@@ -39,7 +39,7 @@ export const getChildrenAction = actionCreator
 export const createFolderAction = actionCreator
   .async<CreateFolderParams, Folder, {}>(ACTION_CREATE_FOLDER)
 
-export const selectFolder = (params: ByIdParams) => push('/folder/' + params.id)
+export const showFolder = (params: ByIdParams) => push('/folder/' + params.id)
 
 export const getRootFolder = wrapAsyncWorker(getRootAction, getRoot)
 
