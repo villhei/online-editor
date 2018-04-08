@@ -7,6 +7,7 @@ import ViewToolbar from 'containers/ViewToolbar'
 import DocumentList from 'containers/DocumentList'
 import Editor from 'containers/Editor'
 import DocumentView from 'containers/DocumentView'
+import DummyLander from 'containers/DummyLander'
 
 type Props = {
   error: {
@@ -24,7 +25,7 @@ export default (props: Props) => {
         <ConnectedSwitch>
           <Route path={'/edit/:documentId'} component={EditorToolbar} />
           <Route path={'/view/:documentId'} component={ViewToolbar} />
-          <Route path='/' component={MainToolbar} />
+          <Route path='/folder/:folderId' component={MainToolbar} />
         </ConnectedSwitch>
       </div>
       <div className='ui padded equal full height grid'>
@@ -39,9 +40,10 @@ export default (props: Props) => {
         <div className='ui full height row content'>
           <section className='ui twelve wide computer sixteen wide tablet centered column without padding'>
             <ConnectedSwitch>
-              <Route path={'/view/:documentId'} component={DocumentView} />
-              <Route path={'/edit/:documentId'} component={Editor} />
-              <Route exact path='/' component={DocumentList} />
+              <Route path='/view/:documentId' component={DocumentView} />
+              <Route path='/edit/:documentId' component={Editor} />
+              <Route path='/folder/:folderId' component={DocumentList} />
+              <Route exact path='/' component={DummyLander} />
             </ConnectedSwitch>
           </section>
         </div>

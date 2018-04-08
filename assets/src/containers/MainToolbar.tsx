@@ -103,7 +103,7 @@ class MainToolbar extends React.Component<Props, State> {
 }
 
 const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateProps => {
-  const folderId: FolderId = model.folders.current
+  const folderId: FolderId = ownProps.match.params.folderId
   const folder: ApiResource<Folder> | undefined = model.folders.byId[folderId]
   return {
     folder,

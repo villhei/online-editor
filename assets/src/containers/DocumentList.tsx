@@ -38,8 +38,8 @@ class DocumentListContainer extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ model }: RootState) => {
-  const resourceId = model.folders.current
+const mapStateToProps = ({ model }: RootState, ownProps: any) => {
+  const resourceId: FolderId = ownProps.match.params.folderId
   const resource = model.folders.byId[resourceId]
   return {
     resourceId,

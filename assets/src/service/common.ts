@@ -1,7 +1,5 @@
 import { AxiosError } from 'axios'
 
-export type DocumentMap<T> = { [id: string]: ApiResource<T> }
-
 export enum ResourceStatus {
   Loading = 'API_RESOURCE:LOADING',
   NotFound = 'API_RESOURCE:NOT_FOUND'
@@ -19,10 +17,6 @@ export type HasName = {
 
 export type HasId = {
   id: string
-}
-
-export type MappedModel<T> = {
-  byId: DocumentMap<T>
 }
 
 export type Partial<T> = {
@@ -58,12 +52,4 @@ export function isResourceAvailable(resource: ApiResource<HasId>): boolean {
 export function isAxiosError(err?: any): err is AxiosError {
   const candidate = (err as AxiosError)
   return Boolean(candidate && candidate.config && candidate.message && candidate.name)
-}
-
-export function updateSingle<T, S extends Object>(state: S & MappedModel<ApiResource<T>>, id: string, updatedEntity: ApiResource<T>): S & MappedModel<ApiResource<T>> {
-  const byId = {
-    ...state.byId,
-    [id]: updatedEntity
-  }
-  return Object.assign({}, state, { byId })
 }

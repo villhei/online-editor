@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { connect, Dispatch } from 'react-redux'
-import { getRootFolder } from 'actions/folder-actions'
-import { clearError } from 'actions/page-actions'
+import { clearError, selectRootFolder } from 'actions/page-actions'
 import { RootState } from '../reducer'
 import Main from 'components/Main'
 
@@ -13,7 +12,7 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  getRootFolder: () => any,
+  selectRootFolder: () => any,
   clearError: () => any
 }
 
@@ -21,7 +20,7 @@ type Props = StateProps & DispatchProps
 
 class MainContainer extends React.Component<Props, any> {
   componentDidMount() {
-    this.props.getRootFolder()
+    this.props.selectRootFolder()
   }
   render() {
     const { error, clearError } = this.props
@@ -37,7 +36,7 @@ const mapStateToProps = ({ model, ui, state }: RootState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
-    getRootFolder: () => getRootFolder(dispatch, undefined),
+    selectRootFolder: () => dispatch(selectRootFolder(undefined)),
     clearError: () => dispatch(clearError(undefined))
   }
 }
