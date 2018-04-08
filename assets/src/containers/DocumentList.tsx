@@ -55,14 +55,25 @@ class DocumentListContainer extends React.Component<Props, any> {
     selectFolder(resource.parent)
   }
   render() {
-    const { resource, getResource, getDocumentById } = this.props
-    const { documents, children } = resource
+    const {
+      resource,
+      getResource,
+      getDocumentById
+    } = this.props
+    const {
+      documents,
+      children
+    } = resource
+
+    const sortedDocuments = sortResource(documents)
+    const sortedFolders = sortResource(children)
+
     return <DocumentList
       getFolderById={getResource}
       getByDocumentId={getDocumentById}
       folder={resource}
-      folders={children}
-      documents={documents}
+      folders={sortedFolders}
+      documents={sortedDocuments}
       parentFolder={this.parentFolder} />
   }
 }
