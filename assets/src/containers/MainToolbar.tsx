@@ -25,6 +25,7 @@ type State = {
   modal: any | null,
   modalInput: string
 }
+
 class MainToolbar extends React.Component<Props, State> {
 
   state = {

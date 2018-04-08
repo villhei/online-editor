@@ -19,10 +19,7 @@ export type PageState = {
   editorToolbar: {
     refreshing: boolean,
     saving: boolean,
-    deleting: boolean,
-    confirmation: {
-      action?: ConfirmActionName
-    }
+    deleting: boolean
   }
 }
 
@@ -31,10 +28,7 @@ export const initialState: PageState = {
   editorToolbar: {
     refreshing: false,
     saving: false,
-    deleting: false,
-    confirmation: {
-      action: undefined
-    }
+    deleting: false
   }
 }
 
@@ -63,22 +57,6 @@ export default function pageReducer(state: PageState = initialState, action: Act
       ...state,
       navigationOpen: false,
       editorToolbar: initialState.editorToolbar
-    }
-  }
-  if (isType(action, expectConfirmAction)) {
-    const { editorToolbar: { confirmation } } = state
-    const modifiedState = {
-      ...state.editorToolbar,
-      confirmation: {
-        action: action.payload.action,
-        confirmed: false
-      }
-    }
-    return {
-      ...state,
-      editorToolbar: {
-        ...modifiedState
-      }
     }
   }
   if (isType(action, deleteDocumentAction.started)) {
