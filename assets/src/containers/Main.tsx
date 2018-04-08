@@ -12,16 +12,12 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  selectRootFolder: () => any,
   clearError: () => any
 }
 
 type Props = StateProps & DispatchProps
 
 class MainContainer extends React.Component<Props, any> {
-  componentDidMount() {
-    this.props.selectRootFolder()
-  }
   render() {
     const { error, clearError } = this.props
     return <Main error={error} clearError={clearError} />
@@ -36,7 +32,6 @@ const mapStateToProps = ({ model, ui, state }: RootState): StateProps => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
-    selectRootFolder: () => dispatch(selectRootFolder(undefined)),
     clearError: () => dispatch(clearError(undefined))
   }
 }
