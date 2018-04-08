@@ -1,8 +1,9 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
 import { clearError, selectRootFolder } from 'actions/page-actions'
-import { RootState } from '../reducer'
 import Loading from 'components/Loading'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
+
+import { RootState } from '../reducer'
 
 type Props = {
   selectRootFolder: () => any

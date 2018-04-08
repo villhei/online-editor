@@ -1,11 +1,17 @@
 import axios from 'axios'
-import { ApiResource, ApiResourceId, isAxiosError, Partial } from './common'
 import { FolderId } from 'service/folder-service'
+
+import {
+  ApiResource,
+  ApiResourceId,
+  Partial,
+  isAxiosError
+} from './common'
 
 export type TextDocumentId = ApiResourceId
 
 export type TextDocument = {
-  readonly id: TextDocumentId,
+  readonly id: ApiResourceId,
   readonly name: string,
   readonly content: string,
   readonly owner: string,
@@ -29,7 +35,7 @@ export function create(document: PartialTextDocument): Promise<TextDocument> {
     .then(response => response.data)
 }
 
-export function update(id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {
+export function update(id: ApiResourceId, document: PartialTextDocument): Promise<TextDocument> {
   return axios.put<TextDocument>(`/api/documents/${id}?overwrite=false`, document)
     .then(res => res.data)
     .catch(err => {
@@ -51,10 +57,10 @@ export function getAll(): Promise<Array<TextDocument>> {
   return axios.get<Array<TextDocument>>('/api/documents').then(res => res.data)
 }
 
-export function getById(id: TextDocumentId): Promise<TextDocument> {
+export function getById(id: ApiResourceId): Promise<TextDocument> {
   return axios.get<TextDocument>(`/api/documents/${id}`).then(res => res.data)
 }
 
-export function deleteById(id: TextDocumentId): Promise<void> {
+export function deleteById(id: ApiResourceId): Promise<void> {
   return axios.delete('/api/documents/' + id).then(res => res.data)
 }

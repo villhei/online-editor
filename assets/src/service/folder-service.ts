@@ -1,6 +1,11 @@
 import axios from 'axios'
 import { TextDocumentId } from 'service/document-service'
-import { ApiResource, ApiResourceId, Partial } from './common'
+
+import {
+  ApiResource,
+  ApiResourceId,
+  Partial
+} from './common'
 
 export type FolderId = ApiResourceId
 

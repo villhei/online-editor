@@ -1,12 +1,13 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../reducer'
-import { ApiResource, getResourceName, ResourceStatus } from 'service/common'
-import { getFolder, createFolder } from 'actions/folder-actions'
-import { createFolderAndRefresh, createAndSelect } from 'actions/editor-actions'
-import { Folder, FolderId } from 'service/folder-service'
-import PromptModal, { Props as PromptModalProps } from 'containers/modals/PromptModal'
+import { createAndSelect, createFolderAndRefresh } from 'actions/editor-actions'
+import { createFolder, getFolder } from 'actions/folder-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
+import PromptModal, { Props as PromptModalProps } from 'containers/modals/PromptModal'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
+import { ApiResource, ResourceStatus, getResourceName } from 'service/common'
+import { Folder, FolderId } from 'service/folder-service'
+
+import { RootState } from '../reducer'
 
 type StateProps = {
   folderId: FolderId,

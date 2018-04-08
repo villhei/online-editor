@@ -1,18 +1,18 @@
-import { Action } from 'redux'
-import { isType } from 'typescript-fsa'
-import { LOCATION_CHANGE } from 'react-router-redux'
 import {
+  deleteDocumentAction,
   getDocumentAction,
-  updateDocumentAction,
-  deleteDocumentAction
+  updateDocumentAction
 } from 'actions/document-actions'
+import {
+  ConfirmActionName,
+  expectConfirmAction
+} from 'actions/editor-actions'
 import {
   toggleMenu
 } from 'actions/page-actions'
-import {
-  expectConfirmAction,
-  ConfirmActionName
-} from 'actions/editor-actions'
+import { LOCATION_CHANGE } from 'react-router-redux'
+import { Action } from 'redux'
+import { isType } from 'typescript-fsa'
 
 export type PageState = {
   navigationOpen: boolean,

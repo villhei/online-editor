@@ -1,6 +1,7 @@
 import * as React from 'react'
-import CardDisplay from './CardDisplay'
 import { Folder } from 'service/folder-service'
+
+import CardDisplay from './CardDisplay'
 
 type Props = {
   folder: Folder,

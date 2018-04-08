@@ -1,8 +1,8 @@
-import { Action } from 'redux'
-import { isType } from 'typescript-fsa'
-import { clearError } from 'actions/page-actions'
 import { updateDocumentAction } from 'actions/document-actions'
 import { getRootAction } from 'actions/folder-actions'
+import { clearError } from 'actions/page-actions'
+import { Action } from 'redux'
+import { isType } from 'typescript-fsa'
 
 export type ErrorState = {
   message: string | undefined,

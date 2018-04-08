@@ -1,13 +1,17 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
-import { ApiResource } from 'service/common'
-import LoadingComponent from 'components/Loading'
 import DocumentViewComponent from 'components/DocumentView'
 import DocumentViewEmpty from 'components/DocumentViewEmpty'
-import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
+import LoadingComponent from 'components/Loading'
 import wrapApiResource from 'containers/ApiResourceHOC'
+import * as React from 'react'
+import {
+  Dispatch,
+  connect
+} from 'react-redux'
+import { ApiResource } from 'service/common'
+import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
+
+import { RootState } from '../reducer'
 
 export type DocumentViewProps = {
   getResource: (id: string) => Promise<TextDocument>,

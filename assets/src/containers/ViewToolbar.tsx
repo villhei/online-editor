@@ -1,11 +1,22 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../reducer'
-import { push } from 'react-router-redux'
 import { getDocument } from 'actions/document-actions'
-import { ApiResource, ResourceStatus, getResourceName } from 'service/common'
-import { TextDocument, TextDocumentId } from 'service/document-service'
 import DocumentToolbarView from 'components/toolbars/DocumentView'
+import * as React from 'react'
+import {
+  Dispatch,
+  connect
+} from 'react-redux'
+import { push } from 'react-router-redux'
+import {
+  ApiResource,
+  ResourceStatus,
+  getResourceName
+} from 'service/common'
+import {
+  TextDocument,
+  TextDocumentId
+} from 'service/document-service'
+
+import { RootState } from '../reducer'
 
 export type Props = {
   getDocument: (id: TextDocumentId) => Promise<TextDocument>,

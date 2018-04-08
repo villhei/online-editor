@@ -1,8 +1,14 @@
+import {
+  getRootAction,
+  getRootFolder
+} from 'actions/folder-actions'
+import { push } from 'react-router-redux'
+import {
+  Folder,
+  getRoot
+} from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'
 import { bindThunkAction } from 'typescript-fsa-redux-thunk'
-import { push } from 'react-router-redux'
-import { getRootAction, getRootFolder } from 'actions/folder-actions'
-import { Folder, getRoot } from 'service/folder-service'
 const actionCreator = actionCreatorFactory()
 
 export const TOGGLE_MENU = 'TOGGLE_MENU'

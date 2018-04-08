@@ -1,33 +1,34 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { push } from 'react-router-redux'
-import { RootState } from '../reducer'
-import {
-  expectConfirmAction,
-  resetDocumentChanges,
-  deleteAndRefresh,
-  updateAndRefresh,
-  updateDocumentName,
-  ConfirmActionName
-} from 'actions/editor-actions'
 import { getDocument } from 'actions/document-actions'
 import {
-  ApiResource,
-  isResourceAvailable,
-  getResourceName
-} from 'service/common'
-import {
-  TextDocument,
-  PartialTextDocument,
-  TextDocumentId,
-  isDocument
-} from 'service/document-service'
+  ConfirmActionName,
+  deleteAndRefresh,
+  expectConfirmAction,
+  resetDocumentChanges,
+  updateAndRefresh,
+  updateDocumentName
+} from 'actions/editor-actions'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
 import ConfirmationModal, { Props as ModalProps } from 'containers/modals/ConfirmationModal'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
+import { push } from 'react-router-redux'
+import {
+  ApiResource,
+  ApiResourceId,
+  getResourceName,
+  isResourceAvailable
+} from 'service/common'
+import {
+  PartialTextDocument,
+  TextDocument,
+  isDocument
+} from 'service/document-service'
+
+import { RootState } from '../reducer'
 
 export type DispatchProps = {
-  getDocument: (id: TextDocumentId) => Promise<TextDocument>,
-  saveDocument: (id: TextDocumentId, document: PartialTextDocument) => any,
+  getDocument: (id: ApiResourceId) => Promise<TextDocument>,
+  saveDocument: (id: ApiResourceId, document: PartialTextDocument) => any,
   resetDocumentChanges: () => any,
   deleteAndRefresh: (document: TextDocument) => any,
   updateDocumentName: (value: string) => any,
@@ -193,7 +194,7 @@ class EditorToolbar extends React.Component<Props, State> {
 }
 
 const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateProps => {
-  const documentId: TextDocumentId = ownProps.match.params.documentId
+  const documentId: ApiResourceId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
   const { modifiedContent, modifiedName } = state.editor
   const { editorToolbar } = ui.page
@@ -210,9 +211,9 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateP
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
-    getDocument: (id: TextDocumentId) => getDocument(dispatch, { id }),
+    getDocument: (id: ApiResourceId) => getDocument(dispatch, { id }),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
-    saveDocument: (id: TextDocumentId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
+    saveDocument: (id: ApiResourceId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
     deleteAndRefresh: (document: TextDocument) => {
       dispatch(deleteAndRefresh({ document }))

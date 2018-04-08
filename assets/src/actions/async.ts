@@ -1,5 +1,5 @@
-import { AsyncActionCreators } from 'typescript-fsa'
 import { Dispatch } from 'redux'
+import { AsyncActionCreators } from 'typescript-fsa'
 
 export function wrapAsyncWorker<P, S, E>(
   asyncAction: AsyncActionCreators<P, S, E>,

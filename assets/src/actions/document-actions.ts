@@ -1,23 +1,23 @@
-import actionCreatorFactory from 'typescript-fsa'
-import { wrapAsyncWorker } from './async'
-
 import {
-  update,
-  create,
-  getById,
-  getAll,
-  deleteById,
-  TextDocumentId,
-  TextDocument,
+  ByIdParams
+} from 'service/common'
+import {
   PartialTextDocument,
-  getAllByFolder
+  TextDocument,
+  TextDocumentId,
+  create,
+  deleteById,
+  getAll,
+  getAllByFolder,
+  getById,
+  update
 } from 'service/document-service'
 import {
   FolderId
 } from 'service/folder-service'
-import {
-  ByIdParams
-} from 'service/common'
+import actionCreatorFactory from 'typescript-fsa'
+
+import { wrapAsyncWorker } from './async'
 
 export type UpdateDocumentParams = ByIdParams & { document: PartialTextDocument }
 export type GetDocumentByFolderParams = { folder: FolderId }

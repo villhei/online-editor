@@ -1,17 +1,21 @@
-import actionCreatorFactory from 'typescript-fsa'
 import { push } from 'react-router-redux'
-import { wrapAsyncWorker } from './async'
-
+import {
+  ApiResource,
+  ApiResourceId,
+  ByIdParams
+} from 'service/common'
 import {
   Folder,
   FolderId,
-  getRoot,
+  PartialFolder,
   create,
-  getByFolderId,
   findByParent,
-  PartialFolder
+  getByFolderId,
+  getRoot
 } from 'service/folder-service'
-import { ApiResource, ApiResourceId, ByIdParams } from 'service/common'
+import actionCreatorFactory from 'typescript-fsa'
+
+import { wrapAsyncWorker } from './async'
 
 export const ACTION_GET_FOLDER = 'ACTION_GET_FOLDER'
 export const ACTION_CREATE_FOLDER = 'ACTION_CREATE_FOLDER'

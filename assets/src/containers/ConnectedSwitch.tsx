@@ -1,7 +1,8 @@
 
+import { Location } from 'history'
 import { connect } from 'react-redux'
 import { Switch } from 'react-router-dom'
-import { Location } from 'history'
+
 import { RootState } from '../reducer'
 
 const ConnectedSwitch = connect(({ ui }: RootState): { location?: Location } => {

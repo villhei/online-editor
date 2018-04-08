@@ -1,12 +1,20 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import wrapApiResource from 'containers/ApiResourceHOC'
-import { ApiResource } from 'service/common'
-import { getFolder, selectFolder } from 'actions/folder-actions'
-import { FolderId, Folder, isFolder } from 'service/folder-service'
-import { RootState } from '../reducer'
+import {
+  getFolder,
+  selectFolder
+} from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderCardView from 'components/cards/FolderCardView'
+import wrapApiResource from 'containers/ApiResourceHOC'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
+import { ApiResource } from 'service/common'
+import {
+  Folder,
+  FolderId,
+  isFolder
+} from 'service/folder-service'
+
+import { RootState } from '../reducer'
 
 type Props = {
   resourceId: FolderId,

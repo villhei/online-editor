@@ -1,4 +1,7 @@
-import { ApiResource, HasId } from 'service/common'
+import {
+  ApiResource,
+  HasId
+} from 'service/common'
 
 export type DocumentMap<T> = { [id: string]: ApiResource<T> }
 export type MappedModel<T> = {

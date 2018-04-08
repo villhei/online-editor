@@ -1,13 +1,13 @@
-import * as React from 'react'
 import ConnectedSwitch from 'containers/ConnectedSwitch'
-import { Route } from 'react-router-dom'
-import MainToolbar from 'containers/MainToolbar'
-import EditorToolbar from 'containers/EditorToolbar'
-import ViewToolbar from 'containers/ViewToolbar'
 import DocumentList from 'containers/DocumentList'
-import Editor from 'containers/Editor'
 import DocumentView from 'containers/DocumentView'
 import DummyLander from 'containers/DummyLander'
+import Editor from 'containers/Editor'
+import EditorToolbar from 'containers/EditorToolbar'
+import MainToolbar from 'containers/MainToolbar'
+import ViewToolbar from 'containers/ViewToolbar'
+import * as React from 'react'
+import { Route } from 'react-router-dom'
 
 type Props = {
   error: {

@@ -1,23 +1,24 @@
-import { Action } from 'redux'
-import { isType } from 'typescript-fsa'
 import {
-  Folder,
-  FolderId
-} from 'service/folder-service'
-import {
-  getRootAction,
   getChildrenAction,
   getFolderAction,
+  getRootAction,
   selectFolder
 } from 'actions/folder-actions'
+import { Action } from 'redux'
 import {
   ApiResource,
   ResourceStatus
 } from 'service/common'
 import {
-  updateSingle,
+  Folder,
+  FolderId
+} from 'service/folder-service'
+import { isType } from 'typescript-fsa'
+
+import {
+  MappedModel,
   updateMany,
-  MappedModel
+  updateSingle
 } from './common'
 
 export type FolderState = MappedModel<ApiResource<Folder>>

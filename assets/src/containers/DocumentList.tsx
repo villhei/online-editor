@@ -1,14 +1,35 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../reducer'
-import { createAndSelect, createFolderAndRefresh } from 'actions/editor-actions'
-import { getDocumentsByFolder, getDocument } from 'actions/document-actions'
-import { getChildren, getFolder, createFolder, selectFolder } from 'actions/folder-actions'
-import { Folder, FolderId, isFolder, PartialFolder } from 'service/folder-service'
+import {
+  getDocument,
+  getDocumentsByFolder
+} from 'actions/document-actions'
+import {
+  createAndSelect,
+  createFolderAndRefresh
+} from 'actions/editor-actions'
+import {
+  createFolder,
+  getChildren,
+  getFolder,
+  selectFolder
+} from 'actions/folder-actions'
 import DocumentList from 'components/DocumentList'
 import LoadingComponent from 'components/Loading'
 import wrapApiResource from 'containers/ApiResourceHOC'
+import * as React from 'react'
+import {
+  Dispatch,
+  connect
+} from 'react-redux'
+import { ApiResourceId } from 'service/common'
 import { TextDocumentId } from 'service/document-service'
+import {
+  Folder,
+  FolderId,
+  PartialFolder,
+  isFolder
+} from 'service/folder-service'
+
+import { RootState } from '../reducer'
 
 type Props = {
   getChildren: (id: FolderId) => any,
@@ -18,6 +39,14 @@ type Props = {
   selectFolder: (id: FolderId) => any,
   resourceId: FolderId,
   resource: Folder
+}
+
+function sortResource(documents: Array<ApiResourceId>, descending = true): Array<ApiResourceId> {
+  const sorted: Array<ApiResourceId> = documents.slice(0)
+    .sort((a, b) => {
+      return a.localeCompare(b)
+    })
+  return sorted
 }
 
 class DocumentListContainer extends React.Component<Props, any> {

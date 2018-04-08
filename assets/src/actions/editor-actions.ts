@@ -1,23 +1,21 @@
-import actionCreatorFactory from 'typescript-fsa'
-import { bindThunkAction } from 'typescript-fsa-redux-thunk'
+import { getFolder } from 'actions/folder-actions'
 import { push } from 'react-router-redux'
-import {
-  deleteDocumentAction,
-  createDocumentAction,
-  updateDocumentAction,
-  CreateDocumentParams,
-  UpdateDocumentParams,
-  updateDocument
-} from './document-actions'
-
-import {
-  createFolder, createFolderAction, CreateFolderParams
-} from './folder-actions'
-
 import { TextDocument, create, deleteById, update } from 'service/document-service'
 import { Folder } from 'service/folder-service'
+import actionCreatorFactory from 'typescript-fsa'
+import { bindThunkAction } from 'typescript-fsa-redux-thunk'
 
-import { getFolder } from 'actions/folder-actions'
+import {
+  CreateDocumentParams,
+  UpdateDocumentParams,
+  createDocumentAction,
+  deleteDocumentAction,
+  updateDocument,
+  updateDocumentAction
+} from './document-actions'
+import {
+  CreateFolderParams, createFolder, createFolderAction
+} from './folder-actions'
 
 export const UPDATE_DOCUMENT_CONTENT = 'UPDATE_DOCUMENT_CONTENT'
 export const UPDATE_DOCUMENT_NAME = 'UPDATE_DOCUMENT_NAME'

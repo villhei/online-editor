@@ -1,16 +1,23 @@
-import { Action } from 'redux'
-import { isType } from 'typescript-fsa'
 import {
   createDocumentAction,
   getDocumentAction,
   getDocumentsAction,
-  updateDocumentAction,
-  getDocumentsByFolderAction
+  getDocumentsByFolderAction,
+  updateDocumentAction
 } from 'actions/document-actions'
-
-import { ApiResource, ResourceStatus } from 'service/common'
-import { updateSingle, updateMany, MappedModel } from './common'
+import { Action } from 'redux'
+import {
+  ApiResource,
+  ResourceStatus
+} from 'service/common'
 import { TextDocument } from 'service/document-service'
+import { isType } from 'typescript-fsa'
+
+import {
+  MappedModel,
+  updateMany,
+  updateSingle
+} from './common'
 
 export type DocumentReducerState = MappedModel<ApiResource<TextDocument>>
 
