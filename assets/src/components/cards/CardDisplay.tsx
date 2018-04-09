@@ -2,10 +2,10 @@ import * as classNames from 'classnames'
 import * as React from 'react'
 
 type Props = {
-  header: string
+  header: JSX.Element | string
   disabled?: boolean,
   selected?: boolean,
-  children?: JSX.Element | string | any,
+  children?: JSX.Element | string,
   icon: {
     name: string,
     color: string
@@ -39,7 +39,7 @@ export default (props: Props) => {
     <a className={cardClasses} onClick={action}>
       <div className='content'>
         <i className={iconClasses}></i>
-        <div className='small header'>
+        <div className='header'>
           {header}
         </div>
         {props.children}

@@ -1,3 +1,4 @@
+import * as classNames from 'classnames'
 import * as React from 'react'
 import { Folder } from 'service/folder-service'
 
@@ -10,26 +11,39 @@ type Props = {
 }
 
 export default (props: Props) => {
-  const { folder, buttonAction, disabled } = props
-  return (<CardDisplay
-    disabled={true}
-    header={folder.name}
-    icon={{
-      name: 'folder',
-      color: 'blue'
-    }}
-    buttonAction={() => null}>
-    <>
-      <div className='meta'>
-        {folder.children.length} folders<br />
-        {folder.documents.length} documents
+  const {
+    folder,
+    buttonAction,
+    disabled } = props
+
+  const cardClasses = classNames(
+    'ui',
+    { 'blue raised': true },
+    'card'
+  )
+  const iconClasses = classNames(
+    'huge left floated',
+    'blue folder', {
+      'disabled': disabled
+    },
+    'icon')
+  return (
+    <a className={cardClasses} onClick={() => null}>
+      <div className='content'>
+        <i className={iconClasses}></i>
+        <div className='header'>
+          {folder.name}
+        </div>
+        <div className='meta'>
+          {folder.children.length} folders<br />
+          {folder.documents.length} documents
       </div>
-      <button className='ui right floated basic button'
-        disabled={disabled}
-        onClick={buttonAction}>
-        <i className='ui right floated huge ellipsis horizontal icon'></i>
-      </button>
-    </>
-  </CardDisplay>
+        <button className='ui left floated basic icon button'
+          disabled={disabled}
+          onClick={buttonAction}>
+          <i className='ui right floated huge ellipsis horizontal icon'></i>
+        </button>
+      </div>
+    </a >
   )
 }
