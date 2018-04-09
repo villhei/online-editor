@@ -11,7 +11,8 @@ import { RootState } from '../reducer'
 
 type StateProps = {
   folderId: FolderId,
-  folder: ApiResource<Folder>
+  folder: ApiResource<Folder>,
+  moveDisabled: boolean
 }
 
 type DispatchProps = {
@@ -84,7 +85,7 @@ class MainToolbar extends React.Component<Props, State> {
   }
 
   render() {
-    const { folder } = this.props
+    const { folder, moveDisabled } = this.props
     const { modal } = this.state
     const refreshing = folder === ResourceStatus.Loading
     const { modalInput } = this.state
@@ -93,6 +94,8 @@ class MainToolbar extends React.Component<Props, State> {
       <>
         <MainToolbarView
           disabled={!folder}
+          moveDisabled={moveDisabled}
+          moveItems={() => null}
           refreshing={refreshing}
           title={getResourceName(folder)}
           refreshFolder={this.refresh}
@@ -107,9 +110,11 @@ class MainToolbar extends React.Component<Props, State> {
 const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateProps => {
   const folderId: FolderId = ownProps.match.params.folderId
   const folder: ApiResource<Folder> | undefined = model.folders.byId[folderId]
+  const moveDisabled = Object.keys(ui.page.selectedItems).length === 0
   return {
     folder,
-    folderId
+    folderId,
+    moveDisabled
   }
 }
 

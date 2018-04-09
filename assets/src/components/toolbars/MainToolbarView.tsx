@@ -6,10 +6,12 @@ import MenuButton from './MenuButton'
 export type Props = {
   title: string,
   refreshing: boolean,
+  moveDisabled: boolean,
   disabled: boolean,
   refreshFolder: () => void
   createFolder: () => void,
-  createDocument: () => void
+  createDocument: () => void,
+  moveItems: () => void
 }
 
 export default (props: Props) => {
@@ -38,6 +40,12 @@ export default (props: Props) => {
         disabled={false}
         icon='file'>
       </MenuButton>
-    </div>
+      <MenuButton
+        onClick={props.moveItems}
+        loading={false}
+        disabled={props.moveDisabled}
+        icon='copy'>
+      </MenuButton>
+    </div >
   )
 }

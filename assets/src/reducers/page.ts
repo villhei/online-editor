@@ -8,28 +8,30 @@ import {
   expectConfirmAction
 } from 'actions/editor-actions'
 import {
-  toggleMenu
+  setSelectedItems
 } from 'actions/page-actions'
 import { LOCATION_CHANGE } from 'react-router-redux'
 import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
 
 export type PageState = {
-  navigationOpen: boolean,
   editorToolbar: {
     refreshing: boolean,
     saving: boolean,
     deleting: boolean
+  },
+  selectedItems: {
+    [id: string]: boolean
   }
 }
 
 export const initialState: PageState = {
-  navigationOpen: false,
   editorToolbar: {
     refreshing: false,
     saving: false,
     deleting: false
-  }
+  },
+  selectedItems: {}
 }
 
 function updateToolbarItem(state: PageState, itemName: string, newStatus: boolean): PageState {
@@ -44,19 +46,10 @@ function updateToolbarItem(state: PageState, itemName: string, newStatus: boolea
 }
 
 export default function pageReducer(state: PageState = initialState, action: Action): PageState {
-  if (isType(action, toggleMenu)) {
-    if (action.payload.menu === 'navigation') {
-      return {
-        ...state,
-        navigationOpen: !state.navigationOpen
-      }
-    }
-  }
-  if (action.type === LOCATION_CHANGE) {
+  if (isType(action, setSelectedItems)) {
     return {
       ...state,
-      navigationOpen: false,
-      editorToolbar: initialState.editorToolbar
+      selectedItems: action.payload.selection
     }
   }
   if (isType(action, deleteDocumentAction.started)) {

@@ -10,7 +10,9 @@ type Props = {
   documents: Array<ApiResourceId>,
   folders: Array<FolderId>,
   folder: Folder,
-  selected: Set<ApiResourceId>,
+  selected: {
+    [id: string]: boolean
+  },
   selectResource: (id: ApiResourceId) => any,
   getFolderById: (id: FolderId) => any,
   getByDocumentId: (id: ApiResourceId) => any
@@ -35,12 +37,12 @@ export default class DocumentList extends React.Component<Props, any> {
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}
               selectFolder={selectResource}
-              selected={selected.has(folderId)}
+              selected={Boolean(selected[folderId])}
               resourceId={folderId} />)}
           {documents.map((documentId: TextDocumentId) =>
             <DocumentCard key={documentId}
               selectDocument={selectResource}
-              selected={selected.has(documentId)}
+              selected={Boolean(selected[documentId])}
               resourceId={documentId} />)}
         </div>
       </div>)

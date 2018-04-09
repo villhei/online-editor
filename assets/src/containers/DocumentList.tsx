@@ -12,6 +12,9 @@ import {
   getFolder,
   showFolder
 } from 'actions/folder-actions'
+import {
+  setSelectedItems
+} from 'actions/page-actions'
 import DocumentList from 'components/DocumentList'
 import LoadingComponent from 'components/Loading'
 import wrapApiResource from 'containers/ApiResourceHOC'
@@ -36,18 +39,19 @@ import {
 
 import { RootState } from '../reducer'
 
+type Selection = {
+  [id: string]: boolean
+}
 type Props = {
   getChildren: (id: FolderId) => any,
   getDocumentsByFolder: (folder: FolderId) => any,
   getDocumentById: (id: TextDocumentId) => any,
   getResource: (id: FolderId) => any,
   showFolder: (id: FolderId) => any,
+  setSelection: (selection: Selection) => any,
   resourceId: FolderId,
-  resource: Folder
-}
-
-type State = {
-  selected: Set<ApiResourceId>
+  resource: Folder,
+  selected: Selection
 }
 
 function sortResource(documents: Array<ApiResourceId>, descending = true): Array<ApiResourceId> {
@@ -58,10 +62,7 @@ function sortResource(documents: Array<ApiResourceId>, descending = true): Array
   return sorted
 }
 
-class DocumentListContainer extends React.Component<Props, any> {
-  state = {
-    selected: new Set()
-  }
+class DocumentListContainer extends React.Component<Props, {}> {
 
   parentFolder = () => {
     const { resource, showFolder } = this.props
@@ -69,19 +70,23 @@ class DocumentListContainer extends React.Component<Props, any> {
   }
 
   selectResource = (id: ApiResourceId) => {
-    const { selected } = this.state
-    if (selected.has(id)) {
-      selected.delete(id)
+    const { selected, setSelection } = this.props
+    if (selected[id]) {
+      setSelection({
+        ...selected,
+        [id]: false
+      })
     } else {
-      selected.add(id)
+      setSelection({
+        ...selected,
+        [id]: true
+      })
     }
-    this.setState({
-      selected: new Set(selected)
-    })
   }
   render() {
     const {
       resource,
+      selected,
       getResource,
       getDocumentById
     } = this.props
@@ -89,9 +94,6 @@ class DocumentListContainer extends React.Component<Props, any> {
       documents,
       children
     } = resource
-    const {
-      selected
-    } = this.state
 
     const sortedDocuments = sortResource(documents)
     const sortedFolders = sortResource(children)
@@ -108,12 +110,13 @@ class DocumentListContainer extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ model }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model, ui }: RootState, ownProps: any) => {
   const resourceId: FolderId = ownProps.match.params.folderId
   const resource = model.folders.byId[resourceId]
   return {
     resourceId,
-    resource
+    resource,
+    selected: ui.page.selectedItems
   }
 }
 
@@ -123,7 +126,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     getDocumentsByFolder: (folder: string) => getDocumentsByFolder(dispatch, folder),
     getDocumentById: (id: TextDocumentId) => getDocument(dispatch, { id }),
     getResource: (id: FolderId) => getFolder(dispatch, { id }),
-    showFolder: (id: FolderId) => dispatch(showFolder({ id }))
+    showFolder: (id: FolderId) => dispatch(showFolder({ id })),
+    setSelection: (selection: Selection) => dispatch(setSelectedItems({ selection }))
   }
 }
 
