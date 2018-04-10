@@ -91,4 +91,16 @@ defmodule OnlineEditorWeb.FolderControllerTest do
 
     assert json_response(conn, 200) == render_json("folder.json", assigns)
   end
+
+  test "DELETE 204 - delete path allows deleting folders", %{conn: conn} do
+    folder = insert(:folder)
+    conn = delete(conn, "/api/folders/#{folder.id}")
+    assert response(conn, 204)
+  end
+
+  test "DELETE 404 - delete path returns an error on missing folder", %{conn: conn} do
+    conn = delete(conn, "/api/folders/#{UUID.uuid4()}")
+    assert json_response(conn, 404) == ErrorView.render("404.json")
+  end
+
 end

@@ -19,6 +19,10 @@ export type HasId = {
   id: string
 }
 
+export type Map<T> = {
+  [id: string]: T
+}
+
 export type Partial<T> = {
   [Partial in keyof T]?: T[Partial]
 }

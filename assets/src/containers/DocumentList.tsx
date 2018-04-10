@@ -28,7 +28,11 @@ import {
   connect
 } from 'react-redux'
 
-import { ApiResourceId } from 'service/common'
+import {
+  ApiResourceId,
+  HasId,
+  Map
+} from 'service/common'
 import { TextDocumentId } from 'service/document-service'
 import {
   Folder,
@@ -39,19 +43,16 @@ import {
 
 import { RootState } from '../reducer'
 
-type Selection = {
-  [id: string]: boolean
-}
 type Props = {
   getChildren: (id: FolderId) => any,
   getDocumentsByFolder: (folder: FolderId) => any,
   getDocumentById: (id: TextDocumentId) => any,
   getResource: (id: FolderId) => any,
   showFolder: (id: FolderId) => any,
-  setSelection: (selection: Selection) => any,
+  setSelection: (selection: Map<HasId>) => any,
   resourceId: FolderId,
   resource: Folder,
-  selected: Selection
+  selected: Map<HasId>
 }
 
 function sortResource(documents: Array<ApiResourceId>, descending = true): Array<ApiResourceId> {
@@ -69,17 +70,15 @@ class DocumentListContainer extends React.Component<Props, {}> {
     showFolder(resource.parent)
   }
 
-  selectResource = (id: ApiResourceId) => {
+  selectResource = (resource: HasId) => {
     const { selected, setSelection } = this.props
-    if (selected[id]) {
-      setSelection({
-        ...selected,
-        [id]: false
-      })
+    if (selected[resource.id]) {
+      const { [resource.id]: omit, ...newSelection } = selected
+      setSelection(newSelection)
     } else {
       setSelection({
         ...selected,
-        [id]: true
+        [resource.id]: resource
       })
     }
   }
@@ -127,7 +126,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     getDocumentById: (id: TextDocumentId) => getDocument(dispatch, { id }),
     getResource: (id: FolderId) => getFolder(dispatch, { id }),
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),
-    setSelection: (selection: Selection) => dispatch(setSelectedItems({ selection }))
+    setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection }))
   }
 }
 

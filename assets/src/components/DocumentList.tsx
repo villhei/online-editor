@@ -2,18 +2,26 @@ import CurrentFolderCard from 'components/cards/CurrentFolderCard'
 import DocumentCard from 'containers/DocumentCard'
 import FolderCard from 'containers/FolderCard'
 import * as React from 'react'
-import { ApiResourceId } from 'service/common'
-import { TextDocument, TextDocumentId } from 'service/document-service'
-import { Folder, FolderId } from 'service/folder-service'
+import {
+  ApiResourceId,
+  HasId,
+  Map
+} from 'service/common'
+import {
+  TextDocument,
+  TextDocumentId
+} from 'service/document-service'
+import {
+  Folder,
+  FolderId
+} from 'service/folder-service'
 
 type Props = {
   documents: Array<ApiResourceId>,
   folders: Array<FolderId>,
   folder: Folder,
-  selected: {
-    [id: string]: boolean
-  },
-  selectResource: (id: ApiResourceId) => any,
+  selected: Map<HasId>,
+  selectResource: (resource: HasId) => any,
   getFolderById: (id: FolderId) => any,
   getByDocumentId: (id: ApiResourceId) => any
   parentFolder: () => void

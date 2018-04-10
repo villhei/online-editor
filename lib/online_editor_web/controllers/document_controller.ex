@@ -67,22 +67,14 @@ defmodule OnlineEditorWeb.DocumentController do
          {:ok, document} <- Repo.update(changeset) do
       conn |> respond_show(document)
     else
-      error -> handle_update_error(conn, error)
+      error -> handle_access_error(conn, error)
     end
   end
 
   def delete(conn, %{"id" => id}) do
     case Query.delete(id) do
       {:ok, _} -> send_resp(conn, :no_content, "")
-      error -> handle_update_error(conn, error)
-    end
-  end
-
-  defp handle_update_error(conn, cause) do
-    case cause do
-      {:error, _} -> respond_with_error(conn, 400, "400.json")
-      nil -> respond_with_error(conn, 404, "404.json")
-      _ -> respond_with_error(conn, 500, "500.json")
+      error -> handle_access_error(conn, error)
     end
   end
 

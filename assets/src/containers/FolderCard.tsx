@@ -7,7 +7,10 @@ import FolderCardView from 'components/cards/FolderCardView'
 import wrapApiResource from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
-import { ApiResource } from 'service/common'
+import {
+  ApiResource,
+  HasId
+} from 'service/common'
 import {
   Folder,
   FolderId,
@@ -19,7 +22,7 @@ import { RootState } from '../reducer'
 type OwnProps = {
   resourceId: FolderId,
   selected: boolean,
-  selectFolder: (id: FolderId) => any
+  selectFolder: (resource: HasId) => any
 }
 type Props = OwnProps & {
   resource: Folder,
@@ -34,8 +37,8 @@ class FolderCard extends React.Component<Props> {
   }
   handleSelectFolder = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
-    const { resourceId, selectFolder } = this.props
-    selectFolder(resourceId)
+    const { resource, selectFolder } = this.props
+    selectFolder(resource)
   }
   render() {
     const { resource, selected } = this.props

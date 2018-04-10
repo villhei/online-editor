@@ -8,7 +8,10 @@ import {
   connect
 } from 'react-redux'
 import { push } from 'react-router-redux'
-import { ApiResource } from 'service/common'
+import {
+  ApiResource,
+  HasId
+} from 'service/common'
 import {
   TextDocument,
   TextDocumentId,
@@ -20,7 +23,7 @@ import { RootState } from '../reducer'
 type OwnProps = {
   resourceId: TextDocumentId,
   selected: boolean,
-  selectDocument: (id: TextDocumentId) => void
+  selectDocument: (resource: HasId) => void
 }
 
 type Props = OwnProps & {
@@ -37,8 +40,8 @@ class DocumentCard extends React.Component<Props> {
 
   selectDocument = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
-    const { resourceId, selectDocument } = this.props
-    selectDocument(resourceId)
+    const { resource, selectDocument } = this.props
+    selectDocument(resource)
   }
   render() {
     const { resource, selected } = this.props

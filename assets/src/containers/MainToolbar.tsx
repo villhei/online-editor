@@ -1,11 +1,29 @@
-import { createAndSelect, createFolderAndRefresh } from 'actions/editor-actions'
-import { createFolder, getFolder } from 'actions/folder-actions'
+import {
+  createAndSelect,
+  createFolderAndRefresh
+} from 'actions/editor-actions'
+import {
+  createFolder,
+  getFolder
+} from 'actions/folder-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
-import PromptModal, { Props as PromptModalProps } from 'containers/modals/PromptModal'
+import PromptModal, {
+  Props as PromptModalProps
+} from 'containers/modals/PromptModal'
 import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
-import { ApiResource, ResourceStatus, getResourceName } from 'service/common'
-import { Folder, FolderId } from 'service/folder-service'
+import {
+  Dispatch,
+  connect
+} from 'react-redux'
+import {
+  ApiResource,
+  ResourceStatus,
+  getResourceName
+} from 'service/common'
+import {
+  Folder,
+  FolderId
+} from 'service/folder-service'
 
 import { RootState } from '../reducer'
 

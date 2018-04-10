@@ -4,6 +4,10 @@ import {
 } from 'actions/folder-actions'
 import { push } from 'react-router-redux'
 import {
+  HasId,
+  Map
+} from 'service/common'
+import {
   Folder,
   getRoot
 } from 'service/folder-service'
@@ -22,9 +26,7 @@ export type ToggleMenu = {
 }
 
 export type SelectedItems = {
-  selection: {
-    [id: string]: boolean
-  }
+  selection: Map<HasId>
 }
 
 export const toggleMenu = actionCreator<ToggleMenu>(TOGGLE_MENU)
