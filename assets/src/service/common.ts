@@ -19,6 +19,8 @@ export type HasId = {
   id: string
 }
 
+export type ByResourceParams<T> = { resource: T }
+
 export type Map<T> = {
   [id: string]: T
 }

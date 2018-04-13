@@ -4,6 +4,8 @@ import { TextDocumentId } from 'service/document-service'
 import {
   ApiResource,
   ApiResourceId,
+  HasId,
+  Map,
   Partial
 } from './common'
 
@@ -49,4 +51,16 @@ export function findByName(folderName: string): Promise<Folder> {
 export function findByParent(id: FolderId): Promise<Array<Folder>> {
   return axios.get<Array<Folder>>('/api/folders/?children=' + id)
     .then(res => res.data)
+}
+
+export function deleteByFolder(f: HasId): Promise<ApiResourceId> {
+  return axios.delete('/api/folders/' + f.id).then(() => f.id)
+}
+
+export function deleteMultiple(items: Map<HasId>): Promise<Array<ApiResourceId>> {
+  const folders: Array<Folder> = Object.keys(items)
+    .map(id => (items[id] as Folder))
+    .filter(d => isFolder(d))
+  const deletions = folders.map(f => deleteByFolder(f))
+  return Promise.all(deletions)
 }

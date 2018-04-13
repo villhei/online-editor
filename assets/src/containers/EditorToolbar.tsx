@@ -216,7 +216,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     saveDocument: (id: ApiResourceId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
     deleteAndRefresh: (document: TextDocument) => {
-      dispatch(deleteAndRefresh({ document }))
+      dispatch(deleteAndRefresh({ resource: document }))
     },
     navigate: (route: string) => dispatch(push(route))
   }

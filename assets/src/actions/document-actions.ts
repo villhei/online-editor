@@ -1,12 +1,16 @@
 import {
-  ByIdParams
+  ByIdParams,
+  ByResourceParams,
+  HasId,
+  Map
 } from 'service/common'
 import {
   PartialTextDocument,
   TextDocument,
   TextDocumentId,
   create,
-  deleteById,
+  deleteByDocument,
+  deleteMultiple,
   getAll,
   getAllByFolder,
   getById,
@@ -21,8 +25,6 @@ import { wrapAsyncWorker } from './async'
 
 export type UpdateDocumentParams = ByIdParams & { document: PartialTextDocument }
 export type GetDocumentByFolderParams = { folder: FolderId }
-export type CreateDocumentParams = { document: PartialTextDocument & { folder: FolderId } }
-export type DeleteDocumentParams = { document: TextDocument }
 
 export const ACTION_GET_DOCUMENT = 'ACTION_GET_DOCUMENT'
 export const ACTION_GET_DOCUMENTS = 'ACTION_GET_DOCUMENTS'
@@ -31,11 +33,12 @@ export const ACTION_GET_DOCUMENTS_BY_FOLDER = 'ACTION_GET_DOCUMENTS_BY_FOLDER'
 export const ACTION_CREATE_DOCUMENT = 'ACTION_CREATE_DOCUMENT'
 export const ACTION_UPDATE_DOCUMENT = 'ACTION_UPDATE_DOCUMENT'
 export const ACTION_DELETE_DOCUMENT = 'ACTION_DELETE_DOCUMENT'
+export const ACTION_DELETE_DOCUMENTS = 'ACTION_DELETE_DOCUMENTS'
 
 const actionCreator = actionCreatorFactory()
 
 export const createDocumentAction = actionCreator
-  .async<CreateDocumentParams, TextDocument, {}>(ACTION_CREATE_DOCUMENT)
+  .async<ByResourceParams<PartialTextDocument>, TextDocument, {}>(ACTION_CREATE_DOCUMENT)
 
 export const getDocumentAction = actionCreator
   .async<ByIdParams, TextDocument, {}>(ACTION_GET_DOCUMENT)
@@ -50,11 +53,15 @@ export const updateDocumentAction = actionCreator
   .async<UpdateDocumentParams, TextDocument, {}>(ACTION_UPDATE_DOCUMENT)
 
 export const deleteDocumentAction = actionCreator
-  .async<DeleteDocumentParams, void>(ACTION_DELETE_DOCUMENT)
+  .async<ByResourceParams<TextDocument>, TextDocumentId>(ACTION_DELETE_DOCUMENT)
 
-export const createDocument = wrapAsyncWorker(createDocumentAction, (params: CreateDocumentParams) => create(params.document))
+export const deleteDocumentsAction = actionCreator
+  .async<Map<HasId>, Array<TextDocumentId>>(ACTION_DELETE_DOCUMENTS)
+
+export const createDocument = wrapAsyncWorker(createDocumentAction, (params: ByResourceParams<PartialTextDocument>) => create(params.resource))
 export const getDocument = wrapAsyncWorker(getDocumentAction, (params: ByIdParams) => getById(params.id))
 export const getDocuments = wrapAsyncWorker(getDocumentsAction, getAll)
 export const getDocumentsByFolder = wrapAsyncWorker(getDocumentsAction, getAllByFolder)
 export const updateDocument = wrapAsyncWorker(updateDocumentAction, (params: UpdateDocumentParams) => update(params.id, params.document))
-export const deleteDocument = wrapAsyncWorker(deleteDocumentAction, (params: DeleteDocumentParams) => deleteById(params.document.id))
+export const deleteDocument = wrapAsyncWorker(deleteDocumentAction, (params: ByResourceParams<TextDocument>) => deleteByDocument(params.resource))
+export const deleteDocuments = wrapAsyncWorker(deleteDocumentsAction, items => deleteMultiple(items))

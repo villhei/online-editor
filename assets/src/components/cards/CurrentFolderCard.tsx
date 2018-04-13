@@ -18,19 +18,19 @@ export default (props: Props) => {
 
   const cardClasses = classNames(
     'ui',
-    { 'blue raised': true },
+    { 'raised': true },
     'card'
   )
-  const iconClasses = classNames(
+  const mainIconClasses = classNames(
     'huge left floated',
-    'blue folder', {
+    'folder open', {
       'disabled': disabled
     },
     'icon')
   return (
     <a className={cardClasses} onClick={() => null}>
       <div className='content'>
-        <i className={iconClasses}></i>
+        <i className={mainIconClasses}></i>
         <div className='header'>
           {folder.name}
         </div>

@@ -4,6 +4,8 @@ import { FolderId } from 'service/folder-service'
 import {
   ApiResource,
   ApiResourceId,
+  HasId,
+  Map,
   Partial,
   isAxiosError
 } from './common'
@@ -61,6 +63,14 @@ export function getById(id: ApiResourceId): Promise<TextDocument> {
   return axios.get<TextDocument>(`/api/documents/${id}`).then(res => res.data)
 }
 
-export function deleteById(id: ApiResourceId): Promise<void> {
-  return axios.delete('/api/documents/' + id).then(res => res.data)
+export function deleteByDocument(d: HasId): Promise<ApiResourceId> {
+  return axios.delete('/api/documents/' + d.id).then(() => d.id)
+}
+
+export function deleteMultiple(items: Map<HasId>): Promise<ApiResourceId[]> {
+  const documents: Array<TextDocument> = Object.keys(items)
+    .map(id => (items[id] as TextDocument))
+    .filter(d => isDocument(d))
+  const deletions = documents.map(d => deleteByDocument(d))
+  return Promise.all(deletions)
 }

@@ -1,5 +1,7 @@
 import {
   createDocumentAction,
+  deleteDocumentAction,
+  deleteDocumentsAction,
   getDocumentAction,
   getDocumentsAction,
   getDocumentsByFolderAction,
@@ -15,6 +17,8 @@ import { isType } from 'typescript-fsa'
 
 import {
   MappedModel,
+  removeMany,
+  removeSingle,
   updateMany,
   updateSingle
 } from './common'
@@ -26,6 +30,7 @@ export const initialState: DocumentReducerState = {
 }
 
 export default function documentReducer(state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
+  console.log('action', action)
   if (isType(action, getDocumentsAction.done) || isType(action, getDocumentsByFolderAction.done)) {
     const documents = action.payload.result
     return updateMany(state, documents)
@@ -38,6 +43,10 @@ export default function documentReducer(state: DocumentReducerState = initialSta
     const id = action.payload.params.id
     const error = action.payload.error
     return updateSingle(state, id, error as Error)
+  }
+  if (isType(action, deleteDocumentsAction.done)) {
+    debugger
+    return removeMany(state, action.payload.result)
   }
   if (isType(action, updateDocumentAction.done)
     || isType(action, getDocumentAction.done)

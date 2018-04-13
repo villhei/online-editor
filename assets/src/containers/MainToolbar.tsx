@@ -1,9 +1,13 @@
 import {
+  deleteDocuments
+} from 'actions/document-actions'
+import {
   createAndSelect,
   createFolderAndRefresh
 } from 'actions/editor-actions'
 import {
   createFolder,
+  deleteFolders,
   getFolder
 } from 'actions/folder-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
@@ -17,6 +21,8 @@ import {
 } from 'react-redux'
 import {
   ApiResource,
+  HasId,
+  Map,
   ResourceStatus,
   getResourceName
 } from 'service/common'
@@ -30,13 +36,16 @@ import { RootState } from '../reducer'
 type StateProps = {
   folderId: FolderId,
   folder: ApiResource<Folder>,
-  moveDisabled: boolean
+  itemsSelected: boolean,
+  selectedItems: Map<HasId>
 }
 
 type DispatchProps = {
   getFolder: (id: FolderId) => any,
   createFolder: (name: string, parent: FolderId) => any,
-  createDocument: (name: string, folder: FolderId) => any
+  createDocument: (name: string, folder: FolderId) => any,
+  moveItems: (items: Map<HasId>) => any,
+  deleteItems: (items: Map<HasId>) => any
 }
 
 type Props = StateProps & DispatchProps
@@ -102,8 +111,13 @@ class MainToolbar extends React.Component<Props, State> {
     })
   }
 
+  handleDeleteItems = () => {
+    const { selectedItems, deleteItems } = this.props
+    deleteItems(selectedItems)
+  }
+
   render() {
-    const { folder, moveDisabled } = this.props
+    const { folder, itemsSelected } = this.props
     const { modal } = this.state
     const refreshing = folder === ResourceStatus.Loading
     const { modalInput } = this.state
@@ -112,8 +126,10 @@ class MainToolbar extends React.Component<Props, State> {
       <>
         <MainToolbarView
           disabled={!folder}
-          moveDisabled={moveDisabled}
+          moveDisabled={itemsSelected}
+          deleteDisabled={itemsSelected}
           moveItems={() => null}
+          deleteItems={this.handleDeleteItems}
           refreshing={refreshing}
           title={getResourceName(folder)}
           refreshFolder={this.refresh}
@@ -128,19 +144,26 @@ class MainToolbar extends React.Component<Props, State> {
 const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateProps => {
   const folderId: FolderId = ownProps.match.params.folderId
   const folder: ApiResource<Folder> | undefined = model.folders.byId[folderId]
-  const moveDisabled = Object.keys(ui.page.selectedItems).length === 0
+  const itemsSelected = Object.keys(ui.page.selectedItems).length === 0
+  const { selectedItems } = ui.page
   return {
     folder,
     folderId,
-    moveDisabled
+    itemsSelected,
+    selectedItems
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
     getFolder: (id: FolderId) => getFolder(dispatch, { id }),
-    createFolder: (name: string, parent: FolderId) => dispatch(createFolderAndRefresh({ folder: { name, parent } })),
-    createDocument: (name: string, folder: FolderId) => dispatch(createAndSelect({ document: { name, folder } }))
+    createFolder: (name: string, parent: FolderId) => dispatch(createFolderAndRefresh({ resource: { name, parent } })),
+    createDocument: (name: string, folder: FolderId) => dispatch(createAndSelect({ resource: { name, folder } })),
+    moveItems: (items: Map<HasId>) => null,
+    deleteItems: (items: Map<HasId>) => {
+      deleteFolders(dispatch, items)
+      deleteDocuments(dispatch, items)
+    }
   }
 }
 

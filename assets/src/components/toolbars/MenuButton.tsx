@@ -15,7 +15,7 @@ const MenuButton = ({ loading, disabled, onClick, icon }: MenuButtonProps) => {
   })
   return (<div className={'ui item'}>
     <div className={classes} onClick={onClick}>
-      <i className={'icon ' + icon} />
+      <i className={icon + ' icon'} />
     </div>
   </div>)
 }

@@ -73,7 +73,10 @@ class DocumentListContainer extends React.Component<Props, {}> {
   selectResource = (resource: HasId) => {
     const { selected, setSelection } = this.props
     if (selected[resource.id]) {
-      const { [resource.id]: omit, ...newSelection } = selected
+      const {
+        [resource.id]: omit,
+        ...newSelection
+      } = selected
       setSelection(newSelection)
     } else {
       setSelection({

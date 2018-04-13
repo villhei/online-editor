@@ -12,6 +12,10 @@ import {
 } from 'actions/page-actions'
 import { LOCATION_CHANGE } from 'react-router-redux'
 import { Action } from 'redux'
+import {
+  HasId,
+  Map
+} from 'service/common'
 import { isType } from 'typescript-fsa'
 
 export type PageState = {
@@ -20,9 +24,7 @@ export type PageState = {
     saving: boolean,
     deleting: boolean
   },
-  selectedItems: {
-    [id: string]: boolean
-  }
+  selectedItems: Map<HasId>
 }
 
 export const initialState: PageState = {

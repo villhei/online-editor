@@ -2,13 +2,18 @@ import { push } from 'react-router-redux'
 import {
   ApiResource,
   ApiResourceId,
-  ByIdParams
+  ByIdParams,
+  ByResourceParams,
+  HasId,
+  Map
 } from 'service/common'
 import {
   Folder,
   FolderId,
   PartialFolder,
   create,
+  deleteByFolder,
+  deleteMultiple,
   findByParent,
   getByFolderId,
   getRoot
@@ -22,8 +27,8 @@ export const ACTION_CREATE_FOLDER = 'ACTION_CREATE_FOLDER'
 export const ACTION_GET_ROOT_FOLDER = 'ACTION_GET_ROOT_FOLDER'
 export const ACTION_GET_CHILDREN = 'ACTION_GET_CHILDREN'
 export const ACTION_SELECT_FOLDER = 'ACTION_SELECT_FOLDER'
-
-export type CreateFolderParams = { folder: PartialFolder }
+export const ACTION_DELETE_FOLDER = 'ACTION_DELETE_FOLDER'
+export const ACTION_DELETE_FOLDERS = 'ACTION_DELETE_FOLDERS'
 
 const actionCreator = actionCreatorFactory()
 
@@ -37,7 +42,13 @@ export const getChildrenAction = actionCreator
   .async<ByIdParams, Array<Folder>, {}>(ACTION_GET_CHILDREN)
 
 export const createFolderAction = actionCreator
-  .async<CreateFolderParams, Folder, {}>(ACTION_CREATE_FOLDER)
+  .async<ByResourceParams<PartialFolder>, Folder, {}>(ACTION_CREATE_FOLDER)
+
+export const deleteFolderaction = actionCreator
+  .async<ByIdParams, FolderId, {}>(ACTION_DELETE_FOLDER)
+
+export const deleteFoldersAction = actionCreator
+  .async<Map<HasId>, {}, {}>(ACTION_DELETE_FOLDERS)
 
 export const showFolder = (params: ByIdParams) => push('/folder/' + params.id)
 
@@ -49,5 +60,10 @@ export const getFolder = wrapAsyncWorker(getFolderAction,
 export const getChildren = wrapAsyncWorker(getChildrenAction,
   ({ id }: ByIdParams) => findByParent(id))
 
-export const createFolder = wrapAsyncWorker(createFolderAction, ({ folder }) =>
-  create(folder))
+export const createFolder = wrapAsyncWorker(createFolderAction, ({ resource }) =>
+  create(resource))
+
+export const deleteFolder = wrapAsyncWorker(deleteFolderaction, ({ id }) =>
+  deleteByFolder({ id }))
+
+export const deleteFolders = wrapAsyncWorker(deleteFoldersAction, items => deleteMultiple(items))
