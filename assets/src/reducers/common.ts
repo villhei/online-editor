@@ -1,7 +1,9 @@
 import {
   ApiResource,
+  ApiResourceId,
   HasId,
-  ApiResourceId
+  ResourceStatus,
+  isAxiosError
 } from 'service/common'
 
 export type DocumentMap<T> = { [id: string]: ApiResource<T> }
@@ -9,6 +11,12 @@ export type MappedModel<T> = {
   byId: DocumentMap<T>
 }
 
+function transformAxiosError<T>(maybeError: ApiResource<T>): ApiResource<T> {
+  if (isAxiosError(maybeError) && maybeError.response && maybeError.response.status === 404) {
+    return ResourceStatus.NotFound
+  }
+  return maybeError
+}
 export function updateSingle<T extends HasId, S extends Object>(
   state: S & MappedModel<ApiResource<T>>,
   id: string,
@@ -16,7 +24,7 @@ export function updateSingle<T extends HasId, S extends Object>(
 ): S & MappedModel<ApiResource<T>> {
   const byId = {
     ...state.byId,
-    [id]: updatedEntity
+    [id]: transformAxiosError(updatedEntity)
   }
   return Object.assign({}, state, { byId })
 }

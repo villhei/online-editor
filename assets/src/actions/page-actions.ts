@@ -5,6 +5,7 @@ import {
   deleteFolder,
   deleteFolders,
   deleteFoldersAction,
+  getFolder,
   getRootAction,
   getRootFolder
 } from 'actions/folder-actions'
@@ -68,24 +69,34 @@ export const moveItems = bindThunkAction(getRootAction, async (params, dispatch)
 })
 
 function deleteEntities<T extends HasId>(
-  items: Map<HasId>,
-  testerFn: (x: any) => x is T,
-  action: (dispatch: Dispatch<RootState>, params: any) => Promise<ApiResourceId>,
-  dispatch: Dispatch<RootState>)
+  entities: Array<T>,
+  dispatch: Dispatch<RootState>,
+  action: (dispatch: Dispatch<RootState>, params: { resource: T }) => Promise<ApiResourceId>
+)
   : Promise<Array<ApiResourceId>> {
-
-  const entities: Array<T> = Object.keys(items)
-    .map(id => (items[id] as T))
-    .filter(d => testerFn(d))
-
   const deletions = entities
-    .map(param => deleteFolder(dispatch, { id: param.id }))
+    .map(entity => action(dispatch, { resource: entity }))
   return Promise.all(deletions)
 }
 
-export const deleteItems = bindThunkAction(deleteFoldersAction, (params, dispatch): Promise<Array<FolderId>> => {
-  return deleteEntities(params, isDocument, deleteDocument, dispatch)
+function filterEntities<T extends HasId>(items: Map<HasId>, typeTesterFn: (x: any) => x is T) {
+  const entities: Array<T> = Object.keys(items)
+    .filter(d => typeTesterFn(items[d]))
+    .map((id: string) => (items[id] as T))
+  return entities
+}
+
+export const deleteItems = bindThunkAction(deleteFoldersAction, (items, dispatch): Promise<Array<FolderId>> => {
+  const documents = filterEntities(items, isDocument)
+  const folders = filterEntities(items, isFolder)
+
+  const affectedFolders: Set<FolderId> = new Set(folders.map(folder => folder.parent)
+    .concat(documents.map(document => document.folder)))
+
+  const deletedEntities = deleteEntities(documents, dispatch, deleteDocument)
     .then(async ids =>
       ids.concat(await
-        deleteEntities(params, isFolder, deleteFolder, dispatch)))
+        deleteEntities(folders, dispatch, deleteFolder)))
+
+  return deletedEntities
 })

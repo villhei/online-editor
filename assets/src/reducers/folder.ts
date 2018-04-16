@@ -1,4 +1,6 @@
 import {
+  deleteFolderaction,
+  deleteFoldersAction,
   getChildrenAction,
   getFolderAction,
   getRootAction,
@@ -7,7 +9,8 @@ import {
 import { Action } from 'redux'
 import {
   ApiResource,
-  ResourceStatus
+  ResourceStatus,
+  isAxiosError
 } from 'service/common'
 import {
   Folder,
@@ -17,6 +20,8 @@ import { isType } from 'typescript-fsa'
 
 import {
   MappedModel,
+  removeMany,
+  removeSingle,
   updateMany,
   updateSingle
 } from './common'
@@ -33,13 +38,19 @@ export default function folderReducer(state: FolderState = initialState, action:
     return updateSingle<Folder, FolderState>(state, id, ResourceStatus.Loading)
   }
   if (isType(action, getFolderAction.failed)) {
-    const { id } = action.payload.params
+    const id = action.payload.params.id
     const error = action.payload.error
     return updateSingle(state, id, error as Error)
   }
   if (isType(action, getChildrenAction.done)) {
     const { result } = action.payload
     return updateMany(state, result)
+  }
+  if (isType(action, deleteFolderaction.done)) {
+    return removeSingle(state, action.payload.params.resource.id)
+  }
+  if (isType(action, deleteFoldersAction.done)) {
+    return removeMany(state, action.payload.result)
   }
   if (isType(action, getFolderAction.done)) {
     const { result } = action.payload

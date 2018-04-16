@@ -10,7 +10,8 @@ import {
 import { Action } from 'redux'
 import {
   ApiResource,
-  ResourceStatus
+  ResourceStatus,
+  isAxiosError
 } from 'service/common'
 import { TextDocument } from 'service/document-service'
 import { isType } from 'typescript-fsa'
@@ -44,8 +45,10 @@ export default function documentReducer(state: DocumentReducerState = initialSta
     const error = action.payload.error
     return updateSingle(state, id, error as Error)
   }
+  if (isType(action, deleteDocumentAction.done)) {
+    return removeSingle(state, action.payload.params.resource.id)
+  }
   if (isType(action, deleteDocumentsAction.done)) {
-    debugger
     return removeMany(state, action.payload.result)
   }
   if (isType(action, updateDocumentAction.done)

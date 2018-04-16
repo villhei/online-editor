@@ -45,10 +45,10 @@ export const createFolderAction = actionCreator
   .async<ByResourceParams<PartialFolder>, Folder, {}>(ACTION_CREATE_FOLDER)
 
 export const deleteFolderaction = actionCreator
-  .async<ByIdParams, FolderId, {}>(ACTION_DELETE_FOLDER)
+  .async<ByResourceParams<Folder>, FolderId, {}>(ACTION_DELETE_FOLDER)
 
 export const deleteFoldersAction = actionCreator
-  .async<Map<HasId>, {}, {}>(ACTION_DELETE_FOLDERS)
+  .async<Map<HasId>, Array<FolderId>, {}>(ACTION_DELETE_FOLDERS)
 
 export const showFolder = (params: ByIdParams) => push('/folder/' + params.id)
 
@@ -63,7 +63,7 @@ export const getChildren = wrapAsyncWorker(getChildrenAction,
 export const createFolder = wrapAsyncWorker(createFolderAction, ({ resource }) =>
   create(resource))
 
-export const deleteFolder = wrapAsyncWorker(deleteFolderaction, ({ id }) =>
+export const deleteFolder = wrapAsyncWorker(deleteFolderaction, ({ resource: { id } }) =>
   deleteByFolder({ id }))
 
 export const deleteFolders = wrapAsyncWorker(deleteFoldersAction, items => deleteMultiple(items))

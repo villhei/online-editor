@@ -23,6 +23,7 @@ import { RootState } from '../reducer'
 type OwnProps = {
   resourceId: TextDocumentId,
   selected: boolean,
+  onResourceNotFound: (id: TextDocumentId) => any,
   selectDocument: (resource: HasId) => void
 }
 

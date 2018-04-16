@@ -1,4 +1,5 @@
 
+import NotFoundCard from 'components/notfound/NotFoundCard'
 import * as React from 'react'
 import { ApiResource, ApiResourceId, ResourceStatus, isAxiosError } from 'service/common'
 
@@ -6,6 +7,7 @@ export interface ApiResourceProps<T> {
   resource: ApiResource<T>,
   resourceId: ApiResourceId,
   getResource: (id: string) => any,
+  onResourceNotFound?: (id: string) => any,
   error?: any
 }
 
@@ -30,11 +32,14 @@ export default function wrapApiResource<T, P>(
       }
 
       handleGetResource = () => {
-        const { resource, resourceId, getResource } = this.props
+        const { resource, resourceId, onResourceNotFound, getResource } = this.props
         const isResourceLoaded = !(isValueResolved(resource)
           || isAxiosError(resource)
           || resource === ResourceStatus.Loading
           || resource === ResourceStatus.NotFound)
+        if (resource === ResourceStatus.NotFound && onResourceNotFound) {
+          onResourceNotFound(resourceId)
+        }
         if (isResourceLoaded) {
           if (resourceId) {
             this.props.getResource(resourceId)
@@ -54,7 +59,7 @@ export default function wrapApiResource<T, P>(
             </div>
           )
         } else if (resource === ResourceStatus.NotFound) {
-          return (<h1>Not found</h1>)
+          return (<NotFoundCard />)
         } else if (resource === ResourceStatus.Loading) {
           return (<Loading />)
         } else {

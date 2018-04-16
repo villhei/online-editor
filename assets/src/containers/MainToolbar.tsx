@@ -10,6 +10,9 @@ import {
   deleteFolders,
   getFolder
 } from 'actions/folder-actions'
+import {
+  deleteItems
+} from 'actions/page-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
 import PromptModal, {
   Props as PromptModalProps
@@ -161,8 +164,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     createDocument: (name: string, folder: FolderId) => dispatch(createAndSelect({ resource: { name, folder } })),
     moveItems: (items: Map<HasId>) => null,
     deleteItems: (items: Map<HasId>) => {
-      deleteFolders(dispatch, items)
-      deleteDocuments(dispatch, items)
+      dispatch(deleteItems(items))
     }
   }
 }

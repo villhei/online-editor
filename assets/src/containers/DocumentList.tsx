@@ -85,6 +85,12 @@ class DocumentListContainer extends React.Component<Props, {}> {
       })
     }
   }
+
+  handleResourceNotFound = (resource: ApiResourceId) => {
+    const { getResource, resourceId } = this.props
+    getResource(resourceId)
+  }
+
   render() {
     const {
       resource,
@@ -105,6 +111,7 @@ class DocumentListContainer extends React.Component<Props, {}> {
       selected={selected}
       getByDocumentId={getDocumentById}
       selectResource={this.selectResource}
+      onResourceNotFound={this.handleResourceNotFound}
       folder={resource}
       folders={sortedFolders}
       documents={sortedDocuments}

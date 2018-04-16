@@ -21,6 +21,7 @@ type Props = {
   folders: Array<FolderId>,
   folder: Folder,
   selected: Map<HasId>,
+  onResourceNotFound: (id: TextDocumentId) => any,
   selectResource: (resource: HasId) => any,
   getFolderById: (id: FolderId) => any,
   getByDocumentId: (id: ApiResourceId) => any
@@ -34,6 +35,7 @@ export default class DocumentList extends React.Component<Props, any> {
       folders,
       selectResource,
       selected,
+      onResourceNotFound,
       parentFolder
     } = this.props
     return (
@@ -45,11 +47,13 @@ export default class DocumentList extends React.Component<Props, any> {
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}
               selectFolder={selectResource}
+              onResourceNotFound={onResourceNotFound}
               selected={Boolean(selected[folderId])}
               resourceId={folderId} />)}
           {documents.map((documentId: TextDocumentId) =>
             <DocumentCard key={documentId}
               selectDocument={selectResource}
+              onResourceNotFound={onResourceNotFound}
               selected={Boolean(selected[documentId])}
               resourceId={documentId} />)}
         </div>

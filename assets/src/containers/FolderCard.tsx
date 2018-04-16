@@ -22,6 +22,7 @@ import { RootState } from '../reducer'
 type OwnProps = {
   resourceId: FolderId,
   selected: boolean,
+  onResourceNotFound: (id: FolderId) => any,
   selectFolder: (resource: HasId) => any
 }
 type Props = OwnProps & {
