@@ -1,6 +1,6 @@
+import ConfirmationModal from 'components/modals/ConfirmationModal'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import ConfirmationModal from 'components/modals/ConfirmationModal'
 
 export type Props = {
   icon: string,

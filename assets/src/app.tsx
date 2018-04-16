@@ -16,14 +16,15 @@
 
 // import socket from "./socket"
 
+import MainContainer from 'containers/Main'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
+import { AppContainer } from 'react-hot-loader'
 import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
-import { AppContainer } from 'react-hot-loader'
-import MainContainer from 'containers/Main'
-import { store } from './reducer'
 import { history } from 'reducers/router'
+
+import { store } from './reducer'
 
 const APP_ROOT: string = 'main'
 

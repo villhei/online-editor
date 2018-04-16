@@ -1,6 +1,6 @@
+import PromptModalView from 'components/modals/PromptModal'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import PromptModalView from 'components/modals/PromptModal'
 
 export type Props = {
   icon: string,

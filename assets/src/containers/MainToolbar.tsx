@@ -14,9 +14,8 @@ import {
   deleteItems
 } from 'actions/page-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
-import PromptModal, {
-  Props as PromptModalProps
-} from 'containers/modals/PromptModal'
+import ConfirmationModal from 'containers/modals/ConfirmationModal'
+import PromptModal from 'containers/modals/PromptModal'
 import * as React from 'react'
 import {
   Dispatch,
@@ -54,16 +53,36 @@ type DispatchProps = {
 type Props = StateProps & DispatchProps
 
 type State = {
-  modal: any | null,
+  modal: {
+    display: string,
+    icon: string,
+    title: string,
+    message: string,
+    placeholder: string,
+    onConfirm: () => any,
+    onCancel: () => any
+  },
   modalInput: string
+}
+
+const dummy = () => null
+
+const initialState: State = {
+  modal: {
+    display: 'none',
+    icon: '',
+    title: '',
+    message: '',
+    placeholder: '',
+    onConfirm: dummy,
+    onCancel: dummy
+  },
+  modalInput: ''
 }
 
 class MainToolbar extends React.Component<Props, State> {
 
-  state = {
-    modal: null,
-    modalInput: ''
-  }
+  state = initialState
 
   refresh = () => {
     const { folderId, getFolder } = this.props
@@ -82,16 +101,16 @@ class MainToolbar extends React.Component<Props, State> {
     const { folderId, createFolder } = this.props
     this.setState({
       modal: {
+        display: 'prompt',
         icon: 'folder',
         title: 'Create new folder',
         message: 'Enter the name for the new folder',
         placeholder: 'New folder',
         onConfirm: () => {
           createFolder(this.state.modalInput, folderId)
-          this.setState({ modal: null })
+          this.setState(initialState)
         },
-        onChange: this.handleInputchange,
-        onCancel: () => this.setState({ modal: null })
+        onCancel: () => this.setState(initialState)
       }
     })
   }
@@ -100,23 +119,34 @@ class MainToolbar extends React.Component<Props, State> {
     const { folderId, createDocument } = this.props
     this.setState({
       modal: {
+        display: 'prompt',
         icon: 'file',
         title: 'Create new document',
         message: 'Enter the name for the new document',
         placeholder: 'New document',
         onConfirm: () => {
           createDocument(this.state.modalInput, folderId)
-          this.setState({ modal: null })
+          this.setState(initialState)
         },
-        onChange: this.handleInputchange,
-        onCancel: () => this.setState({ modal: null })
+        onCancel: () => this.setState(initialState)
       }
     })
   }
 
   handleDeleteItems = () => {
     const { selectedItems, deleteItems } = this.props
-    deleteItems(selectedItems)
+    const itemCount = Object.keys(selectedItems).length
+    this.setState({
+      modal: {
+        display: 'confirm',
+        icon: 'remove',
+        title: 'Delete selected items?',
+        message: `Are you sure you want to delete the selected ${itemCount} items?`,
+        placeholder: '',
+        onConfirm: () => deleteItems(selectedItems),
+        onCancel: () => this.setState({ modal: initialState.modal })
+      }
+    })
   }
 
   render() {
@@ -139,7 +169,12 @@ class MainToolbar extends React.Component<Props, State> {
           createFolder={this.handleCreateFolder}
           createDocument={this.handleCreateDocument}
         />
-        {modal && <PromptModal {...modal} value={modalInput} isValid={isValid} />}
+        {modal.display === 'prompt' && <PromptModal
+          {...modal}
+          value={modalInput}
+          isValid={isValid} onChange={this.handleInputchange}
+        />}
+        {modal.display === 'confirm' && <ConfirmationModal {...modal} />}
       </>)
   }
 }

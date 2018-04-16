@@ -90,9 +90,6 @@ export const deleteItems = bindThunkAction(deleteFoldersAction, (items, dispatch
   const documents = filterEntities(items, isDocument)
   const folders = filterEntities(items, isFolder)
 
-  const affectedFolders: Set<FolderId> = new Set(folders.map(folder => folder.parent)
-    .concat(documents.map(document => document.folder)))
-
   const deletedEntities = deleteEntities(documents, dispatch, deleteDocument)
     .then(async ids =>
       ids.concat(await

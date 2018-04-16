@@ -31,7 +31,6 @@ export const initialState: DocumentReducerState = {
 }
 
 export default function documentReducer(state: DocumentReducerState = initialState, action: Action): DocumentReducerState {
-  console.log('action', action)
   if (isType(action, getDocumentsAction.done) || isType(action, getDocumentsByFolderAction.done)) {
     const documents = action.payload.result
     return updateMany(state, documents)
