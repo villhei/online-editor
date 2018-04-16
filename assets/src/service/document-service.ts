@@ -1,11 +1,19 @@
 import axios from 'axios'
-import { ApiResource, ApiResourceId, isAxiosError, Partial } from './common'
 import { FolderId } from 'service/folder-service'
+
+import {
+  ApiResource,
+  ApiResourceId,
+  HasId,
+  Map,
+  Partial,
+  isAxiosError
+} from './common'
 
 export type TextDocumentId = ApiResourceId
 
 export type TextDocument = {
-  readonly id: TextDocumentId,
+  readonly id: ApiResourceId,
   readonly name: string,
   readonly content: string,
   readonly owner: string,
@@ -29,7 +37,7 @@ export function create(document: PartialTextDocument): Promise<TextDocument> {
     .then(response => response.data)
 }
 
-export function update(id: TextDocumentId, document: PartialTextDocument): Promise<TextDocument> {
+export function update(id: ApiResourceId, document: PartialTextDocument): Promise<TextDocument> {
   return axios.put<TextDocument>(`/api/documents/${id}?overwrite=false`, document)
     .then(res => res.data)
     .catch(err => {
@@ -51,10 +59,18 @@ export function getAll(): Promise<Array<TextDocument>> {
   return axios.get<Array<TextDocument>>('/api/documents').then(res => res.data)
 }
 
-export function getById(id: TextDocumentId): Promise<TextDocument> {
+export function getById(id: ApiResourceId): Promise<TextDocument> {
   return axios.get<TextDocument>(`/api/documents/${id}`).then(res => res.data)
 }
 
-export function deleteById(id: TextDocumentId): Promise<void> {
-  return axios.delete('/api/documents/' + id).then(res => res.data)
+export function deleteByDocument(d: HasId): Promise<ApiResourceId> {
+  return axios.delete('/api/documents/' + d.id).then(() => d.id)
+}
+
+export function deleteMultiple(items: Map<HasId>): Promise<ApiResourceId[]> {
+  const documents: Array<TextDocument> = Object.keys(items)
+    .map(id => (items[id] as TextDocument))
+    .filter(d => isDocument(d))
+  const deletions = documents.map(d => deleteByDocument(d))
+  return Promise.all(deletions)
 }

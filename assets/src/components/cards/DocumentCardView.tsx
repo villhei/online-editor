@@ -1,9 +1,13 @@
 import * as React from 'react'
-import CardDisplay from './CardDisplay'
 import { TextDocument } from 'service/document-service'
+
+import CardDisplay from './CardDisplay'
+import SelectedButton from './SelectedButton'
 
 type Props = {
   document: TextDocument,
+  selected: boolean,
+  selectDocument: (event: React.MouseEvent<HTMLElement>) => void,
   editDocument: () => any
 }
 
@@ -21,7 +25,7 @@ function formatDate(isoString: string): string {
 }
 
 export default (props: Props) => {
-  const { document, editDocument } = props
+  const { document, editDocument, selected, selectDocument } = props
   return (<CardDisplay
     header={document.name}
     icon={{
@@ -34,6 +38,9 @@ export default (props: Props) => {
         Last modified {formatDate(document.updated_at)}
       </div>
       <div className='ui divider' />
+      <SelectedButton
+        selected={selected}
+        onSelect={selectDocument} />
     </>
   </CardDisplay >
   )

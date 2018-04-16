@@ -1,6 +1,5 @@
 defmodule OnlineEditor.Document.Query do
-  import Ecto.Query
-  alias OnlineEditor.Repo
+  use OnlineEditor, :query
   alias OnlineEditor.Document
 
   def descriptions do
@@ -45,12 +44,6 @@ defmodule OnlineEditor.Document.Query do
   end
 
   def delete(id) do
-    with %Document{} = document <- get_by_id(id),
-         changeset <- Document.delete_changeset(document),
-         {:ok, document} <- Repo.update(changeset) do
-      {:ok, document}
-    else
-      error -> error
-    end
+    do_delete(__MODULE__, id)
   end
 end

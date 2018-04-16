@@ -1,37 +1,61 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import wrapApiResource from 'containers/ApiResourceHOC'
-import { ApiResource } from 'service/common'
-import { getFolder, selectFolder } from 'actions/folder-actions'
-import { FolderId, Folder, isFolder } from 'service/folder-service'
-import { RootState } from '../reducer'
+import {
+  getFolder,
+  showFolder
+} from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderCardView from 'components/cards/FolderCardView'
+import wrapApiResource from 'containers/ApiResourceHOC'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
+import {
+  ApiResource,
+  HasId
+} from 'service/common'
+import {
+  Folder,
+  FolderId,
+  isFolder
+} from 'service/folder-service'
 
-type Props = {
+import { RootState } from '../reducer'
+
+type OwnProps = {
   resourceId: FolderId,
+  selected: boolean,
+  onResourceNotFound: (id: FolderId) => any,
+  selectFolder: (resource: HasId) => any
+}
+type Props = OwnProps & {
   resource: Folder,
   getResource: (id: FolderId) => any,
-  selectFolder: (id: FolderId) => any
+  showFolder: (id: FolderId) => any
 }
 
 class FolderCard extends React.Component<Props> {
-  handleSelectFolder = () => {
-    const { resourceId, selectFolder } = this.props
-    selectFolder(resourceId)
+  handleShowFolder = () => {
+    const { resourceId, showFolder } = this.props
+    showFolder(resourceId)
+  }
+  handleSelectFolder = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation()
+    const { resource, selectFolder } = this.props
+    selectFolder(resource)
   }
   render() {
-    const folder = this.props.resource
+    const { resource, selected } = this.props
     return <FolderCardView
-      folder={folder}
-      selectFolder={this.handleSelectFolder} />
+      folder={resource}
+      selected={selected}
+      selectFolder={this.handleSelectFolder}
+      showFolder={this.handleShowFolder} />
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: { resourceId: FolderId }) => {
-  const { resourceId } = ownProps
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: OwnProps) => {
+  const { resourceId, selected } = ownProps
   const resource: ApiResource<Folder> = model.folders.byId[resourceId]
   return {
+    selected,
     resource,
     resourceId
   }
@@ -40,7 +64,7 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: { resourceId
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
     getResource: (id: FolderId) => getFolder(dispatch, { id }),
-    selectFolder: (id: FolderId) => dispatch(selectFolder({ id }))
+    showFolder: (id: FolderId) => dispatch(showFolder({ id }))
   }
 }
 

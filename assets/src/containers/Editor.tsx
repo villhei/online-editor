@@ -1,15 +1,16 @@
-import * as React from 'react'
-import { Controlled as CodeMirror } from 'react-codemirror2'
-import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../reducer'
 import { getDocument } from 'actions/document-actions'
-import { updatedocumentContent, resetDocumentChanges } from 'actions/editor-actions'
-import { ApiResource } from 'service/common'
-import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
-import wrapApiResource from 'containers/ApiResourceHOC'
-import Loading from 'components/Loading'
+import { resetDocumentChanges, updatedocumentContent } from 'actions/editor-actions'
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
+import Loading from 'components/Loading'
+import wrapApiResource from 'containers/ApiResourceHOC'
+import * as React from 'react'
+import { Controlled as CodeMirror } from 'react-codemirror2'
+import { Dispatch, connect } from 'react-redux'
+import { ApiResource, ApiResourceId } from 'service/common'
+import { TextDocument, isDocument } from 'service/document-service'
+
+import { RootState } from '../reducer'
 
 const EDITOR_OPTIONS = {
   lineNumbers: true,
@@ -60,7 +61,7 @@ class Editor extends React.PureComponent<EditorProps> {
 }
 
 const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any) => {
-  const resourceId: TextDocumentId = ownProps.match.params.documentId
+  const resourceId: ApiResourceId = ownProps.match.params.documentId
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   const { modifiedContent } = state.editor
   const { saving } = ui.page.editorToolbar

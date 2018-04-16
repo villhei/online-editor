@@ -25,7 +25,15 @@ defmodule OnlineEditorWeb do
       import OnlineEditorWeb.Gettext
       alias OnlineEditorWeb.ErrorView
 
-      def respond_with_error(conn, error_code, error_view, error_message \\ []) do
+      defp handle_access_error(conn, cause) do
+        case cause do
+          {:error, _} -> respond_with_error(conn, 400, "400.json")
+          nil -> respond_with_error(conn, 404, "404.json")
+          _ -> respond_with_error(conn, 500, "500.json")
+        end
+      end
+
+      defp respond_with_error(conn, error_code, error_view, error_message \\ []) do
         conn
         |> put_status(error_code)
         |> render(ErrorView, error_view, error_message)

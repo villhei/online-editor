@@ -1,23 +1,21 @@
+import { getFolder } from 'actions/folder-actions'
+import { push } from 'react-router-redux'
+import { ByResourceParams } from 'service/common'
+import { TextDocument, TextDocumentId, create, deleteByDocument, update } from 'service/document-service'
+import { Folder, PartialFolder } from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'
 import { bindThunkAction } from 'typescript-fsa-redux-thunk'
-import { push } from 'react-router-redux'
+
 import {
-  deleteDocumentAction,
-  createDocumentAction,
-  updateDocumentAction,
-  CreateDocumentParams,
   UpdateDocumentParams,
-  updateDocument
+  createDocumentAction,
+  deleteDocumentAction,
+  updateDocument,
+  updateDocumentAction
 } from './document-actions'
-
 import {
-  createFolder, createFolderAction, CreateFolderParams
+  createFolder, createFolderAction
 } from './folder-actions'
-
-import { TextDocument, create, deleteById, update } from 'service/document-service'
-import { Folder } from 'service/folder-service'
-
-import { getFolder } from 'actions/folder-actions'
 
 export const UPDATE_DOCUMENT_CONTENT = 'UPDATE_DOCUMENT_CONTENT'
 export const UPDATE_DOCUMENT_NAME = 'UPDATE_DOCUMENT_NAME'
@@ -45,20 +43,21 @@ export const updateDocumentName = actionCreator<UpdateParams>(UPDATE_DOCUMENT_NA
 
 export const expectConfirmAction = actionCreator<ExpectConfirmAction>(EXPECT_CONFIRM_ACTION)
 
-export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (params, dispatch): Promise<void> => {
-  await deleteById(params.document.id)
-  await getFolder(dispatch, { id: params.document.folder })
+export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (params, dispatch): Promise<TextDocumentId> => {
+  const deletedId = await deleteByDocument(params.resource)
+  await getFolder(dispatch, { id: params.resource.folder })
   dispatch(push('/'))
+  return deletedId
 })
 
-export const createAndSelect = bindThunkAction(createDocumentAction, async (params: CreateDocumentParams, dispatch): Promise<TextDocument> => {
-  const document = await create(params.document)
+export const createAndSelect = bindThunkAction(createDocumentAction, async (params: ByResourceParams<PartialFolder>, dispatch): Promise<TextDocument> => {
+  const document = await create(params.resource)
   getFolder(dispatch, { id: document.folder })
   dispatch(push('/edit/' + document.id))
   return document
 })
 
-export const createFolderAndRefresh = bindThunkAction(createFolderAction, async (params: CreateFolderParams, dispatch): Promise<Folder> => {
+export const createFolderAndRefresh = bindThunkAction(createFolderAction, async (params: ByResourceParams<Folder>, dispatch): Promise<Folder> => {
   const folder = await createFolder(dispatch, params)
   getFolder(dispatch, { id: folder.parent })
   return folder

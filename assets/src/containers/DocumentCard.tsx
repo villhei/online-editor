@@ -1,16 +1,33 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { push } from 'react-router-redux'
-import wrapApiResource from 'containers/ApiResourceHOC'
-import { ApiResource } from 'service/common'
 import { getDocument } from 'actions/document-actions'
-import { TextDocumentId, TextDocument, isDocument } from 'service/document-service'
-import { RootState } from '../reducer'
-import DocumentCardView from 'components/cards/DocumentCardView'
 import LoadingCard from 'components/LoadingCard'
+import DocumentCardView from 'components/cards/DocumentCardView'
+import wrapApiResource from 'containers/ApiResourceHOC'
+import * as React from 'react'
+import {
+  Dispatch,
+  connect
+} from 'react-redux'
+import { push } from 'react-router-redux'
+import {
+  ApiResource,
+  HasId
+} from 'service/common'
+import {
+  TextDocument,
+  TextDocumentId,
+  isDocument
+} from 'service/document-service'
 
-type Props = {
+import { RootState } from '../reducer'
+
+type OwnProps = {
   resourceId: TextDocumentId,
+  selected: boolean,
+  onResourceNotFound: (id: TextDocumentId) => any,
+  selectDocument: (resource: HasId) => void
+}
+
+type Props = OwnProps & {
   resource: TextDocument,
   getResource: (id: TextDocumentId) => any,
   editResource: (id: TextDocumentId) => any
@@ -21,16 +38,28 @@ class DocumentCard extends React.Component<Props> {
     const { resourceId, editResource } = this.props
     editResource(resourceId)
   }
+
+  selectDocument = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation()
+    const { resource, selectDocument } = this.props
+    selectDocument(resource)
+  }
   render() {
-    const document = this.props.resource
-    return <DocumentCardView document={document} editDocument={this.editDocument} />
+    const { resource, selected } = this.props
+    return <DocumentCardView
+      selected={selected}
+      document={resource}
+      selectDocument={this.selectDocument}
+      editDocument={this.editDocument} />
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: { resourceId: TextDocumentId }) => {
-  const { resourceId } = ownProps
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: OwnProps) => {
+  const { resourceId, selected, selectDocument } = ownProps
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   return {
+    selected,
+    selectDocument,
     resource,
     resourceId
   }

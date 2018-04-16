@@ -32,7 +32,15 @@ defmodule OnlineEditor.Folder do
     |> validate_required([:name])
   end
 
+  def delete_changeset(%Folder{} = folder) do
+    deletion = %{deleted: true, deleted_at: Ecto.DateTime.utc()}
+    folder
+    |> change(deletion)
+    |> validate_required([:deleted, :deleted_at])
+  end
+
   def load_children(%Folder{} = model) do
     model |> Repo.preload(:children)
   end
+
 end

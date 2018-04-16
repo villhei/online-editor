@@ -52,4 +52,11 @@ defmodule OnlineEditorWeb.FolderController do
         |> respond_with_error(400, "400.json", error: "Unable to create document")
     end
   end
+
+  def delete(conn, %{"id" => id}) do
+    case Query.delete(id) do
+      {:ok, _} -> send_resp(conn, :no_content, "")
+      error -> handle_access_error(conn, error)
+    end
+  end
 end

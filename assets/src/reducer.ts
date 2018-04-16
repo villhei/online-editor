@@ -1,13 +1,25 @@
-import { createStore, combineReducers, applyMiddleware, Reducer } from 'redux'
-import { routerMiddleware, RouterState } from 'react-router-redux'
+import {
+  RouterState,
+  routerMiddleware
+} from 'react-router-redux'
+import documentReducer, {
+  DocumentReducerState
+} from 'reducers/documents'
+import folderReducer, {
+  FolderState
+} from 'reducers/folder'
+import {
+  Reducer,
+  applyMiddleware,
+  combineReducers,
+  createStore
+} from 'redux'
 import thunk from 'redux-thunk'
-import documentReducer, { DocumentReducerState } from 'reducers/documents'
-import folderReducer, { FolderState } from 'reducers/folder'
 
-import { history, router } from 'reducers/router'
-import pageReducer, { PageState } from 'reducers/page'
 import editorReducer, { EditorState } from 'reducers/editor'
 import errorReducer, { ErrorState } from 'reducers/error'
+import pageReducer, { PageState } from 'reducers/page'
+import { history, router } from 'reducers/router'
 
 const reactRouterMiddleware = routerMiddleware(history)
 

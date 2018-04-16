@@ -1,10 +1,11 @@
-import * as React from 'react'
 import * as classNames from 'classnames'
+import * as React from 'react'
 
 type Props = {
-  header: string
+  header: JSX.Element | string
   disabled?: boolean,
-  children?: JSX.Element | string | any,
+  selected?: boolean,
+  children?: JSX.Element | string,
   icon: {
     name: string,
     color: string
@@ -13,16 +14,32 @@ type Props = {
 }
 
 export default (props: Props) => {
-  const { header, icon: { name, color }, buttonAction, disabled } = props
-  const iconClasses = classNames('huge right floated', color, name, {
-    'disabled': disabled
-  }, 'icon')
+  const {
+    selected,
+    header,
+    icon: {
+      name,
+      color },
+    buttonAction,
+    disabled } = props
+  const cardClasses = classNames(
+    'ui',
+    { 'blue raised': selected },
+    'card'
+  )
+  const iconClasses = classNames(
+    'huge right floated',
+    color,
+    name, {
+      'disabled': disabled
+    },
+    'icon')
   const action = !disabled ? buttonAction : () => null
   return (
-    <a className='ui card' onClick={action}>
+    <a className={cardClasses} onClick={action}>
       <div className='content'>
         <i className={iconClasses}></i>
-        <div className='small header'>
+        <div className='header'>
           {header}
         </div>
         {props.children}

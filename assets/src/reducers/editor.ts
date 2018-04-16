@@ -1,8 +1,12 @@
+import { updateDocumentAction } from 'actions/document-actions'
+import {
+  resetDocumentChanges,
+  updateDocumentName,
+  updatedocumentContent
+} from 'actions/editor-actions'
+import { LOCATION_CHANGE } from 'react-router-redux'
 import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
-import { LOCATION_CHANGE } from 'react-router-redux'
-import { updateDocumentAction } from 'actions/document-actions'
-import { updatedocumentContent, updateDocumentName, resetDocumentChanges } from 'actions/editor-actions'
 
 export type EditorState = {
   modifiedContent?: string,

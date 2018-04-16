@@ -1,41 +1,39 @@
-import { Action } from 'redux'
-import { isType } from 'typescript-fsa'
-import { LOCATION_CHANGE } from 'react-router-redux'
 import {
+  deleteDocumentAction,
   getDocumentAction,
-  updateDocumentAction,
-  deleteDocumentAction
+  updateDocumentAction
 } from 'actions/document-actions'
 import {
-  toggleMenu
-} from 'actions/page-actions'
-import {
-  expectConfirmAction,
-  ConfirmActionName
+  ConfirmActionName,
+  expectConfirmAction
 } from 'actions/editor-actions'
+import {
+  setSelectedItems
+} from 'actions/page-actions'
+import { LOCATION_CHANGE } from 'react-router-redux'
+import { Action } from 'redux'
+import {
+  HasId,
+  Map
+} from 'service/common'
+import { isType } from 'typescript-fsa'
 
 export type PageState = {
-  navigationOpen: boolean,
   editorToolbar: {
     refreshing: boolean,
     saving: boolean,
-    deleting: boolean,
-    confirmation: {
-      action?: ConfirmActionName
-    }
-  }
+    deleting: boolean
+  },
+  selectedItems: Map<HasId>
 }
 
 export const initialState: PageState = {
-  navigationOpen: false,
   editorToolbar: {
     refreshing: false,
     saving: false,
-    deleting: false,
-    confirmation: {
-      action: undefined
-    }
-  }
+    deleting: false
+  },
+  selectedItems: {}
 }
 
 function updateToolbarItem(state: PageState, itemName: string, newStatus: boolean): PageState {
@@ -50,35 +48,10 @@ function updateToolbarItem(state: PageState, itemName: string, newStatus: boolea
 }
 
 export default function pageReducer(state: PageState = initialState, action: Action): PageState {
-  if (isType(action, toggleMenu)) {
-    if (action.payload.menu === 'navigation') {
-      return {
-        ...state,
-        navigationOpen: !state.navigationOpen
-      }
-    }
-  }
-  if (action.type === LOCATION_CHANGE) {
+  if (isType(action, setSelectedItems)) {
     return {
       ...state,
-      navigationOpen: false,
-      editorToolbar: initialState.editorToolbar
-    }
-  }
-  if (isType(action, expectConfirmAction)) {
-    const { editorToolbar: { confirmation } } = state
-    const modifiedState = {
-      ...state.editorToolbar,
-      confirmation: {
-        action: action.payload.action,
-        confirmed: false
-      }
-    }
-    return {
-      ...state,
-      editorToolbar: {
-        ...modifiedState
-      }
+      selectedItems: action.payload.selection
     }
   }
   if (isType(action, deleteDocumentAction.started)) {

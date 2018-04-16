@@ -47,6 +47,13 @@ defmodule OnlineEditorWeb.FolderQueryTest do
     assert expected == actual
   end
 
+
+  test "deleting flags entries se deleted" do
+    folder = insert(:folder)
+    actual = Query.delete(folder.id)
+    assert {:ok, %{deleted: true}} = actual
+  end
+
   test "find_by_name returns a folder populated with documents" do
     folder = insert(:folder)
 

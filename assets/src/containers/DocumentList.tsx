@@ -1,49 +1,131 @@
-import * as React from 'react'
-import { connect, Dispatch } from 'react-redux'
-import { RootState } from '../reducer'
-import { createAndSelect, createFolderAndRefresh } from 'actions/editor-actions'
-import { getDocumentsByFolder, getDocument } from 'actions/document-actions'
-import { getChildren, getFolder, createFolder, selectFolder } from 'actions/folder-actions'
-import { Folder, FolderId, isFolder, PartialFolder } from 'service/folder-service'
+import {
+  getDocument,
+  getDocumentsByFolder
+} from 'actions/document-actions'
+import {
+  createAndSelect,
+  createFolderAndRefresh
+} from 'actions/editor-actions'
+import {
+  createFolder,
+  getChildren,
+  getFolder,
+  showFolder
+} from 'actions/folder-actions'
+import {
+  setSelectedItems
+} from 'actions/page-actions'
 import DocumentList from 'components/DocumentList'
 import LoadingComponent from 'components/Loading'
 import wrapApiResource from 'containers/ApiResourceHOC'
+import * as React from 'react'
+import {
+  DragSource,
+  DropTarget
+} from 'react-dnd'
+import {
+  Dispatch,
+  connect
+} from 'react-redux'
+
+import {
+  ApiResourceId,
+  HasId,
+  Map
+} from 'service/common'
 import { TextDocumentId } from 'service/document-service'
+import {
+  Folder,
+  FolderId,
+  PartialFolder,
+  isFolder
+} from 'service/folder-service'
+
+import { RootState } from '../reducer'
 
 type Props = {
   getChildren: (id: FolderId) => any,
   getDocumentsByFolder: (folder: FolderId) => any,
   getDocumentById: (id: TextDocumentId) => any,
   getResource: (id: FolderId) => any,
-  selectFolder: (id: FolderId) => any,
+  showFolder: (id: FolderId) => any,
+  setSelection: (selection: Map<HasId>) => any,
   resourceId: FolderId,
-  resource: Folder
+  resource: Folder,
+  selected: Map<HasId>
 }
 
-class DocumentListContainer extends React.Component<Props, any> {
+function sortResource(documents: Array<ApiResourceId>, descending = true): Array<ApiResourceId> {
+  const sorted: Array<ApiResourceId> = documents.slice(0)
+    .sort((a, b) => {
+      return a.localeCompare(b)
+    })
+  return sorted
+}
+
+class DocumentListContainer extends React.Component<Props, {}> {
+
   parentFolder = () => {
-    const { resource, selectFolder } = this.props
-    selectFolder(resource.parent)
+    const { resource, showFolder } = this.props
+    showFolder(resource.parent)
   }
+
+  selectResource = (resource: HasId) => {
+    const { selected, setSelection } = this.props
+    if (selected[resource.id]) {
+      const {
+        [resource.id]: omit,
+        ...newSelection
+      } = selected
+      setSelection(newSelection)
+    } else {
+      setSelection({
+        ...selected,
+        [resource.id]: resource
+      })
+    }
+  }
+
+  handleResourceNotFound = (resource: ApiResourceId) => {
+    const { getResource, resourceId } = this.props
+    getResource(resourceId)
+  }
+
   render() {
-    const { resource, getResource, getDocumentById } = this.props
-    const { documents, children } = resource
+    const {
+      resource,
+      selected,
+      getResource,
+      getDocumentById
+    } = this.props
+    const {
+      documents,
+      children
+    } = resource
+
+    const sortedDocuments = sortResource(documents)
+    const sortedFolders = sortResource(children)
+
     return <DocumentList
       getFolderById={getResource}
+      selected={selected}
       getByDocumentId={getDocumentById}
+      selectResource={this.selectResource}
+      onResourceNotFound={this.handleResourceNotFound}
       folder={resource}
-      folders={children}
-      documents={documents}
+      folders={sortedFolders}
+      documents={sortedDocuments}
       parentFolder={this.parentFolder} />
   }
 }
 
-const mapStateToProps = ({ model }: RootState) => {
-  const resourceId = model.folders.current
+const mapStateToProps = ({ model, ui }: RootState, ownProps: any) => {
+  const resourceId: FolderId = ownProps.match.params.folderId
   const resource = model.folders.byId[resourceId]
   return {
     resourceId,
-    resource
+    resource,
+    selected: ui.page.selectedItems
   }
 }
 
@@ -53,7 +135,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     getDocumentsByFolder: (folder: string) => getDocumentsByFolder(dispatch, folder),
     getDocumentById: (id: TextDocumentId) => getDocument(dispatch, { id }),
     getResource: (id: FolderId) => getFolder(dispatch, { id }),
-    selectFolder: (id: FolderId) => dispatch(selectFolder({ id }))
+    showFolder: (id: FolderId) => dispatch(showFolder({ id })),
+    setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection }))
   }
 }
 
