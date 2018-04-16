@@ -143,8 +143,11 @@ class MainToolbar extends React.Component<Props, State> {
         title: 'Delete selected items?',
         message: `Are you sure you want to delete the selected ${itemCount} items?`,
         placeholder: '',
-        onConfirm: () => deleteItems(selectedItems),
-        onCancel: () => this.setState({ modal: initialState.modal })
+        onConfirm: () => {
+          deleteItems(selectedItems)
+          this.setState(initialState)
+        },
+        onCancel: () => this.setState(initialState)
       }
     })
   }
