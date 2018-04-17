@@ -20,10 +20,6 @@ import LoadingComponent from 'components/Loading'
 import wrapApiResource from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
-  DragSource,
-  DropTarget
-} from 'react-dnd'
-import {
   Dispatch,
   connect
 } from 'react-redux'
