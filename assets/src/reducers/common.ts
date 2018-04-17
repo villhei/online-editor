@@ -38,9 +38,6 @@ export function removeSingle<T extends HasId, S extends Object>(
     ...byId
   } = state.byId
   const newState = Object.assign({}, state, { byId })
-  console.log('removed', id)
-  console.log('state', state)
-  console.log('newState', newState)
   return newState
 }
 

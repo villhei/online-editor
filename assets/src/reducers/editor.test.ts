@@ -1,3 +1,7 @@
+/**
+ * @jest-environment node
+ */
+
 import { Action } from 'redux'
 import actionCreatorFactory from 'typescript-fsa'
 import { LOCATION_CHANGE } from 'react-router-redux'

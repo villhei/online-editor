@@ -45,7 +45,7 @@ export default function documentReducer(state: DocumentReducerState = initialSta
     return updateSingle(state, id, error as Error)
   }
   if (isType(action, deleteDocumentAction.done)) {
-    return removeSingle(state, action.payload.params.resource.id)
+    return removeSingle(state, action.payload.result)
   }
   if (isType(action, deleteDocumentsAction.done)) {
     return removeMany(state, action.payload.result)
