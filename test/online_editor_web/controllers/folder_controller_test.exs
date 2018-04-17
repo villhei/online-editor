@@ -92,6 +92,13 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     assert json_response(conn, 200) == render_json("folder.json", assigns)
   end
 
+  test "PUT 200 - update path allows updating documents", %{conn: conn} do
+    folder = insert(:folder)
+    conn = put(conn, "/api/folders/#{folder.id}", %{name: "new name"})
+    body = json_response(conn, 200)
+    assert body["name"] == "new name"
+  end
+
   test "DELETE 204 - delete path allows deleting folders", %{conn: conn} do
     folder = insert(:folder)
     conn = delete(conn, "/api/folders/#{folder.id}")

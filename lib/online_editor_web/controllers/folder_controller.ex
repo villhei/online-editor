@@ -53,6 +53,18 @@ defmodule OnlineEditorWeb.FolderController do
     end
   end
 
+  def update(conn, %{"id" => id} = params) do
+    with %Folder{} = folder <- Query.get_by_id(id),
+         changeset <- Folder.changeset(folder, params),
+         {:ok, folder} <- Repo.update(changeset) do
+      conn
+        |> put_status(200)
+        |> render("show.json", folder: folder)
+    else
+      error -> handle_access_error(conn, error)
+    end
+  end
+
   def delete(conn, %{"id" => id}) do
     case Query.delete(id) do
       {:ok, _} -> send_resp(conn, :no_content, "")
