@@ -1,14 +1,12 @@
 import { getDocument } from 'actions/document-actions'
 import {
-  ConfirmActionName,
   deleteAndRefresh,
-  expectConfirmAction,
   resetDocumentChanges,
   updateAndRefresh,
   updateDocumentName
 } from 'actions/editor-actions'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
-import ConfirmationModal, { Props as ModalProps } from 'containers/modals/ConfirmationModal'
+import ConfirmationModal from 'containers/modals/ConfirmationModal'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
 import { push } from 'react-router-redux'
@@ -27,7 +25,7 @@ import {
 import { RootState } from '../reducer'
 
 export type DispatchProps = {
-  getDocument: (id: ApiResourceId) => Promise<TextDocument>,
+  getDocument: (id: ApiResourceId) => any,
   saveDocument: (id: ApiResourceId, document: PartialTextDocument) => any,
   resetDocumentChanges: () => any,
   deleteAndRefresh: (document: TextDocument) => any,
@@ -87,7 +85,7 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 
   refreshDocument = () => {
-    const { document, documentId, isModified, getDocument, resetDocumentChanges } = this.props
+    const { documentId, isModified, getDocument, resetDocumentChanges } = this.props
     if (!isModified) {
       getDocument(documentId)
     } else {
@@ -157,9 +155,7 @@ class EditorToolbar extends React.Component<Props, State> {
       documentId,
       document,
       isModified,
-      modifiedContent,
       modifiedName,
-      updateDocumentName,
       deleting,
       saving,
       refreshing

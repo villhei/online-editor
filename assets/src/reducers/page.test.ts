@@ -3,26 +3,15 @@
  */
 
 import { ACTION_DELETE_DOCUMENT, ACTION_GET_DOCUMENT, ACTION_UPDATE_DOCUMENT } from 'actions/document-actions'
-import { ToggleMenu, reset, toggleMenu } from 'actions/page-actions'
-import { TOGGLE_MENU } from 'constants/page'
-import { LOCATION_CHANGE } from 'react-router-redux'
-import { Action } from 'redux'
 import actionCreatorFactory from 'typescript-fsa'
 
 import pageReducer, { initialState } from './page'
 
 const actionFactory = actionCreatorFactory()
 
-const toggleAction = toggleMenu({ menu: 'navigation' })
-
 const deleteDocument = actionFactory.async<{}, typeof document>(ACTION_DELETE_DOCUMENT)
 const updateDocument = actionFactory.async<{}, typeof document>(ACTION_UPDATE_DOCUMENT)
 const getDocument = actionFactory.async<{}, typeof document>(ACTION_GET_DOCUMENT)
-
-const navigationAction = {
-  type: LOCATION_CHANGE,
-  payload: {}
-}
 
 const spinnerState = {
   ...initialState,

@@ -1,19 +1,11 @@
-/**
- * @jest-environment node
- */
-
 import {
   ACTION_CREATE_DOCUMENT,
-  ACTION_DELETE_DOCUMENT,
-  ACTION_GET_DOCUMENT,
-  ACTION_GET_DOCUMENTS
+  ACTION_DELETE_DOCUMENT
 } from 'actions/document-actions'
-import { Action } from 'redux'
 import { TextDocument, TextDocumentId } from 'service/document-service'
 import actionCreatorFactory from 'typescript-fsa'
 
 import documentReducer, {
-  DocumentReducerState,
   initialState
 } from './documents'
 
@@ -22,26 +14,14 @@ const document: TextDocument = {
   id: 'foo',
   name: 'example',
   owner: 'barguy',
+  folder: 'rootId',
   content: 'example document',
   inserted_at: new Date().toISOString(),
   updated_at: new Date().toISOString()
 }
 
-const other: TextDocument = {
-  id: 'bar',
-  name: 'example2',
-  owner: 'barguy',
-  content: 'example document 2',
-  inserted_at: new Date().toISOString(),
-  updated_at: new Date().toISOString()
-}
-
-const modifiedDocument: TextDocument = {
-  ...document,
-  content: 'modified content'
-}
-
 const newDocument: TextDocument = {
+  ...document,
   id: 'newId',
   name: 'someName',
   owner: 'someGuy',
@@ -60,8 +40,6 @@ const otherDocument: TextDocument = {
 
 const createDocument = actionFactory.async<{}, TextDocument>(ACTION_CREATE_DOCUMENT)
 const deleteDocument = actionFactory.async<{}, TextDocumentId>(ACTION_DELETE_DOCUMENT)
-
-const getDocument = actionFactory.async<{}, TextDocument>(ACTION_GET_DOCUMENT)
 
 describe('Document reducer', () => {
 

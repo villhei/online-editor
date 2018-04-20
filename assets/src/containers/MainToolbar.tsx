@@ -1,13 +1,8 @@
 import {
-  deleteDocuments
-} from 'actions/document-actions'
-import {
   createAndSelect,
   createFolderAndRefresh
 } from 'actions/editor-actions'
 import {
-  createFolder,
-  deleteFolders,
   getFolder
 } from 'actions/folder-actions'
 import {

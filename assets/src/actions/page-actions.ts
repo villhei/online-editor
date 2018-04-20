@@ -3,9 +3,7 @@ import {
 } from 'actions/document-actions'
 import {
   deleteFolder,
-  deleteFolders,
   deleteFoldersAction,
-  getFolder,
   getRootAction,
   getRootFolder
 } from 'actions/folder-actions'
@@ -24,7 +22,6 @@ import {
 import {
   Folder,
   FolderId,
-  getRoot,
   isFolder
 } from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'

@@ -1,7 +1,5 @@
 import { push } from 'react-router-redux'
 import {
-  ApiResource,
-  ApiResourceId,
   ByIdParams,
   ByResourceParams,
   HasId,

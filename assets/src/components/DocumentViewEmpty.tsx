@@ -1,5 +1,4 @@
 import * as React from 'react'
-import * as ReactMarkdown from 'react-markdown'
 
 export default () => {
   return <div className='ui container'>

@@ -7,8 +7,7 @@ export interface ApiResourceProps<T> {
   resource: ApiResource<T>,
   resourceId: ApiResourceId,
   getResource: (id: string) => any,
-  onResourceNotFound?: (id: string) => any,
-  error?: any
+  onResourceNotFound?: (id: string) => any
 }
 
 type TypeChecker<T> = (value: ApiResource<T>) => value is T
@@ -42,13 +41,13 @@ export default function wrapApiResource<T, P>(
         }
         if (isResourceLoaded) {
           if (resourceId) {
-            this.props.getResource(resourceId)
+            getResource(resourceId)
           }
         }
       }
 
       render() {
-        const { resource, error } = this.props
+        const { resource } = this.props
         if (isValueResolved(resource)) {
           return <Component {...this.props} />
         }

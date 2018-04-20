@@ -4,13 +4,8 @@ import {
   updateDocumentAction
 } from 'actions/document-actions'
 import {
-  ConfirmActionName,
-  expectConfirmAction
-} from 'actions/editor-actions'
-import {
   setSelectedItems
 } from 'actions/page-actions'
-import { LOCATION_CHANGE } from 'react-router-redux'
 import { Action } from 'redux'
 import {
   HasId,

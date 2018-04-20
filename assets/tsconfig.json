@@ -37,14 +37,12 @@
     },
     "allowJs": true
   },
-  "files": [
-    "src/app.tsx"
+  "include": [
+    "src/**/*"
   ],
   "exclude": [
     "node_modules",
     "priv",
-    "ts-build",
-    "**/*.test.ts",
-    "**/*.test.tsx"
+    "ts-build"
   ]
 }

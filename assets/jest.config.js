@@ -1,8 +1,14 @@
 module.exports = {
+  globals: {
+    'ts-jest': {
+      tsConfigFile: '../tsconfig.json'
+    }
+  },
   transform: {
     '^.+\\.tsx?$': 'ts-jest/preprocessor.js'
   },
   testRegex: '(/__tests__/.*|(\\.|/)(test|))\\.(jsx?|tsx?)$',
+  testEnvironment: 'node',
   moduleFileExtensions: [
     'ts',
     'tsx',
@@ -17,7 +23,7 @@ module.exports = {
     '^containers(.*)$': '<rootDir>/containers/$1',
     '^components(.*)$': '<rootDir>/components/$1',
     '^service(.*)$': '<rootDir>/service/$1',
-    '^reducers(.*)$': '<rootDir>/reducers/$1',
-    mocks: 'mocks'
-  }
+    '^reducers(.*)$': '<rootDir>/reducers/$1'
+  },
+  collectCoverage: true
 }

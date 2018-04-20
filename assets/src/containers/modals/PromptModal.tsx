@@ -30,7 +30,7 @@ class PromptModal extends React.Component<Props, any> {
 
   render() {
     const modalContainer = (document.getElementById('modal') as HTMLDivElement)
-    const { icon, title, message, placeholder, value, isValid, onChange, onCancel, onConfirm } = this.props
+    const { icon, title, message, placeholder, value, isValid, onChange, onCancel } = this.props
 
     return ReactDOM.createPortal(<PromptModalView
       title={title}

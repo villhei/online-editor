@@ -1,4 +1,4 @@
-import { clearError, selectRootFolder } from 'actions/page-actions'
+import { selectRootFolder } from 'actions/page-actions'
 import Loading from 'components/Loading'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'

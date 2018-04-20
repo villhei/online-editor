@@ -1,7 +1,7 @@
 import { getFolder } from 'actions/folder-actions'
 import { push } from 'react-router-redux'
 import { ByResourceParams } from 'service/common'
-import { TextDocument, TextDocumentId, create, deleteByDocument, update } from 'service/document-service'
+import { TextDocument, TextDocumentId, create, deleteByDocument } from 'service/document-service'
 import { Folder, PartialFolder } from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'
 import { bindThunkAction } from 'typescript-fsa-redux-thunk'
@@ -52,19 +52,19 @@ export const deleteAndRefresh = bindThunkAction(deleteDocumentAction, async (par
 
 export const createAndSelect = bindThunkAction(createDocumentAction, async (params: ByResourceParams<PartialFolder>, dispatch): Promise<TextDocument> => {
   const document = await create(params.resource)
-  getFolder(dispatch, { id: document.folder })
+  await getFolder(dispatch, { id: document.folder })
   dispatch(push('/edit/' + document.id))
   return document
 })
 
 export const createFolderAndRefresh = bindThunkAction(createFolderAction, async (params: ByResourceParams<Folder>, dispatch): Promise<Folder> => {
   const folder = await createFolder(dispatch, params)
-  getFolder(dispatch, { id: folder.parent })
+  await getFolder(dispatch, { id: folder.parent })
   return folder
 })
 
 export const updateAndRefresh = bindThunkAction(updateDocumentAction, async (params: UpdateDocumentParams, dispatch): Promise<TextDocument> => {
   const document = await updateDocument(dispatch, params)
-  getFolder(dispatch, { id: document.folder })
+  await getFolder(dispatch, { id: document.folder })
   return document
 })

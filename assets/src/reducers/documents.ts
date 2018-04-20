@@ -10,8 +10,7 @@ import {
 import { Action } from 'redux'
 import {
   ApiResource,
-  ResourceStatus,
-  isAxiosError
+  ResourceStatus
 } from 'service/common'
 import { TextDocument } from 'service/document-service'
 import { isType } from 'typescript-fsa'

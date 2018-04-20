@@ -1,25 +1,17 @@
-/**
- * @jest-environment node
- */
-
-import { Action } from 'redux'
-import actionCreatorFactory from 'typescript-fsa'
-import { LOCATION_CHANGE } from 'react-router-redux'
-import {
-  UPDATE_DOCUMENT_CONTENT,
-  UPDATE_DOCUMENT_NAME,
-  updatedocumentContent,
-  updateDocumentName,
-  resetDocumentChanges
-} from 'actions/editor-actions'
 import { updateDocumentAction } from 'actions/document-actions'
+import {
+  resetDocumentChanges,
+  updateDocumentName,
+  updatedocumentContent
+} from 'actions/editor-actions'
+
 import editorReducer, { initialState } from './editor'
 
 const updateContentAction = updatedocumentContent({ value: 'updated value' })
 
 const updateNameAction = updateDocumentName({ value: 'updated name' })
 
-const resetAction = resetDocumentChanges()
+const resetAction = resetDocumentChanges(undefined)
 
 const modifiedState = { ...initialState, modifiedContent: 'foo', modifiedName: 'bar' }
 
@@ -46,7 +38,7 @@ describe('Editor reducer', () => {
   })
 
   it('should reset the modifications on document update', () => {
-    const action = updateDocumentAction.done({})
+    const action = updateDocumentAction.done({ id: 'foo', document: {} })
     expect(editorReducer(modifiedState, action)).toEqual(initialState)
   })
 

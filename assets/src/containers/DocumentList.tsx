@@ -3,11 +3,6 @@ import {
   getDocumentsByFolder
 } from 'actions/document-actions'
 import {
-  createAndSelect,
-  createFolderAndRefresh
-} from 'actions/editor-actions'
-import {
-  createFolder,
   getChildren,
   getFolder,
   showFolder
@@ -33,7 +28,6 @@ import { TextDocumentId } from 'service/document-service'
 import {
   Folder,
   FolderId,
-  PartialFolder,
   isFolder
 } from 'service/folder-service'
 

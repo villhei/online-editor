@@ -19,7 +19,7 @@ import {
 import { RootState } from '../reducer'
 
 export type Props = {
-  getDocument: (id: TextDocumentId) => Promise<TextDocument>,
+  getDocument: (id: TextDocumentId) => any,
   navigate: (route: string) => any,
   documentId: string,
   document: ApiResource<TextDocument>,
@@ -37,7 +37,7 @@ class ViewToolbar extends React.Component<Props, any> {
   }
 
   render() {
-    const { documentId, document, refreshing } = this.props
+    const { document, refreshing } = this.props
     const commonProps = {
       editDisabled: document === ResourceStatus.NotFound,
       editDocument: this.editDocument,

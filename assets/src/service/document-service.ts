@@ -2,7 +2,6 @@ import axios from 'axios'
 import { FolderId } from 'service/folder-service'
 
 import {
-  ApiResource,
   ApiResourceId,
   HasId,
   Map,
@@ -24,12 +23,11 @@ export type TextDocument = {
 
 export type PartialTextDocument = Partial<TextDocument>
 
-export function isDocument(candidate: ApiResource<TextDocument>): candidate is TextDocument {
-  const document = candidate as TextDocument
+export function isDocument(candidate: any): candidate is TextDocument {
   return Boolean(document &&
-    typeof document.id === 'string' &&
-    typeof document.name === 'string' &&
-    typeof document.content === 'string')
+    typeof candidate.id === 'string' &&
+    typeof candidate.name === 'string' &&
+    typeof candidate.content === 'string')
 }
 
 export function create(document: PartialTextDocument): Promise<TextDocument> {

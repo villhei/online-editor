@@ -1,6 +1,5 @@
 import {
-  clearError,
-  selectRootFolder
+  clearError
 } from 'actions/page-actions'
 import Main from 'components/Main'
 import * as React from 'react'

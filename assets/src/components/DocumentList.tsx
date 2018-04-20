@@ -8,7 +8,6 @@ import {
   Map
 } from 'service/common'
 import {
-  TextDocument,
   TextDocumentId
 } from 'service/document-service'
 import {

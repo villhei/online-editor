@@ -7,7 +7,7 @@
     "deploy": "webpack --config webpack.config.prod.js ",
     "watch": "webpack --watch-stdin --progress --color",
     "typescript": "tsc",
-    "tslint": "tslint -p . -c tslint.json --fix 'src/**/*.{ts,tsx}'",
+    "lint": "tslint -p . -c tslint.json --fix 'src/**/*.{ts,tsx}'",
     "test": "yarn jest",
     "standard": "standard --fix",
     "webpack": "webpack",

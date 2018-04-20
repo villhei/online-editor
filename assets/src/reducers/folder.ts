@@ -2,19 +2,15 @@ import {
   deleteFolderaction,
   deleteFoldersAction,
   getChildrenAction,
-  getFolderAction,
-  getRootAction,
-  showFolder
+  getFolderAction
 } from 'actions/folder-actions'
 import { Action } from 'redux'
 import {
   ApiResource,
-  ResourceStatus,
-  isAxiosError
+  ResourceStatus
 } from 'service/common'
 import {
-  Folder,
-  FolderId
+  Folder
 } from 'service/folder-service'
 import { isType } from 'typescript-fsa'
 
