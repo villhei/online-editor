@@ -21,12 +21,12 @@ export type Folder = {
 
 export type PartialFolder = Partial<Folder>
 
-export function isFolder(candidate: ApiResource<Folder>): candidate is Folder {
-  const folder = (candidate as Folder)
-  return Boolean(folder &&
-    folder.id &&
-    folder.name &&
-    Array.isArray(folder.children))
+export function isFolder(candidate: any): candidate is Folder {
+  return Boolean(candidate &&
+    typeof candidate.id === 'string' &&
+    typeof candidate.name === 'string' &&
+    Array.isArray(candidate.documents) &&
+    Array.isArray(candidate.children))
 }
 
 export function create(folder: PartialFolder): Promise<Folder> {
