@@ -10,7 +10,7 @@ export function wrapAsyncWorker<P, S, E>(
     return worker(params).then(result => {
       dispatch(asyncAction.done({ params, result }))
       return result
-    }, error => {
+    }).catch(error => {
       dispatch(asyncAction.failed({ params, error }))
       throw error
     })
