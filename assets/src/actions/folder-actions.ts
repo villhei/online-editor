@@ -61,7 +61,7 @@ export const getChildren = wrapAsyncWorker(getChildrenAction,
 export const createFolder = wrapAsyncWorker(createFolderAction, ({ resource }) =>
   create(resource))
 
-export const deleteFolder = wrapAsyncWorker(deleteFolderaction, ({ resource: { id } }) =>
-  deleteByFolder({ id }))
+export const deleteFolder = wrapAsyncWorker(deleteFolderaction, ({ resource }) =>
+  deleteByFolder(resource))
 
 export const deleteFolders = wrapAsyncWorker(deleteFoldersAction, items => deleteMultiple(items))

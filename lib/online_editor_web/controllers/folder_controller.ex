@@ -9,10 +9,10 @@ defmodule OnlineEditorWeb.FolderController do
   def index(%Plug.Conn{query_params: %{"find" => name}} = conn, _params) do
     case Query.get_by_name(name) do
       nil ->
-        conn |> respond_with_error(404, "404.json")
+        conn |> render("index.json", folders: [])
 
       folder ->
-        conn |> render("folder.json", folder: folder)
+        conn |> render("index.json", folders: [folder])
     end
   end
 

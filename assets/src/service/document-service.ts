@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { FolderId } from 'service/folder-service'
 
 import {
@@ -6,6 +5,7 @@ import {
   HasId,
   Map,
   Partial,
+  configureApiEndpoints,
   isAxiosError
 } from './common'
 
@@ -24,23 +24,25 @@ export type TextDocument = {
 export type PartialTextDocument = Partial<TextDocument>
 
 export function isDocument(candidate: any): candidate is TextDocument {
-  return Boolean(document &&
+  return Boolean(candidate &&
     typeof candidate.id === 'string' &&
     typeof candidate.name === 'string' &&
     typeof candidate.content === 'string')
 }
 
-export function create(document: PartialTextDocument): Promise<TextDocument> {
-  return axios.post<Promise<TextDocument>>('/api/documents', document)
-    .then(response => response.data)
-}
+export const endpoints = configureApiEndpoints<TextDocument>('/api/documents')
+
+export const {
+  create,
+  getAll,
+  getById,
+  deleteResource
+} = endpoints
 
 export function update(id: ApiResourceId, document: PartialTextDocument): Promise<TextDocument> {
-  return axios.put<TextDocument>(`/api/documents/${id}?overwrite=false`, document)
-    .then(res => res.data)
+  return endpoints.update(id, document, { query: { overwrite: 'false' } })
     .catch(err => {
       if (isAxiosError(err) && err.response && err.response.status === 409) {
-        console.log('rejecting')
         return Promise.reject(new Error('An updated version of the document exists, please reload the document'))
       } else {
         return Promise.reject(err)
@@ -49,26 +51,15 @@ export function update(id: ApiResourceId, document: PartialTextDocument): Promis
 }
 
 export function getAllByFolder(id: FolderId): Promise<Array<TextDocument>> {
-  return axios.get<Array<TextDocument>>('/api/documents?folder=' + id)
-    .then(res => res.data)
+  return getAll({ query: { folder: id } })
 }
 
-export function getAll(): Promise<Array<TextDocument>> {
-  return axios.get<Array<TextDocument>>('/api/documents').then(res => res.data)
-}
-
-export function getById(id: ApiResourceId): Promise<TextDocument> {
-  return axios.get<TextDocument>(`/api/documents/${id}`).then(res => res.data)
-}
-
-export function deleteByDocument(d: HasId): Promise<ApiResourceId> {
-  return axios.delete('/api/documents/' + d.id).then(() => d.id)
-}
+export const deleteByDocument = (d: TextDocument) => deleteResource(d)
 
 export function deleteMultiple(items: Map<HasId>): Promise<ApiResourceId[]> {
-  const documents: Array<TextDocument> = Object.keys(items)
-    .map(id => (items[id] as TextDocument))
+  const documents: Array<TextDocument> = Object.values(items)
+    .map(item => (item as TextDocument))
     .filter(d => isDocument(d))
-  const deletions = documents.map(d => deleteByDocument(d))
+  const deletions = documents.map(d => deleteResource(d))
   return Promise.all(deletions)
 }

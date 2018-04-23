@@ -46,7 +46,7 @@ defmodule OnlineEditorWeb.FolderControllerTest do
   test "GET 200 - find by name can return the root folder", %{conn: conn} do
     folder = insert(:folder) |> Map.merge(@no_relations)
     conn = get(conn, "/api/folders/?find=Root")
-    assert json_response(conn, 200) == render_json("folder.json", %{folder: folder})
+    assert json_response(conn, 200) == render_json("index.json", %{folders: [folder]})
   end
 
   test "GET 200 - index path allows for fetching children", %{conn: conn} do
@@ -68,7 +68,7 @@ defmodule OnlineEditorWeb.FolderControllerTest do
 
   test "GET 404 - find by name returns not found for nonexistant folder", %{conn: conn} do
     conn = get(conn, "/api/folders/?find=Something")
-    assert json_response(conn, 404) == ErrorView.render("404.json")
+    assert json_response(conn, 200) == []
   end
 
   test "GET 200 - find by name can returns a folder populated with children", %{conn: conn} do
@@ -83,13 +83,13 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     conn = get(conn, "/api/folders/?find=Root")
 
     assigns = [
-      folder: %{
+      folders: [%{
         parent
         | children: [child], documents: []
-      }
+      }]
     ]
 
-    assert json_response(conn, 200) == render_json("folder.json", assigns)
+    assert json_response(conn, 200) == render_json("index.json", assigns)
   end
 
   test "PUT 200 - update path allows updating documents", %{conn: conn} do
