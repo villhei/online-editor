@@ -9,6 +9,10 @@
     "jsx": "react",
     "moduleResolution": "node",
     "baseUrl": "./src",
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "types": [
       "node"
     ],
@@ -37,10 +41,12 @@
     },
     "allowJs": true
   },
-  "include": [
-    "src/**/*"
+  "fils": [
+    "src/app.tsx"
   ],
   "exclude": [
+    "**/*.test.ts",
+    "**/*.test.tsx",
     "node_modules",
     "priv",
     "ts-build"
