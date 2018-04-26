@@ -32,14 +32,14 @@ export default function wrapApiResource<T, P>(
 
       handleGetResource = () => {
         const { resource, resourceId, onResourceNotFound, getResource } = this.props
-        const isResourceLoaded = !(isValueResolved(resource)
+        const isResourceLoaded = (isValueResolved(resource)
           || isAxiosError(resource)
           || resource === ResourceStatus.Loading
           || resource === ResourceStatus.NotFound)
         if (resource === ResourceStatus.NotFound && onResourceNotFound) {
           onResourceNotFound(resourceId)
         }
-        if (isResourceLoaded) {
+        if (!isResourceLoaded) {
           if (resourceId) {
             getResource(resourceId)
           }

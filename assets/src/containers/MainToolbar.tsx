@@ -6,7 +6,8 @@ import {
   getFolder
 } from 'actions/folder-actions'
 import {
-  deleteItems
+  deleteItems,
+  setSelectedItems
 } from 'actions/page-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
@@ -42,7 +43,8 @@ type DispatchProps = {
   createFolder: (name: string, parent: FolderId) => any,
   createDocument: (name: string, folder: FolderId) => any,
   moveItems: (items: Map<HasId>) => any,
-  deleteItems: (items: Map<HasId>) => any
+  deleteItems: (items: Map<HasId>) => any,
+  clearSelection: () => any
 }
 
 type Props = StateProps & DispatchProps
@@ -111,7 +113,7 @@ class MainToolbar extends React.Component<Props, State> {
   }
 
   handleCreateDocument = () => {
-    const { folderId, createDocument } = this.props
+    const { folderId, createDocument, clearSelection } = this.props
     this.setState({
       modal: {
         display: 'prompt',
@@ -122,6 +124,7 @@ class MainToolbar extends React.Component<Props, State> {
         onConfirm: () => {
           createDocument(this.state.modalInput, folderId)
           this.setState(initialState)
+          clearSelection()
         },
         onCancel: () => this.setState(initialState)
       }
@@ -129,7 +132,7 @@ class MainToolbar extends React.Component<Props, State> {
   }
 
   handleDeleteItems = () => {
-    const { selectedItems, deleteItems } = this.props
+    const { selectedItems, deleteItems, clearSelection } = this.props
     const itemCount = Object.keys(selectedItems).length
     this.setState({
       modal: {
@@ -141,6 +144,7 @@ class MainToolbar extends React.Component<Props, State> {
         onConfirm: () => {
           deleteItems(selectedItems)
           this.setState(initialState)
+          clearSelection()
         },
         onCancel: () => this.setState(initialState)
       }
@@ -198,7 +202,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     moveItems: (items: Map<HasId>) => null,
     deleteItems: (items: Map<HasId>) => {
       dispatch(deleteItems(items))
-    }
+    },
+    clearSelection: () => dispatch(setSelectedItems({ selection: {} }))
   }
 }
 

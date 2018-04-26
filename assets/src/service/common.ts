@@ -43,7 +43,10 @@ export function getResourceName(resource: ApiResource<HasName>): string {
   }
 }
 
-export function isResourceAvailable(resource: ApiResource<HasId>): boolean {
+export function isResourceAvailable<T extends HasId>(resource: ApiResource<T>): boolean {
+  if (resource === undefined) {
+    return false
+  }
   if (resource === ResourceStatus.Loading) {
     return false
   } else if (resource === ResourceStatus.NotFound) {
