@@ -4,6 +4,7 @@ import {
   updateDocumentName,
   updatedocumentContent
 } from 'actions/editor-actions'
+import { TextDocument } from 'service/document-service'
 
 import editorReducer, { initialState } from './editor'
 
@@ -14,6 +15,16 @@ const updateNameAction = updateDocumentName({ value: 'updated name' })
 const resetAction = resetDocumentChanges(undefined)
 
 const modifiedState = { ...initialState, modifiedContent: 'foo', modifiedName: 'bar' }
+
+export const document: TextDocument = {
+  id: 'foo',
+  name: 'example',
+  owner: 'barguy',
+  folder: 'rootId',
+  content: 'example document',
+  inserted_at: new Date().toISOString(),
+  updated_at: new Date().toISOString()
+}
 
 describe('Editor reducer', () => {
   it('should return the state as-is if action is not recognized', () => {
@@ -38,8 +49,7 @@ describe('Editor reducer', () => {
   })
 
   it('should reset the modifications on document update', () => {
-    const action = updateDocumentAction.done({ id: 'foo', document: {} })
+    const action = updateDocumentAction.done({ params: { id: document.id, document }, result: document })
     expect(editorReducer(modifiedState, action)).toEqual(initialState)
   })
-
 })

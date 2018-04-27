@@ -54,7 +54,7 @@ class DocumentCard extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: OwnProps) => {
+const mapStateToProps = ({ model }: RootState, ownProps: OwnProps) => {
   const { resourceId, selected, selectDocument } = ownProps
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   return {

@@ -3,6 +3,7 @@
  */
 
 import { ACTION_DELETE_DOCUMENT, ACTION_GET_DOCUMENT, ACTION_UPDATE_DOCUMENT } from 'actions/document-actions'
+import { TextDocument } from 'service/document-service'
 import actionCreatorFactory from 'typescript-fsa'
 
 import pageReducer, { initialState } from './page'
@@ -22,6 +23,16 @@ const spinnerState = {
   }
 }
 
+export const document: TextDocument = {
+  id: 'foo',
+  name: 'example',
+  owner: 'barguy',
+  folder: 'rootId',
+  content: 'example document',
+  inserted_at: new Date().toISOString(),
+  updated_at: new Date().toISOString()
+}
+
 describe('Page reducer', () => {
   it('should return the state as-is if action is not recognized', () => {
     expect(pageReducer(initialState, {
@@ -29,7 +40,13 @@ describe('Page reducer', () => {
     })).toEqual(initialState)
   })
 
-  const actions = [
+  type ActionTestCase = {
+    action: typeof deleteDocument | typeof updateDocument | typeof getDocument,
+    name: string,
+    field: 'deleting' | 'saving' | 'refreshing'
+  }
+
+  const actions: Array<ActionTestCase> = [
     {
       action: deleteDocument, name: 'delete', field: 'deleting'
     },
@@ -39,14 +56,14 @@ describe('Page reducer', () => {
     {
       action: getDocument, name: 'get', field: 'refreshing'
     }]
-  actions.forEach(({ action, name, field }) => {
+  actions.forEach(({ action, field }: ActionTestCase) => {
     it(`should set the ${field} status  to true on ${action} action start`, () => {
       const rawAction = action.started({ params: { id: 'foo' } })
       expect(pageReducer(initialState, rawAction).editorToolbar[field]).toBeTruthy()
     })
 
     it(`should set the ${field} status to false on ${action} action done`, () => {
-      const rawAction = action.done({ params: { id: 'foo' }, result: undefined })
+      const rawAction = action.done({ params: { id: 'foo' }, result: document })
       expect(pageReducer(spinnerState, rawAction).editorToolbar[field]).toBeFalsy()
     })
 

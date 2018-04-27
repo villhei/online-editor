@@ -50,7 +50,7 @@ class Editor extends React.PureComponent<EditorProps> {
       className='ui full height without padding'
       autoFocus={true}
       value={modifiedContent || resource.content}
-      onBeforeChange={(editor, data, value) => {
+      onBeforeChange={(_editor, _data, value) => {
         updateDocumentContent(value)
       }}
       options={{

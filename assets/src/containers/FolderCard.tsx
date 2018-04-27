@@ -51,7 +51,7 @@ class FolderCard extends React.Component<Props> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: OwnProps) => {
+const mapStateToProps = ({ model }: RootState, ownProps: OwnProps) => {
   const { resourceId, selected } = ownProps
   const resource: ApiResource<Folder> = model.folders.byId[resourceId]
   return {

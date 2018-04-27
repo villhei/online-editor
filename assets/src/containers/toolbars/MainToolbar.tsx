@@ -29,7 +29,7 @@ import {
   FolderId
 } from 'service/folder-service'
 
-import { RootState } from '../reducer'
+import { RootState } from 'main/reducer'
 
 type StateProps = {
   folderId: FolderId,
@@ -181,7 +181,7 @@ class MainToolbar extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateProps => {
+const mapStateToProps = ({ model, ui }: RootState, ownProps: any): StateProps => {
   const folderId: FolderId = ownProps.match.params.folderId
   const folder: ApiResource<Folder> | undefined = model.folders.byId[folderId]
   const itemsSelected = Object.keys(ui.page.selectedItems).length === 0
@@ -199,7 +199,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     getFolder: (id: FolderId) => getFolder(dispatch, { id }),
     createFolder: (name: string, parent: FolderId) => dispatch(createFolderAndRefresh({ resource: { name, parent } })),
     createDocument: (name: string, folder: FolderId) => dispatch(createAndSelect({ resource: { name, folder } })),
-    moveItems: (items: Map<HasId>) => null,
+    moveItems: (_items: Map<HasId>) => null,
     deleteItems: (items: Map<HasId>) => {
       dispatch(deleteItems(items))
     },

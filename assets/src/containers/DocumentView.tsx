@@ -30,7 +30,7 @@ class DocumentView extends React.PureComponent<DocumentViewProps> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model }: RootState, ownProps: any) => {
   const resourceId: TextDocumentId = ownProps.match.params.documentId
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   return {

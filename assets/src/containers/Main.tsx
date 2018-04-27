@@ -27,7 +27,7 @@ class MainContainer extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ model, ui, state }: RootState): StateProps => {
+const mapStateToProps = ({ state }: RootState): StateProps => {
   return {
     error: state.error
   }

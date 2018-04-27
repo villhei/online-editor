@@ -53,13 +53,13 @@ export const toggleMenu = actionCreator<ToggleMenu>(TOGGLE_MENU)
 export const clearError = actionCreator<undefined>(CLEAR_ERROR)
 export const setSelectedItems = actionCreator<SelectedItems>(SET_SELECTED_ITEMS)
 
-export const selectRootFolder = bindThunkAction(getRootAction, async (params, dispatch): Promise<Folder> => {
+export const selectRootFolder = bindThunkAction(getRootAction, async (_params, dispatch): Promise<Folder> => {
   const folder = await getRootFolder(dispatch, undefined)
   dispatch(push('/folder/' + folder.id))
   return folder
 })
 
-export const moveItems = bindThunkAction(getRootAction, async (params, dispatch): Promise<Folder> => {
+export const moveItems = bindThunkAction(getRootAction, async (_params, dispatch): Promise<Folder> => {
   const folder = await getRootFolder(dispatch, undefined)
   dispatch(push('/folder/' + folder.id))
   return folder

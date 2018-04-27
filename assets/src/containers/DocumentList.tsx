@@ -45,7 +45,7 @@ type Props = {
   selected: Map<HasId>
 }
 
-function sortResource(documents: Array<ApiResourceId>, descending = true): Array<ApiResourceId> {
+function sortResource(documents: Array<ApiResourceId>): Array<ApiResourceId> {
   const sorted: Array<ApiResourceId> = documents.slice(0)
     .sort((a, b) => {
       return a.localeCompare(b)
@@ -76,7 +76,7 @@ class DocumentListContainer extends React.Component<Props, {}> {
     }
   }
 
-  handleResourceNotFound = (resource: ApiResourceId) => {
+  handleResourceNotFound = () => {
     const { getResource, resourceId } = this.props
     getResource(resourceId)
   }

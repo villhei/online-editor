@@ -18,7 +18,7 @@ class LandingPage extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ model, ui, state }: RootState) => ({})
+const mapStateToProps = ({ }: RootState) => ({})
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {

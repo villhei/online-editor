@@ -22,7 +22,7 @@ import {
   isDocument
 } from 'service/document-service'
 
-import { RootState } from '../reducer'
+import { RootState } from 'main/reducer'
 
 export type DispatchProps = {
   getDocument: (id: ApiResourceId) => any,

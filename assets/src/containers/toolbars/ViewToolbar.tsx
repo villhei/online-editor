@@ -16,7 +16,7 @@ import {
   TextDocumentId
 } from 'service/document-service'
 
-import { RootState } from '../reducer'
+import { RootState } from 'main/reducer'
 
 export type Props = {
   getDocument: (id: TextDocumentId) => any,
@@ -51,7 +51,7 @@ class ViewToolbar extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model, ui }: RootState, ownProps: any) => {
   const documentId: TextDocumentId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
   const { refreshing } = ui.page.editorToolbar

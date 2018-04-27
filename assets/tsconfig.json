@@ -5,48 +5,50 @@
     "noImplicitAny": true,
     "module": "commonjs",
     "target": "es6",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "alwaysStrict": true,
     "strictNullChecks": true,
     "jsx": "react",
     "moduleResolution": "node",
-    "baseUrl": "./src",
+    "baseUrl": "",
     "lib": [
       "es2017",
       "dom"
     ],
     "types": [
-      "node"
+      "node",
+      "jest"
     ],
     "paths": {
-      "actions": [
-        "actions/*"
+      "actions/*": [
+        "src/actions/*"
       ],
-      "constants": [
-        "constants/*"
+      "constants/*": [
+        "src/constants/*"
       ],
-      "containers": [
-        "containers/*"
+      "containers/*": [
+        "src/containers/*"
       ],
-      "components": [
-        "components/*"
+      "components/*": [
+        "src/components/*"
       ],
-      "service": [
-        "service/*"
+      "service/*": [
+        "src/service/*"
       ],
-      "reducers": [
-        "reducers/*"
+      "reducers/*": [
+        "src/reducers/*"
       ],
-      "mocks": [
-        "mocks/*"
+      "main/*": [
+        "src/*"
       ]
     },
     "allowJs": true
   },
-  "fils": [
-    "src/app.tsx"
+  "include": [
+    "src/**/*"
   ],
   "exclude": [
-    "**/*.test.ts",
-    "**/*.test.tsx",
     "node_modules",
     "priv",
     "ts-build"
