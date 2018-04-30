@@ -56,7 +56,8 @@ export function isResourceAvailable<T extends HasId>(resource: ApiResource<T>): 
   return false
 }
 
-export function isAxiosError(candidate: any): candidate is AxiosError {
+export function isAxiosError(object: Object): object is AxiosError {
+  const candidate = object as AxiosError | undefined
   return Boolean(candidate && candidate.config && candidate.message && candidate.name)
 }
 
@@ -107,7 +108,7 @@ export function configureApiEndpoints<T extends HasId>(apiPath: string): ApiEndp
 
   function update(
     id: ApiResourceId,
-    updatedResource: T,
+    updatedResource: Partial<T>,
     options: RequestOptions = requestDefaults): Promise<T> {
     const query = getQueryString(options)
     return axios.put<T>(`${apiPath}/${id}` + query, updatedResource)

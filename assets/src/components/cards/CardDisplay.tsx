@@ -10,7 +10,7 @@ type Props = {
     name: string,
     color: string
   },
-  buttonAction: () => any
+  buttonAction: () => void
 }
 
 export default (props: Props) => {

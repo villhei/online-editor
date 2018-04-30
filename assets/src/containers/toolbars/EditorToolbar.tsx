@@ -22,15 +22,15 @@ import {
   isDocument
 } from 'service/document-service'
 
-import { RootState } from 'main/reducer'
+import { RootState, RouterProvidedProps } from 'main/reducer'
 
 export type DispatchProps = {
-  getDocument: (id: ApiResourceId) => any,
-  saveDocument: (id: ApiResourceId, document: PartialTextDocument) => any,
-  resetDocumentChanges: () => any,
-  deleteAndRefresh: (document: TextDocument) => any,
-  updateDocumentName: (value: string) => any,
-  navigate: (route: string) => any
+  getDocument: (id: ApiResourceId) => void,
+  saveDocument: (id: ApiResourceId, document: PartialTextDocument) => void,
+  resetDocumentChanges: () => void,
+  deleteAndRefresh: (document: TextDocument) => void,
+  updateDocumentName: (value: string) => void,
+  navigate: (route: string) => void
 }
 
 const CONFIRM_VIEW_ICON = 'share'
@@ -75,8 +75,16 @@ const ACTIONS = {
   }
 }
 
+type ModalParams = {
+  icon: string,
+  title: string,
+  message: string,
+  onConfirm: () => void,
+  onCancel: () => void
+}
+
 type State = {
-  modal: any | null
+  modal: ModalParams | null
 }
 
 class EditorToolbar extends React.Component<Props, State> {
@@ -89,15 +97,16 @@ class EditorToolbar extends React.Component<Props, State> {
     if (!isModified) {
       getDocument(documentId)
     } else {
+      const modal: ModalParams = {
+        ...ACTIONS['refresh'],
+        onConfirm: () => {
+          getDocument(documentId)
+          resetDocumentChanges()
+        },
+        onCancel: () => this.setState({ modal: null })
+      }
       this.setState({
-        modal: {
-          ...ACTIONS['refresh'],
-          onConfirm: () => {
-            getDocument(documentId)
-            resetDocumentChanges()
-          },
-          onCancel: () => this.setState({ modal: null })
-        }
+        modal
       })
     }
   }
@@ -105,14 +114,15 @@ class EditorToolbar extends React.Component<Props, State> {
   deleteDocument = () => {
     const { document, deleteAndRefresh } = this.props
     if (isDocument(document)) {
+      const modal: ModalParams = {
+        ...ACTIONS['delete'],
+        onConfirm: () => {
+          deleteAndRefresh(document)
+        },
+        onCancel: () => this.setState({ modal: null })
+      }
       this.setState({
-        modal: {
-          ...ACTIONS['delete'],
-          onConfirm: () => {
-            deleteAndRefresh(document)
-          },
-          onCancel: () => this.setState({ modal: null })
-        }
+        modal
       })
     }
   }
@@ -189,7 +199,7 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any): StateProps => {
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvidedProps): StateProps => {
   const documentId: ApiResourceId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
   const { modifiedContent, modifiedName } = state.editor

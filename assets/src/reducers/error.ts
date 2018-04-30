@@ -14,6 +14,7 @@ export const initialState: ErrorState = {
   stack: undefined
 }
 
+// tslint:disable-next-line
 function updateError(state: ErrorState, error: any): ErrorState {
   return {
     ...state,

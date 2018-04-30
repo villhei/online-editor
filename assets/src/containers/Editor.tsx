@@ -10,7 +10,7 @@ import { Dispatch, connect } from 'react-redux'
 import { ApiResource, ApiResourceId } from 'service/common'
 import { TextDocument, isDocument } from 'service/document-service'
 
-import { RootState } from '../reducer'
+import { RootState, RouterProvidedProps } from '../reducer'
 
 const EDITOR_OPTIONS = {
   lineNumbers: true,
@@ -25,8 +25,8 @@ const EDITOR_OPTIONS = {
 
 export type EditorProps = {
   getResource: (id: string) => Promise<TextDocument>,
-  updateDocumentContent: (value: string) => any,
-  resetDocumentChanges: () => any,
+  updateDocumentContent: (value: string) => void,
+  resetDocumentChanges: () => void,
   resourceId: string,
   resource: TextDocument,
   saving: boolean,
@@ -60,7 +60,7 @@ class Editor extends React.PureComponent<EditorProps> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: ApiResourceId = ownProps.match.params.documentId
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   const { modifiedContent } = state.editor

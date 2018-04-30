@@ -20,14 +20,13 @@ type Props = {
   folders: Array<FolderId>,
   folder: Folder,
   selected: Map<HasId>,
-  onResourceNotFound: (id: TextDocumentId) => any,
-  selectResource: (resource: HasId) => any,
-  getFolderById: (id: FolderId) => any,
-  getByDocumentId: (id: ApiResourceId) => any
+  onResourceNotFound: (id: TextDocumentId) => void,
+  selectResource: (resource: HasId) => void,
+  getFolderById: (id: FolderId) => void,
   parentFolder: () => void
 }
 
-export default class DocumentList extends React.Component<Props, any> {
+export default class DocumentList extends React.Component<Props> {
   render() {
     const { documents,
       folder,

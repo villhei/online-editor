@@ -12,7 +12,6 @@ import {
   deleteByDocument,
   deleteMultiple,
   getAll,
-  getAllByFolder,
   getById,
   update
 } from 'service/document-service'
@@ -61,7 +60,6 @@ export const deleteDocumentsAction = actionCreator
 export const createDocument = wrapAsyncWorker(createDocumentAction, (params: ByResourceParams<PartialTextDocument>) => create(params.resource))
 export const getDocument = wrapAsyncWorker(getDocumentAction, (params: ByIdParams) => getById(params.id))
 export const getDocuments = wrapAsyncWorker(getDocumentsAction, getAll)
-export const getDocumentsByFolder = wrapAsyncWorker(getDocumentsAction, getAllByFolder)
 export const updateDocument = wrapAsyncWorker(updateDocumentAction, (params: UpdateDocumentParams) => update(params.id, params.document))
 export const deleteDocument = wrapAsyncWorker(deleteDocumentAction, (params: ByResourceParams<TextDocument>) => deleteByDocument(params.resource))
 export const deleteDocuments = wrapAsyncWorker(deleteDocumentsAction, items => deleteMultiple(items))

@@ -10,7 +10,7 @@ import documentReducer, {
 } from './documents'
 
 const actionFactory = actionCreatorFactory()
-const document: TextDocument = {
+export const document: TextDocument = {
   id: 'foo',
   name: 'example',
   owner: 'barguy',

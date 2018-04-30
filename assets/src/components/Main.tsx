@@ -14,7 +14,7 @@ type Props = {
     message: string | undefined,
     stack: string | undefined
   },
-  clearError: () => any
+  clearError: () => void
 }
 
 export default class Main extends React.Component<Props, {}> {

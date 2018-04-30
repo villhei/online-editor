@@ -15,12 +15,12 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  clearError: () => any
+  clearError: () => void
 }
 
-type Props = StateProps & DispatchProps
+export type Props = StateProps & DispatchProps
 
-class MainContainer extends React.Component<Props, any> {
+class MainContainer extends React.Component<Props> {
   render() {
     const { error, clearError } = this.props
     return <Main error={error} clearError={clearError} />

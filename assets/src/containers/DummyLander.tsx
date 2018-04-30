@@ -5,11 +5,11 @@ import { Dispatch, connect } from 'react-redux'
 
 import { RootState } from '../reducer'
 
-type Props = {
-  selectRootFolder: () => any
+type DispatchProps = {
+  selectRootFolder: () => void
 }
 
-class LandingPage extends React.Component<Props, any> {
+class LandingPage extends React.Component<DispatchProps> {
   componentDidMount() {
     this.props.selectRootFolder()
   }
@@ -18,11 +18,9 @@ class LandingPage extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ }: RootState) => ({})
-
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
     selectRootFolder: () => dispatch(selectRootFolder(undefined))
   }
 }
-export default connect(mapStateToProps, mapDispatchToProps)(LandingPage)
+export default connect(undefined, mapDispatchToProps)(LandingPage)

@@ -1,6 +1,7 @@
 {
   "extends": "tslint-config-standard",
   "rules": {
+    "no-any": true,
     "no-import-side-effect": true,
     "semicolon": [
       true,

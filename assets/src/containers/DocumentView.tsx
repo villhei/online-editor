@@ -11,7 +11,7 @@ import {
 import { ApiResource } from 'service/common'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
 
-import { RootState } from '../reducer'
+import { RootState, RouterProvidedProps } from '../reducer'
 
 export type DocumentViewProps = {
   getResource: (id: string) => Promise<TextDocument>,
@@ -30,7 +30,7 @@ class DocumentView extends React.PureComponent<DocumentViewProps> {
   }
 }
 
-const mapStateToProps = ({ model }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model }: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: TextDocumentId = ownProps.match.params.documentId
   const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
   return {

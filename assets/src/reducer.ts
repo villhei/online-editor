@@ -14,12 +14,14 @@ import {
   combineReducers,
   createStore
 } from 'redux'
+
 import thunk from 'redux-thunk'
 
 import editorReducer, { EditorState } from 'reducers/editor'
 import errorReducer, { ErrorState } from 'reducers/error'
 import pageReducer, { PageState } from 'reducers/page'
 import { history, router } from 'reducers/router'
+import { Map } from 'service/common'
 
 const reactRouterMiddleware = routerMiddleware(history)
 
@@ -35,6 +37,15 @@ export type RootState = {
   state: {
     editor: EditorState,
     error: ErrorState
+  }
+}
+
+export type RouterProvidedProps = {
+  match: {
+    path: string,
+    url: string,
+    params: Map<string>,
+    isExact: boolean
   }
 }
 

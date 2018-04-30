@@ -23,14 +23,14 @@ import { RootState } from '../reducer'
 type OwnProps = {
   resourceId: TextDocumentId,
   selected: boolean,
-  onResourceNotFound: (id: TextDocumentId) => any,
+  onResourceNotFound: (id: TextDocumentId) => void,
   selectDocument: (resource: HasId) => void
 }
 
 type Props = OwnProps & {
   resource: TextDocument,
-  getResource: (id: TextDocumentId) => any,
-  editResource: (id: TextDocumentId) => any
+  getResource: (id: TextDocumentId) => void,
+  editResource: (id: TextDocumentId) => void
 }
 
 class DocumentCard extends React.Component<Props> {

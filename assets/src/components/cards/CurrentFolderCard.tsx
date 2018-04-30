@@ -5,7 +5,7 @@ import { Folder } from 'service/folder-service'
 type Props = {
   folder: Folder,
   disabled: boolean,
-  buttonAction: () => any
+  buttonAction: () => void
 }
 
 export default (props: Props) => {

@@ -76,7 +76,7 @@ function deleteEntities<T extends HasId>(
   return Promise.all(deletions)
 }
 
-function filterEntities<T extends HasId>(items: Map<HasId>, typeTesterFn: (x: any) => x is T) {
+function filterEntities<T extends HasId>(items: Map<HasId>, typeTesterFn: (x: Object) => x is T) {
   const entities: Array<T> = Object.keys(items)
     .filter(d => typeTesterFn(items[d]))
     .map((id: string) => (items[id] as T))

@@ -57,7 +57,7 @@ export const createAndSelect = bindThunkAction(createDocumentAction, async (para
   return document
 })
 
-export const createFolderAndRefresh = bindThunkAction(createFolderAction, async (params: ByResourceParams<Folder>, dispatch): Promise<Folder> => {
+export const createFolderAndRefresh = bindThunkAction(createFolderAction, async (params: ByResourceParams<PartialFolder>, dispatch): Promise<Folder> => {
   const folder = await createFolder(dispatch, params)
   await getFolder(dispatch, { id: folder.parent })
   return folder

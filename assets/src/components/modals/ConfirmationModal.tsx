@@ -5,8 +5,8 @@ type Props = {
   title: string,
   message: string,
   icon: string,
-  onConfirm: () => any,
-  onCancel: () => any
+  onConfirm: () => void,
+  onCancel: () => void
 }
 const ConfirmationModal = (props: Props) => {
   const iconClasses = classNames('icon', props.icon)

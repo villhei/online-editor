@@ -9,16 +9,16 @@ export type Props = {
   placeholder: string,
   value: string,
   isValid: boolean,
-  onConfirm: () => any,
-  onChange: (event: React.FormEvent<HTMLInputElement>) => any,
-  onCancel: () => any
+  onConfirm: () => void,
+  onChange: (event: React.FormEvent<HTMLInputElement>) => void,
+  onCancel: () => void
 }
 
 export type State = {
   response: string
 }
 
-class PromptModal extends React.Component<Props, any> {
+class PromptModal extends React.Component<Props> {
 
   handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     this.props.onChange(event)

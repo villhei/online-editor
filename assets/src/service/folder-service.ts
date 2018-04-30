@@ -27,7 +27,8 @@ export const {
   getAll
 } = endpoints
 
-export function isFolder(candidate: any): candidate is Folder {
+export function isFolder(object: Object): object is Folder {
+  const candidate = object as (Folder | undefined)
   return Boolean(candidate &&
     typeof candidate.id === 'string' &&
     typeof candidate.name === 'string' &&

@@ -6,8 +6,8 @@ import { ApiResource, ApiResourceId, ResourceStatus, isAxiosError } from 'servic
 export interface ApiResourceProps<T> {
   resource: ApiResource<T>,
   resourceId: ApiResourceId,
-  getResource: (id: string) => any,
-  onResourceNotFound?: (id: string) => any
+  getResource: (id: string) => void,
+  onResourceNotFound?: (id: string) => void
 }
 
 type TypeChecker<T> = (value: ApiResource<T>) => value is T
@@ -15,13 +15,13 @@ type TypeChecker<T> = (value: ApiResource<T>) => value is T
 type ApiResourceContainer<T, P> = React.ComponentClass<P & ApiResourceProps<T>>
 
 type ElementFn = () => JSX.Element
-
+// tslint:disable-next-line
 type ComponentWrapper<T, P> = (component: ApiResourceContainer<T, P>, Loading: ElementFn) => any
 
 export default function wrapApiResource<T, P>(
   isValueResolved: TypeChecker<T>): ComponentWrapper<T, P> {
   return function (Component: ApiResourceContainer<T, P>,
-    Loading: ElementFn) {
+    Loading: ElementFn): Function {
     return class ApiResourceWrapper extends React.Component<P & ApiResourceProps<T>> {
       componentDidMount() {
         this.handleGetResource()

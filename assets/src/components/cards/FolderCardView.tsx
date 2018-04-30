@@ -7,7 +7,7 @@ import SelectedButton from './SelectedButton'
 type Props = {
   folder: Folder,
   selected: boolean
-  showFolder: () => any,
+  showFolder: () => void,
   selectFolder: (event: React.MouseEvent<HTMLElement>) => void
 }
 

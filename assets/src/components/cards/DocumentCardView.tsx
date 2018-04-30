@@ -8,7 +8,7 @@ type Props = {
   document: TextDocument,
   selected: boolean,
   selectDocument: (event: React.MouseEvent<HTMLElement>) => void,
-  editDocument: () => any
+  editDocument: () => void
 }
 
 function formatDate(isoString: string): string {

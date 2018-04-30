@@ -8,9 +8,9 @@ type Props = {
   icon: string,
   value: string,
   hasError: boolean,
-  onConfirm: () => any,
-  onChange: (event: React.FormEvent<HTMLInputElement>) => any,
-  onCancel: () => any
+  onConfirm: () => void,
+  onChange: (event: React.FormEvent<HTMLInputElement>) => void,
+  onCancel: () => void
 }
 const ConfirmationModal = (props: Props) => {
   const iconClasses = classNames('icon', props.icon)

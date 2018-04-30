@@ -29,7 +29,7 @@ import {
   FolderId
 } from 'service/folder-service'
 
-import { RootState } from 'main/reducer'
+import { RootState, RouterProvidedProps } from 'main/reducer'
 
 type StateProps = {
   folderId: FolderId,
@@ -39,12 +39,12 @@ type StateProps = {
 }
 
 type DispatchProps = {
-  getFolder: (id: FolderId) => any,
-  createFolder: (name: string, parent: FolderId) => any,
-  createDocument: (name: string, folder: FolderId) => any,
-  moveItems: (items: Map<HasId>) => any,
-  deleteItems: (items: Map<HasId>) => any,
-  clearSelection: () => any
+  getFolder: (id: FolderId) => void
+  createFolder: (name: string, parent: FolderId) => void,
+  createDocument: (name: string, folder: FolderId) => void,
+  moveItems: (items: Map<HasId>) => void,
+  deleteItems: (items: Map<HasId>) => void,
+  clearSelection: () => void
 }
 
 type Props = StateProps & DispatchProps
@@ -56,8 +56,8 @@ type State = {
     title: string,
     message: string,
     placeholder: string,
-    onConfirm: () => any,
-    onCancel: () => any
+    onConfirm: () => void,
+    onCancel: () => void
   },
   modalInput: string
 }
@@ -181,7 +181,7 @@ class MainToolbar extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ model, ui }: RootState, ownProps: any): StateProps => {
+const mapStateToProps = ({ model, ui }: RootState, ownProps: RouterProvidedProps): StateProps => {
   const folderId: FolderId = ownProps.match.params.folderId
   const folder: ApiResource<Folder> | undefined = model.folders.byId[folderId]
   const itemsSelected = Object.keys(ui.page.selectedItems).length === 0

@@ -10,10 +10,6 @@ import pageReducer, { initialState } from './page'
 
 const actionFactory = actionCreatorFactory()
 
-const deleteDocument = actionFactory.async<{}, typeof document>(ACTION_DELETE_DOCUMENT)
-const updateDocument = actionFactory.async<{}, typeof document>(ACTION_UPDATE_DOCUMENT)
-const getDocument = actionFactory.async<{}, typeof document>(ACTION_GET_DOCUMENT)
-
 const spinnerState = {
   ...initialState,
   editorToolbar: {
@@ -32,6 +28,10 @@ export const document: TextDocument = {
   inserted_at: new Date().toISOString(),
   updated_at: new Date().toISOString()
 }
+
+const deleteDocument = actionFactory.async<{}, TextDocument>(ACTION_DELETE_DOCUMENT)
+const updateDocument = actionFactory.async<{}, TextDocument>(ACTION_UPDATE_DOCUMENT)
+const getDocument = actionFactory.async<{}, TextDocument>(ACTION_GET_DOCUMENT)
 
 describe('Page reducer', () => {
   it('should return the state as-is if action is not recognized', () => {

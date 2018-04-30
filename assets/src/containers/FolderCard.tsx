@@ -22,13 +22,13 @@ import { RootState } from '../reducer'
 type OwnProps = {
   resourceId: FolderId,
   selected: boolean,
-  onResourceNotFound: (id: FolderId) => any,
-  selectFolder: (resource: HasId) => any
+  onResourceNotFound: (id: FolderId) => void,
+  selectFolder: (resource: HasId) => void
 }
 type Props = OwnProps & {
   resource: Folder,
-  getResource: (id: FolderId) => any,
-  showFolder: (id: FolderId) => any
+  getResource: (id: FolderId) => void,
+  showFolder: (id: FolderId) => void
 }
 
 class FolderCard extends React.Component<Props> {

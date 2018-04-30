@@ -3,7 +3,7 @@ import * as React from 'react'
 
 type Props = {
   selected: boolean,
-  onSelect: (event: React.MouseEvent<HTMLElement>) => any
+  onSelect: (event: React.MouseEvent<HTMLElement>) => void
 }
 
 export default (props: Props) => {

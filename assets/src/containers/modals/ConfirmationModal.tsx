@@ -6,11 +6,11 @@ export type Props = {
   icon: string,
   title: string,
   message: string,
-  onConfirm: () => any,
-  onCancel: () => any
+  onConfirm: () => void,
+  onCancel: () => void
 }
 
-class Modal extends React.Component<Props, any> {
+class Modal extends React.Component<Props> {
   render() {
     const modalContainer = (document.getElementById('modal') as HTMLDivElement)
     const { icon, title, message, onCancel, onConfirm } = this.props

@@ -1,9 +1,7 @@
 import {
-  getDocument,
-  getDocumentsByFolder
+  getDocument
 } from 'actions/document-actions'
 import {
-  getChildren,
   getFolder,
   showFolder
 } from 'actions/folder-actions'
@@ -18,28 +16,23 @@ import {
   Dispatch,
   connect
 } from 'react-redux'
-
 import {
   ApiResourceId,
   HasId,
   Map
 } from 'service/common'
-import { TextDocumentId } from 'service/document-service'
 import {
   Folder,
   FolderId,
   isFolder
 } from 'service/folder-service'
 
-import { RootState } from '../reducer'
+import { RootState, RouterProvidedProps } from 'main/reducer'
 
 type Props = {
-  getChildren: (id: FolderId) => any,
-  getDocumentsByFolder: (folder: FolderId) => any,
-  getDocumentById: (id: TextDocumentId) => any,
-  getResource: (id: FolderId) => any,
-  showFolder: (id: FolderId) => any,
-  setSelection: (selection: Map<HasId>) => any,
+  getResource: (id: FolderId) => typeof getDocument,
+  showFolder: (id: FolderId) => typeof showFolder,
+  setSelection: (selection: Map<HasId>) => typeof setSelectedItems,
   resourceId: FolderId,
   resource: Folder,
   selected: Map<HasId>
@@ -85,8 +78,7 @@ class DocumentListContainer extends React.Component<Props, {}> {
     const {
       resource,
       selected,
-      getResource,
-      getDocumentById
+      getResource
     } = this.props
     const {
       documents,
@@ -99,7 +91,6 @@ class DocumentListContainer extends React.Component<Props, {}> {
     return <DocumentList
       getFolderById={getResource}
       selected={selected}
-      getByDocumentId={getDocumentById}
       selectResource={this.selectResource}
       onResourceNotFound={this.handleResourceNotFound}
       folder={resource}
@@ -109,7 +100,7 @@ class DocumentListContainer extends React.Component<Props, {}> {
   }
 }
 
-const mapStateToProps = ({ model, ui }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model, ui }: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: FolderId = ownProps.match.params.folderId
   const resource = model.folders.byId[resourceId]
   return {
@@ -121,9 +112,6 @@ const mapStateToProps = ({ model, ui }: RootState, ownProps: any) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getChildren: (id: FolderId) => getChildren(dispatch, { id }),
-    getDocumentsByFolder: (folder: string) => getDocumentsByFolder(dispatch, folder),
-    getDocumentById: (id: TextDocumentId) => getDocument(dispatch, { id }),
     getResource: (id: FolderId) => getFolder(dispatch, { id }),
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),
     setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection }))

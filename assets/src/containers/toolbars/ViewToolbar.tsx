@@ -16,17 +16,22 @@ import {
   TextDocumentId
 } from 'service/document-service'
 
-import { RootState } from 'main/reducer'
+import { RootState, RouterProvidedProps } from 'main/reducer'
 
-export type Props = {
-  getDocument: (id: TextDocumentId) => any,
-  navigate: (route: string) => any,
+export type StateProps = {
   documentId: string,
   document: ApiResource<TextDocument>,
   refreshing: boolean
 }
 
-class ViewToolbar extends React.Component<Props, any> {
+type DispatchProps = {
+  getDocument: (id: TextDocumentId) => void,
+  navigate: (route: string) => void
+}
+
+export type Props = StateProps & DispatchProps
+
+class ViewToolbar extends React.Component<Props> {
   editDocument = () => {
     this.props.navigate('/edit/' + this.props.documentId)
   }
@@ -51,7 +56,7 @@ class ViewToolbar extends React.Component<Props, any> {
   }
 }
 
-const mapStateToProps = ({ model, ui }: RootState, ownProps: any) => {
+const mapStateToProps = ({ model, ui }: RootState, ownProps: RouterProvidedProps): StateProps => {
   const documentId: TextDocumentId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
   const { refreshing } = ui.page.editorToolbar
@@ -62,7 +67,7 @@ const mapStateToProps = ({ model, ui }: RootState, ownProps: any) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
+const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
     getDocument: (id: TextDocumentId) => getDocument(dispatch, { id }),
     navigate: (route: string) => dispatch(push(route))
