@@ -1,6 +1,6 @@
 import CurrentFolderCard from 'components/cards/CurrentFolderCard'
-import DocumentCard from 'containers/DocumentCard'
 import FolderCard from 'containers/FolderCard'
+import DocumentCard from 'containers/documents/DocumentCard'
 import * as React from 'react'
 import {
   ApiResourceId,
@@ -26,7 +26,7 @@ type Props = {
   parentFolder: () => void
 }
 
-export default class DocumentList extends React.Component<Props> {
+export default class DocumentCardsLayoutView extends React.Component<Props> {
   render() {
     const { documents,
       folder,

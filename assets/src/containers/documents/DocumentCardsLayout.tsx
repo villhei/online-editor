@@ -8,8 +8,8 @@ import {
 import {
   setSelectedItems
 } from 'actions/page-actions'
-import DocumentList from 'components/DocumentList'
 import LoadingComponent from 'components/Loading'
+import DocumentCardsLayoutView from 'components/documents/DocumentCardsLayoutView'
 import wrapApiResource from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
@@ -46,7 +46,7 @@ function sortResource(documents: Array<ApiResourceId>): Array<ApiResourceId> {
   return sorted
 }
 
-class DocumentListContainer extends React.Component<Props, {}> {
+class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
 
   parentFolder = () => {
     const { resource, showFolder } = this.props
@@ -88,7 +88,7 @@ class DocumentListContainer extends React.Component<Props, {}> {
     const sortedDocuments = sortResource(documents)
     const sortedFolders = sortResource(children)
 
-    return <DocumentList
+    return <DocumentCardsLayoutView
       getFolderById={getResource}
       selected={selected}
       selectResource={this.selectResource}
@@ -118,5 +118,5 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   }
 }
 
-const wrappedResource = wrapApiResource<Folder, Props>(isFolder)(DocumentListContainer, LoadingComponent)
+const wrappedResource = wrapApiResource<Folder, Props>(isFolder)(DocumentCardsLayoutContainer, LoadingComponent)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)
