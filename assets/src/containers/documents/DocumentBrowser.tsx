@@ -9,7 +9,8 @@ import {
   setSelectedItems
 } from 'actions/page-actions'
 import LoadingComponent from 'components/Loading'
-import DocumentCardsLayoutView from 'components/documents/DocumentCardsLayoutView'
+import DocumentCardsView from 'components/documents/DocumentCardsView'
+import DocumentListView from 'components/documents/DocumentListView'
 import wrapApiResource from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
@@ -33,6 +34,7 @@ type Props = {
   getResource: (id: FolderId) => typeof getDocument,
   showFolder: (id: FolderId) => typeof showFolder,
   setSelection: (selection: Map<HasId>) => typeof setSelectedItems,
+  layout: 'cards' | 'list'
   resourceId: FolderId,
   resource: Folder,
   selected: Map<HasId>
@@ -78,7 +80,8 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
     const {
       resource,
       selected,
-      getResource
+      getResource,
+      layout
     } = this.props
     const {
       documents,
@@ -87,16 +90,30 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
 
     const sortedDocuments = sortResource(documents)
     const sortedFolders = sortResource(children)
-
-    return <DocumentCardsLayoutView
-      getFolderById={getResource}
-      selected={selected}
-      selectResource={this.selectResource}
-      onResourceNotFound={this.handleResourceNotFound}
-      folder={resource}
-      folders={sortedFolders}
-      documents={sortedDocuments}
-      parentFolder={this.parentFolder} />
+    switch (layout) {
+      case 'cards': {
+        return <DocumentCardsView
+          getFolderById={getResource}
+          selected={selected}
+          selectResource={this.selectResource}
+          onResourceNotFound={this.handleResourceNotFound}
+          folder={resource}
+          folders={sortedFolders}
+          documents={sortedDocuments}
+          parentFolder={this.parentFolder} />
+      }
+      default: {
+        return <DocumentListView
+          getFolderById={getResource}
+          selected={selected}
+          selectResource={this.selectResource}
+          onResourceNotFound={this.handleResourceNotFound}
+          folder={resource}
+          folders={sortedFolders}
+          documents={sortedDocuments}
+          parentFolder={this.parentFolder} />
+      }
+    }
   }
 }
 
@@ -106,7 +123,8 @@ const mapStateToProps = ({ model, ui }: RootState, ownProps: RouterProvidedProps
   return {
     resourceId,
     resource,
-    selected: ui.page.selectedItems
+    selected: ui.page.selectedItems,
+    layout: 'list'
   }
 }
 

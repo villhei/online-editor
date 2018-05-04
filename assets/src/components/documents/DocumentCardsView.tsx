@@ -1,6 +1,6 @@
 import CurrentFolderCard from 'components/cards/CurrentFolderCard'
-import FolderCard from 'containers/FolderCard'
 import DocumentCard from 'containers/documents/DocumentCard'
+import FolderCard from 'containers/folders/FolderCard'
 import * as React from 'react'
 import {
   ApiResourceId,

@@ -2,7 +2,7 @@ import ConnectedSwitch from 'containers/ConnectedSwitch'
 import DocumentView from 'containers/DocumentView'
 import DummyLander from 'containers/DummyLander'
 import Editor from 'containers/Editor'
-import DocumentCardsLayout from 'containers/documents/DocumentCardsLayout'
+import DocumentBrowser from 'containers/documents/DocumentBrowser'
 import EditorToolbar from 'containers/toolbars/EditorToolbar'
 import MainToolbar from 'containers/toolbars/MainToolbar'
 import ViewToolbar from 'containers/toolbars/ViewToolbar'
@@ -43,7 +43,7 @@ export default class Main extends React.Component<Props, {}> {
               <ConnectedSwitch>
                 <Route path='/view/:documentId' component={DocumentView} />
                 <Route path='/edit/:documentId' component={Editor} />
-                <Route path='/folder/:folderId' component={DocumentCardsLayout} />
+                <Route path='/folder/:folderId' component={DocumentBrowser} />
                 <Route exact path='/' component={DummyLander} />
               </ConnectedSwitch>
             </section>

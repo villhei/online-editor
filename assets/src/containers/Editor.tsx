@@ -3,7 +3,7 @@ import { resetDocumentChanges, updatedocumentContent } from 'actions/editor-acti
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
 import Loading from 'components/Loading'
-import wrapApiResource from 'containers/ApiResourceHOC'
+import wrapApiResource, { selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { Dispatch, connect } from 'react-redux'
@@ -60,14 +60,12 @@ class Editor extends React.PureComponent<EditorProps> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvidedProps) => {
+const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: ApiResourceId = ownProps.match.params.documentId
-  const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
-  const { modifiedContent } = state.editor
-  const { saving } = ui.page.editorToolbar
+  const { modifiedContent } = state.state.editor
+  const { saving } = state.ui.page.editorToolbar
   return {
-    resource,
-    resourceId,
+    ...selectApiResource(state, 'documents', resourceId),
     modifiedContent,
     saving
   }

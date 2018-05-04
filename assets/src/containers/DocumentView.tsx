@@ -2,13 +2,12 @@ import { getDocument } from 'actions/document-actions'
 import DocumentViewComponent from 'components/DocumentView'
 import DocumentViewEmpty from 'components/DocumentViewEmpty'
 import LoadingComponent from 'components/Loading'
-import wrapApiResource from 'containers/ApiResourceHOC'
+import wrapApiResource, { selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
   Dispatch,
   connect
 } from 'react-redux'
-import { ApiResource } from 'service/common'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
 
 import { RootState, RouterProvidedProps } from '../reducer'
@@ -30,13 +29,9 @@ class DocumentView extends React.PureComponent<DocumentViewProps> {
   }
 }
 
-const mapStateToProps = ({ model }: RootState, ownProps: RouterProvidedProps) => {
+const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: TextDocumentId = ownProps.match.params.documentId
-  const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
-  return {
-    resource,
-    resourceId
-  }
+  return selectApiResource<TextDocument>(state, 'documents', resourceId)
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {

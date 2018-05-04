@@ -1,7 +1,9 @@
 
 import NotFoundCard from 'components/notfound/NotFoundCard'
+import { RootState } from 'main/reducer'
 import * as React from 'react'
-import { ApiResource, ApiResourceId, ResourceStatus, isAxiosError } from 'service/common'
+import { Dispatch } from 'react-redux'
+import { ApiResource, ApiResourceId, ByIdParams, ResourceStatus, isAxiosError } from 'service/common'
 
 export interface ApiResourceProps<T> {
   resource: ApiResource<T>,
@@ -66,5 +68,34 @@ export default function wrapApiResource<T, P>(
         }
       }
     }
+  }
+}
+
+export type ApiResourceSelection<T> = {
+  resourceId: ApiResourceId,
+  resource: ApiResource<T>
+}
+
+export function selectApiResource<T>(
+  { model }: RootState,
+  modelKey: 'folders' | 'documents',
+  resourceId: ApiResourceId
+): ApiResourceSelection<T> {
+  const resource: ApiResource<T> = (model[modelKey].byId[resourceId] as ApiResource<T>)
+  return {
+    resource,
+    resourceId
+  }
+}
+
+type ResourceFetcher = (dispatch: Dispatch<RootState>, params: ByIdParams) => void
+
+export type ApiResourceDispatch = {
+  getResource: (id: ApiResourceId) => void
+}
+
+export function mapGetResource(dispatch: Dispatch<RootState>, getResource: ResourceFetcher): ApiResourceDispatch {
+  return {
+    getResource: (id: ApiResourceId) => getResource(dispatch, { id })
   }
 }
