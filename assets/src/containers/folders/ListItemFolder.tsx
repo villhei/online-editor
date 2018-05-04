@@ -1,12 +1,11 @@
 import { getFolder } from 'actions/folder-actions'
 import LoadingComponent from 'components/Loading'
 import FolderItem from 'components/lists/FolderItem'
-import wrapApiResource, { ApiResourceDispatch, mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
-import ListItem, { ListItemProps } from 'containers/lists/ListItem'
-import { RootState } from 'main/reducer'
+import wrapApiResource, { ApiResourceDispatch } from 'containers/ApiResourceHOC'
+import ListItem, { ListItemProps, createDispatchMapper, createResourceMapper } from 'containers/lists/ListItem'
 import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
-import { ApiResource, ApiResourceId } from 'service/common'
+import { connect } from 'react-redux'
+import { ApiResourceId } from 'service/common'
 import { Folder, isFolder } from 'service/folder-service'
 
 type OwnProps = {
@@ -17,15 +16,10 @@ type OwnProps = {
   onResourceNotFound: (id: ApiResourceId) => void
 }
 
-type MappedProps = {
-  resourceId: ApiResourceId,
-  resource: ApiResource<Folder>
-  selected: boolean
-}
-
 type Props = ListItemProps<Folder> & OwnProps & ApiResourceDispatch & {
   resource: Folder
 }
+
 class ListItemFolder extends ListItem<Folder, Props> {
   render() {
     const { selected, resource, resourceId } = this.props
@@ -40,15 +34,8 @@ class ListItemFolder extends ListItem<Folder, Props> {
   }
 }
 
-const mapStateToProps = (state: RootState, ownProps: OwnProps): MappedProps => {
-  const { resourceId, selected } = ownProps
-  return {
-    ...selectApiResource<Folder>(state, 'folders', resourceId),
-    selected
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): ApiResourceDispatch => mapGetResource(dispatch, getFolder)
+const mapStateToProps = createResourceMapper<Folder, OwnProps>('folders')
+const mapDispatchToProps = createDispatchMapper(getFolder)
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   wrapApiResource<Folder, Props>(isFolder)(ListItemFolder, LoadingComponent))

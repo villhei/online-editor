@@ -1,12 +1,11 @@
 import { getDocument } from 'actions/document-actions'
 import LoadingComponent from 'components/Loading'
 import DocumentItem from 'components/lists/DocumentItem'
-import wrapApiResource, { ApiResourceDispatch, mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
-import ListItem, { ListItemProps } from 'containers/lists/ListItem'
-import { RootState } from 'main/reducer'
+import wrapApiResource, { ApiResourceDispatch } from 'containers/ApiResourceHOC'
+import ListItem, { ListItemProps, createDispatchMapper, createResourceMapper } from 'containers/lists/ListItem'
 import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
-import { ApiResource, ApiResourceId } from 'service/common'
+import { connect } from 'react-redux'
+import { ApiResourceId } from 'service/common'
 import { TextDocument, isDocument } from 'service/document-service'
 
 type DispatchProps = ApiResourceDispatch
@@ -17,12 +16,6 @@ type OwnProps = {
   onSelect: (resource: TextDocument) => void,
   onClick: (resource: TextDocument) => void,
   onResourceNotFound: (id: ApiResourceId) => void
-}
-
-type MappedProps = {
-  resourceId: ApiResourceId,
-  resource: ApiResource<TextDocument>
-  selected: boolean
 }
 
 type Props = ListItemProps<TextDocument> & OwnProps & DispatchProps & {
@@ -43,15 +36,8 @@ class ListItemDocument extends ListItem<TextDocument, Props> {
   }
 }
 
-const mapStateToProps = (state: RootState, ownProps: OwnProps): MappedProps => {
-  const { resourceId, selected } = ownProps
-  return {
-    ...selectApiResource<TextDocument>(state, 'documents', resourceId),
-    selected
-  }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => mapGetResource(dispatch, getDocument)
+const mapStateToProps = createResourceMapper<TextDocument, OwnProps>('documents')
+const mapDispatchToProps = createDispatchMapper(getDocument)
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   wrapApiResource<TextDocument, Props>(isDocument)(ListItemDocument, LoadingComponent))

@@ -88,7 +88,7 @@ export function selectApiResource<T>(
   }
 }
 
-type ResourceFetcher = (dispatch: Dispatch<RootState>, params: ByIdParams) => void
+export type ResourceFetcher = (dispatch: Dispatch<RootState>, params: ByIdParams) => void
 
 export type ApiResourceDispatch = {
   getResource: (id: ApiResourceId) => void
