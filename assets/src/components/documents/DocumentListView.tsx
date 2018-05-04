@@ -1,3 +1,4 @@
+import ListItemDocument from 'containers/documents/ListItemDocument'
 import ListItemFolder from 'containers/folders/ListItemFolder'
 import * as React from 'react'
 import {
@@ -37,23 +38,41 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
     return (
       <div className='ui twelve wide centered column'>
         <div className='ui middle aligned divided list'>
-          <div className='blue bordered item'>
-            <i className='large grey folder icon'></i>
-            <div className='content'>
-              foo
-            </div>
-          </div>
-          {folders.map((id) => (<ListItemFolder key={id} selected={false} resourceId={id} />))}
-          {documents.map((id) => (
-            <div key={id} className='item'>
-              <i className='circular inverted large teal file icon'></i>
-              <div className='content'>
-                <a>{id}</a>
+          <div className='item'>
+            <div className='ui content grid'>
+              <div className='ui row'>
+                <div className='ui twelve wide column'>
+                  <i className='large icons' onClick={parentFolder}>
+                    <i className='circular inverted grey folder icon'></i>
+                    <i className='circular inverted top left corner ellipsis horizontal  icon'></i>
+                  </i>
+                  <a>
+                    {folder.name}
+                  </a>
+                </div>
               </div>
-            </div>))
-          }
+            </div>
+          </div >
+          {folders.map((folderId) => (
+            <ListItemFolder
+              key={folderId}
+              onResourceNotFound={onResourceNotFound}
+              selected={Boolean(selected[folderId])}
+              resourceId={folderId}
+              onClick={() => console.log('click on', folderId)}
+              onSelect={selectResource} />
+          ))}
+          {documents.map((documentId) => (
+            <ListItemDocument
+              key={documentId}
+              onResourceNotFound={onResourceNotFound}
+              selected={Boolean(selected[documentId])}
+              resourceId={documentId}
+              onClick={() => console.log('click on ', documentId)}
+              onSelect={selectResource} />
+          ))}
         </div>
-      </div >
+      </div>
     )
   }
 }

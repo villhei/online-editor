@@ -1,36 +1,39 @@
-import { getFolder } from 'actions/folder-actions'
+import { getDocument } from 'actions/document-actions'
 import LoadingComponent from 'components/Loading'
-import FolderItem from 'components/lists/FolderItem'
+import DocumentItem from 'components/lists/DocumentItem'
 import wrapApiResource, { ApiResourceDispatch, mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import ListItem, { ListItemProps } from 'containers/lists/ListItem'
 import { RootState } from 'main/reducer'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
 import { ApiResource, ApiResourceId } from 'service/common'
-import { Folder, isFolder } from 'service/folder-service'
+import { TextDocument, isDocument } from 'service/document-service'
+
+type DispatchProps = ApiResourceDispatch
 
 type OwnProps = {
   resourceId: ApiResourceId
   selected: boolean,
-  onSelect: (resource: Folder) => void,
-  onClick: (resource: Folder) => void,
+  onSelect: (resource: TextDocument) => void,
+  onClick: (resource: TextDocument) => void,
   onResourceNotFound: (id: ApiResourceId) => void
 }
 
 type MappedProps = {
   resourceId: ApiResourceId,
-  resource: ApiResource<Folder>
+  resource: ApiResource<TextDocument>
   selected: boolean
 }
 
-type Props = ListItemProps<Folder> & OwnProps & ApiResourceDispatch & {
-  resource: Folder
+type Props = ListItemProps<TextDocument> & OwnProps & DispatchProps & {
+  resource: TextDocument
 }
-class ListItemFolder extends ListItem<Folder, Props> {
+
+class ListItemDocument extends ListItem<TextDocument, Props> {
   render() {
     const { selected, resource, resourceId } = this.props
     return (
-      <FolderItem
+      <DocumentItem
         resource={resource}
         resourceId={resourceId}
         selected={selected}
@@ -43,12 +46,12 @@ class ListItemFolder extends ListItem<Folder, Props> {
 const mapStateToProps = (state: RootState, ownProps: OwnProps): MappedProps => {
   const { resourceId, selected } = ownProps
   return {
-    ...selectApiResource<Folder>(state, 'folders', resourceId),
+    ...selectApiResource<TextDocument>(state, 'documents', resourceId),
     selected
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): ApiResourceDispatch => mapGetResource(dispatch, getFolder)
+const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => mapGetResource(dispatch, getDocument)
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  wrapApiResource<Folder, Props>(isFolder)(ListItemFolder, LoadingComponent))
+  wrapApiResource<TextDocument, Props>(isDocument)(ListItemDocument, LoadingComponent))

@@ -1,12 +1,12 @@
 import * as classNames from 'classnames'
 import * as React from 'react'
-import { Folder, FolderId } from 'service/folder-service'
+import { TextDocument, TextDocumentId } from 'service/document-service'
 
 import ListItem from './Item'
 
 type Props = {
-  resourceId: FolderId,
-  resource: Folder,
+  resourceId: TextDocumentId,
+  resource: TextDocument,
   selected: boolean,
   onSelect: () => void,
   onClick: () => void
@@ -21,7 +21,7 @@ export default (props: Props) => {
     <ListItem
       heading={resource.name}
       onClick={onClick}
-      icon='blue folder'>
+      icon='teal file'>
       <button className={buttonClasses} onClick={onSelect} >
         <i className='check icon' />
       </button>
