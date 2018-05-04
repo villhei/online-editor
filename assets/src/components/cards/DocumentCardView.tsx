@@ -8,7 +8,7 @@ type Props = {
   document: TextDocument,
   selected: boolean,
   selectDocument: (event: React.MouseEvent<HTMLElement>) => void,
-  editDocument: () => void
+  onClick: () => void
 }
 
 function formatDate(isoString: string): string {
@@ -25,14 +25,14 @@ function formatDate(isoString: string): string {
 }
 
 export default (props: Props) => {
-  const { document, editDocument, selected, selectDocument } = props
+  const { document, onClick, selected, selectDocument } = props
   return (<CardDisplay
     header={document.name}
     icon={{
       name: 'file',
       color: 'teal'
     }}
-    buttonAction={editDocument}>
+    buttonAction={onClick}>
     <>
       <div className='meta'>
         Last modified {formatDate(document.updated_at)}

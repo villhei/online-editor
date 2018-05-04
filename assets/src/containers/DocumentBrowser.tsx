@@ -6,6 +6,8 @@ import {
   showFolder
 } from 'actions/folder-actions'
 import {
+  Layout,
+  selectLayout,
   setSelectedItems
 } from 'actions/page-actions'
 import LoadingComponent from 'components/Loading'
@@ -37,7 +39,8 @@ type Props = {
   showFolder: (id: FolderId) => typeof showFolder,
   setSelection: (selection: Map<HasId>) => typeof setSelectedItems,
   editResource: (id: ApiResourceId) => void,
-  layout: 'cards' | 'list'
+  setLayout: (layout: Layout) => void,
+  layout: Layout
   resourceId: FolderId,
   resource: Folder,
   selected: Map<HasId>
@@ -51,6 +54,16 @@ function sortResource(documents: Array<ApiResourceId>): Array<ApiResourceId> {
   return sorted
 }
 
+function selectLayoutView(layout: string) {
+  switch (layout) {
+    case 'cards': {
+      return DocumentCardsView
+    }
+    default: {
+      return DocumentListView
+    }
+  }
+}
 class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
 
   parentFolder = () => {
@@ -66,6 +79,10 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
   handleClickDocument = (document: TextDocument) => {
     const { editResource } = this.props
     editResource(document.id)
+  }
+
+  handleSetLayout = (layout: Layout) => () => {
+    this.props.setLayout(layout)
   }
 
   selectResource = (resource: HasId) => {
@@ -103,32 +120,24 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
 
     const sortedDocuments = sortResource(documents)
     const sortedFolders = sortResource(children)
-    switch (layout) {
-      case 'cards': {
-        return <DocumentCardsView
-          getFolderById={getResource}
-          selected={selected}
-          selectResource={this.selectResource}
-          onResourceNotFound={this.handleResourceNotFound}
-          folder={resource}
-          folders={sortedFolders}
-          documents={sortedDocuments}
-          parentFolder={this.parentFolder} />
-      }
-      default: {
-        return <DocumentListView
-          getFolderById={getResource}
-          selected={selected}
-          selectResource={this.selectResource}
-          clickFolder={this.handleClickFolder}
-          clickDocument={this.handleClickDocument}
-          onResourceNotFound={this.handleResourceNotFound}
-          folder={resource}
-          folders={sortedFolders}
-          documents={sortedDocuments}
-          parentFolder={this.parentFolder} />
-      }
-    }
+    const SelectedLayout = selectLayoutView(layout)
+    return <>
+      <div className='ui secondary two item menu'>
+        <a onClick={this.handleSetLayout('list')} className='item'>Tree</a>
+        <a onClick={this.handleSetLayout('cards')} className='item'>Cards</a>
+      </div>
+      <SelectedLayout
+        getFolderById={getResource}
+        selected={selected}
+        selectResource={this.selectResource}
+        clickFolder={this.handleClickFolder}
+        clickDocument={this.handleClickDocument}
+        onResourceNotFound={this.handleResourceNotFound}
+        folder={resource}
+        folders={sortedFolders}
+        documents={sortedDocuments}
+        parentFolder={this.parentFolder} />
+    </>
   }
 }
 
@@ -137,7 +146,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   return {
     ...selectApiResource(state, 'folders', resourceId),
     selected: state.ui.page.selectedItems,
-    layout: 'list'
+    layout: state.ui.page.layout
   }
 }
 
@@ -146,7 +155,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
     ...mapGetResource(dispatch, getFolder),
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),
     setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection })),
-    editResource: (id: ApiResourceId) => dispatch(push('/edit/' + id))
+    editResource: (id: ApiResourceId) => dispatch(push('/edit/' + id)),
+    setLayout: (layout: Layout) => dispatch(selectLayout(layout))
   }
 }
 

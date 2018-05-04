@@ -34,12 +34,16 @@ export const TOGGLE_MENU = 'TOGGLE_MENU'
 
 export const CLEAR_ERROR = 'CLEAR_ERROR'
 
+export const SELECT_LAYOUT = 'SELECT_LAYOUT'
+
 export const SET_SELECTED_ITEMS = 'SET_SELECTED_ITEMS'
 
 export const ACTION_DELETE_DOCUMENT = 'ACTION_DELETE_DOCUMENT'
 
 export const deleteDocumentAction = actionCreator
   .async<ByIdParams, ByResourceParams<TextDocument>>(ACTION_DELETE_DOCUMENT)
+
+export type Layout = 'cards' | 'list'
 
 export type ToggleMenu = {
   menu: string
@@ -51,6 +55,8 @@ export type SelectedItems = {
 
 export const toggleMenu = actionCreator<ToggleMenu>(TOGGLE_MENU)
 export const clearError = actionCreator<undefined>(CLEAR_ERROR)
+export const selectLayout = actionCreator<Layout>(SELECT_LAYOUT)
+
 export const setSelectedItems = actionCreator<SelectedItems>(SET_SELECTED_ITEMS)
 
 export const selectRootFolder = bindThunkAction(getRootAction, async (_params, dispatch): Promise<Folder> => {

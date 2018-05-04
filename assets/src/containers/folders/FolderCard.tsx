@@ -22,6 +22,7 @@ type OwnProps = {
   resourceId: FolderId,
   selected: boolean,
   onResourceNotFound: (id: FolderId) => void,
+  onClick: (resource: HasId) => void
   selectFolder: (resource: HasId) => void
 }
 type Props = OwnProps & {
@@ -46,7 +47,7 @@ class FolderCard extends React.Component<Props> {
       folder={resource}
       selected={selected}
       selectFolder={this.handleSelectFolder}
-      showFolder={this.handleShowFolder} />
+      onClick={this.handleShowFolder} />
   }
 }
 

@@ -23,33 +23,32 @@ type OwnProps = {
   resourceId: TextDocumentId,
   selected: boolean,
   onResourceNotFound: (id: TextDocumentId) => void,
+  onClick: (resource: HasId) => void
   selectDocument: (resource: HasId) => void
 }
 
 type Props = OwnProps & {
   resource: TextDocument,
-  getResource: (id: TextDocumentId) => void,
-  editResource: (id: TextDocumentId) => void
+  getResource: (id: TextDocumentId) => void
 }
 
 class DocumentCard extends React.Component<Props> {
-  editDocument = () => {
-    const { resourceId, editResource } = this.props
-    editResource(resourceId)
-  }
-
   selectDocument = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation()
     const { resource, selectDocument } = this.props
     selectDocument(resource)
   }
+  handleOnClick = () => {
+    const { resource, onClick } = this.props
+    onClick(resource)
+  }
   render() {
     const { resource, selected } = this.props
     return <DocumentCardView
+      onClick={this.handleOnClick}
       selected={selected}
       document={resource}
-      selectDocument={this.selectDocument}
-      editDocument={this.editDocument} />
+      selectDocument={this.selectDocument} />
   }
 }
 

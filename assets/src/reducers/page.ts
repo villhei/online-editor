@@ -4,6 +4,8 @@ import {
   updateDocumentAction
 } from 'actions/document-actions'
 import {
+  Layout,
+  selectLayout,
   setSelectedItems
 } from 'actions/page-actions'
 import { Action } from 'redux'
@@ -19,6 +21,7 @@ export type PageState = {
     saving: boolean,
     deleting: boolean
   },
+  layout: Layout,
   selectedItems: Map<HasId>
 }
 
@@ -28,6 +31,7 @@ export const initialState: PageState = {
     saving: false,
     deleting: false
   },
+  layout: 'list',
   selectedItems: {}
 }
 
@@ -47,6 +51,12 @@ export default function pageReducer(state: PageState = initialState, action: Act
     return {
       ...state,
       selectedItems: action.payload.selection
+    }
+  }
+  if (isType(action, selectLayout)) {
+    return {
+      ...state,
+      layout: action.payload
     }
   }
   if (isType(action, deleteDocumentAction.started)) {

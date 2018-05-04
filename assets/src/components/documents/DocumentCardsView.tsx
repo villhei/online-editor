@@ -20,6 +20,8 @@ type Props = {
   folders: Array<FolderId>,
   folder: Folder,
   selected: Map<HasId>,
+  clickFolder: (resource: HasId) => void,
+  clickDocument: (resource: HasId) => void,
   onResourceNotFound: (id: TextDocumentId) => void,
   selectResource: (resource: HasId) => void,
   getFolderById: (id: FolderId) => void,
@@ -31,6 +33,8 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
     const { documents,
       folder,
       folders,
+      clickDocument,
+      clickFolder,
       selectResource,
       selected,
       onResourceNotFound,
@@ -45,12 +49,14 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}
               selectFolder={selectResource}
+              onClick={clickFolder}
               onResourceNotFound={onResourceNotFound}
               selected={Boolean(selected[folderId])}
               resourceId={folderId} />)}
           {documents.map((documentId: TextDocumentId) =>
             <DocumentCard key={documentId}
               selectDocument={selectResource}
+              onClick={clickDocument}
               onResourceNotFound={onResourceNotFound}
               selected={Boolean(selected[documentId])}
               resourceId={documentId} />)}

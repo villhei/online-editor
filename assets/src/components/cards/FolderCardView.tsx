@@ -7,12 +7,12 @@ import SelectedButton from './SelectedButton'
 type Props = {
   folder: Folder,
   selected: boolean
-  showFolder: () => void,
+  onClick: () => void,
   selectFolder: (event: React.MouseEvent<HTMLElement>) => void
 }
 
 export default (props: Props) => {
-  const { folder, selected, showFolder, selectFolder } = props
+  const { folder, selected, onClick, selectFolder } = props
   return (<CardDisplay
     header={folder.name}
     selected={selected}
@@ -20,7 +20,7 @@ export default (props: Props) => {
       name: 'folder',
       color: 'blue'
     }}
-    buttonAction={showFolder}>
+    buttonAction={onClick}>
     <>
       <div className='meta'>
         {folder.documents.length} documents
