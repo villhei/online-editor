@@ -7,6 +7,7 @@ import {
   Map
 } from 'service/common'
 import {
+  TextDocument,
   TextDocumentId
 } from 'service/document-service'
 import {
@@ -19,6 +20,8 @@ type Props = {
   folders: Array<FolderId>,
   folder: Folder,
   selected: Map<HasId>,
+  clickFolder: (resource: Folder) => void,
+  clickDocument: (resource: TextDocument) => void,
   onResourceNotFound: (id: TextDocumentId) => void,
   selectResource: (resource: HasId) => void,
   getFolderById: (id: FolderId) => void,
@@ -28,6 +31,8 @@ type Props = {
 export default class DocumentCardsLayoutView extends React.Component<Props> {
   render() {
     const { documents,
+      clickFolder,
+      clickDocument,
       folder,
       folders,
       selectResource,
@@ -59,7 +64,7 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
               onResourceNotFound={onResourceNotFound}
               selected={Boolean(selected[folderId])}
               resourceId={folderId}
-              onClick={() => console.log('click on', folderId)}
+              onClick={clickFolder}
               onSelect={selectResource} />
           ))}
           {documents.map((documentId) => (
@@ -68,7 +73,7 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
               onResourceNotFound={onResourceNotFound}
               selected={Boolean(selected[documentId])}
               resourceId={documentId}
-              onClick={() => console.log('click on ', documentId)}
+              onClick={clickDocument}
               onSelect={selectResource} />
           ))}
         </div>

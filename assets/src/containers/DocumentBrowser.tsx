@@ -17,11 +17,13 @@ import {
   Dispatch,
   connect
 } from 'react-redux'
+import { push } from 'react-router-redux'
 import {
   ApiResourceId,
   HasId,
   Map
 } from 'service/common'
+import { TextDocument } from 'service/document-service'
 import {
   Folder,
   FolderId,
@@ -34,6 +36,7 @@ type Props = {
   getResource: (id: FolderId) => typeof getDocument,
   showFolder: (id: FolderId) => typeof showFolder,
   setSelection: (selection: Map<HasId>) => typeof setSelectedItems,
+  editResource: (id: ApiResourceId) => void,
   layout: 'cards' | 'list'
   resourceId: FolderId,
   resource: Folder,
@@ -53,6 +56,16 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
   parentFolder = () => {
     const { resource, showFolder } = this.props
     showFolder(resource.parent)
+  }
+
+  handleClickFolder = (folder: Folder) => {
+    const { showFolder } = this.props
+    showFolder(folder.id)
+  }
+
+  handleClickDocument = (document: TextDocument) => {
+    const { editResource } = this.props
+    editResource(document.id)
   }
 
   selectResource = (resource: HasId) => {
@@ -107,6 +120,8 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
           getFolderById={getResource}
           selected={selected}
           selectResource={this.selectResource}
+          clickFolder={this.handleClickFolder}
+          clickDocument={this.handleClickDocument}
           onResourceNotFound={this.handleResourceNotFound}
           folder={resource}
           folders={sortedFolders}
@@ -130,7 +145,8 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
     ...mapGetResource(dispatch, getFolder),
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),
-    setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection }))
+    setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection })),
+    editResource: (id: ApiResourceId) => dispatch(push('/edit/' + id))
   }
 }
 
