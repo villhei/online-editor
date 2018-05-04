@@ -2,7 +2,7 @@ import { getDocument } from 'actions/document-actions'
 import DocumentViewComponent from 'components/DocumentView'
 import DocumentViewEmpty from 'components/DocumentViewEmpty'
 import LoadingComponent from 'components/Loading'
-import wrapApiResource, { selectApiResource } from 'containers/ApiResourceHOC'
+import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
   Dispatch,
@@ -34,10 +34,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   return selectApiResource<TextDocument>(state, 'documents', resourceId)
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
-  return {
-    getResource: (id: string) => getDocument(dispatch, { id })
-  }
-}
+const mapDispatchToProps = (dispatch: Dispatch<RootState>) => mapGetResource(dispatch, getDocument)
+
 const wrappedResource = wrapApiResource<TextDocument, DocumentViewProps>(isDocument)(DocumentView, LoadingComponent)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

@@ -4,7 +4,7 @@ import {
 } from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderCardView from 'components/cards/FolderCardView'
-import wrapApiResource, { selectApiResource } from 'containers/ApiResourceHOC'
+import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
 import {
@@ -60,7 +60,7 @@ const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getResource: (id: FolderId) => getFolder(dispatch, { id }),
+    ...mapGetResource(dispatch, getFolder),
     showFolder: (id: FolderId) => dispatch(showFolder({ id }))
   }
 }

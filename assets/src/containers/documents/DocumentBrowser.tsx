@@ -11,7 +11,7 @@ import {
 import LoadingComponent from 'components/Loading'
 import DocumentCardsView from 'components/documents/DocumentCardsView'
 import DocumentListView from 'components/documents/DocumentListView'
-import wrapApiResource from 'containers/ApiResourceHOC'
+import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
   Dispatch,
@@ -117,20 +117,18 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
   }
 }
 
-const mapStateToProps = ({ model, ui }: RootState, ownProps: RouterProvidedProps) => {
+const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: FolderId = ownProps.match.params.folderId
-  const resource = model.folders.byId[resourceId]
   return {
-    resourceId,
-    resource,
-    selected: ui.page.selectedItems,
+    ...selectApiResource(state, 'folders', resourceId),
+    selected: state.ui.page.selectedItems,
     layout: 'list'
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getResource: (id: FolderId) => getFolder(dispatch, { id }),
+    ...mapGetResource(dispatch, getFolder),
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),
     setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection }))
   }

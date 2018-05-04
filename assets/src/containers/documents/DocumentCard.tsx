@@ -1,7 +1,7 @@
 import { getDocument } from 'actions/document-actions'
 import LoadingCard from 'components/LoadingCard'
 import DocumentCardView from 'components/cards/DocumentCardView'
-import wrapApiResource, { selectApiResource } from 'containers/ApiResourceHOC'
+import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
   Dispatch,
@@ -64,7 +64,7 @@ const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getResource: (id: string) => getDocument(dispatch, { id }),
+    ...mapGetResource(dispatch, getDocument),
     editResource: (id: string) => dispatch(push('/edit/' + id))
   }
 }

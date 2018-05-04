@@ -3,11 +3,11 @@ import { resetDocumentChanges, updatedocumentContent } from 'actions/editor-acti
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
 import Loading from 'components/Loading'
-import wrapApiResource, { selectApiResource } from 'containers/ApiResourceHOC'
+import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { Dispatch, connect } from 'react-redux'
-import { ApiResource, ApiResourceId } from 'service/common'
+import { ApiResourceId } from 'service/common'
 import { TextDocument, isDocument } from 'service/document-service'
 
 import { RootState, RouterProvidedProps } from '../reducer'
@@ -73,7 +73,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getResource: (id: string) => getDocument(dispatch, { id }),
+    ...mapGetResource(dispatch, getDocument),
     updateDocumentContent: (value: string) => dispatch(updatedocumentContent({ value })),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined))
   }
