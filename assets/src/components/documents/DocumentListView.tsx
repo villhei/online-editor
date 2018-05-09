@@ -1,5 +1,7 @@
+import CurrentFolderItem from 'components/lists/CurrentFolderItem'
 import ListItemDocument from 'containers/documents/ListItemDocument'
 import ListItemFolder from 'containers/folders/ListItemFolder'
+
 import * as React from 'react'
 import {
   ApiResourceId,
@@ -42,22 +44,12 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
     } = this.props
     return (
       <div className='ui twelve wide centered column'>
-        <div className='ui middle aligned divided list'>
-          <div className='item'>
-            <div className='ui content grid'>
-              <div className='ui row'>
-                <div className='ui twelve wide column'>
-                  <i className='large icons' onClick={parentFolder}>
-                    <i className='circular inverted grey folder icon'></i>
-                    <i className='circular inverted top left corner ellipsis horizontal  icon'></i>
-                  </i>
-                  <a>
-                    {folder.name}
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div >
+        <div className='ui divided link list'>
+          <CurrentFolderItem
+            name={folder.name}
+            disabled={Boolean(!folder.parent)}
+            onClick={parentFolder}
+          />
           {folders.map((folderId) => (
             <ListItemFolder
               key={folderId}

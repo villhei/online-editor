@@ -13,6 +13,7 @@ import {
 import LoadingComponent from 'components/Loading'
 import DocumentCardsView from 'components/documents/DocumentCardsView'
 import DocumentListView from 'components/documents/DocumentListView'
+import LayoutSelection from 'components/documents/LayoutSelection'
 import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
@@ -122,10 +123,11 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
     const sortedFolders = sortResource(children)
     const SelectedLayout = selectLayoutView(layout)
     return <>
-      <div className='ui secondary two item menu'>
-        <a onClick={this.handleSetLayout('list')} className='item'>Tree</a>
-        <a onClick={this.handleSetLayout('cards')} className='item'>Cards</a>
-      </div>
+      <LayoutSelection
+        onSelectList={this.handleSetLayout('list')}
+        onSelectTree={this.handleSetLayout('cards')}
+        selected={layout}
+      />
       <SelectedLayout
         getFolderById={getResource}
         selected={selected}
