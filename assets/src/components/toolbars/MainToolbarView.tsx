@@ -46,7 +46,7 @@ export default (props: Props) => {
         onClick={props.moveItems}
         loading={false}
         disabled={props.moveDisabled}
-        icon='folder open'>
+        icon='share'>
       </MenuButton>
       <MenuButton
         onClick={props.deleteItems}
