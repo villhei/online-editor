@@ -1,39 +1,38 @@
-import * as classNames from 'classnames'
 import Modal from 'components/modals/Modal'
+import ChildFolderList from 'containers/folders/ChildFolderList'
 import * as React from 'react'
+import { HasId, Map } from 'service/common'
+import { Folder, FolderId } from 'service/folder-service'
 
 type Props = {
   title: string,
   message: string,
-  placeholder: string,
-  icon: string,
-  value: string,
-  hasError: boolean,
+  initialFolder: FolderId,
+  items: Array<FolderId>,
+  selectedItems: Map<HasId>
+  isValid: boolean,
   onConfirm: () => void,
-  onChange: (event: React.FormEvent<HTMLInputElement>) => void,
+  onSelect: (resource: Folder) => void,
   onCancel: () => void
 }
-const ConfirmationModal = (props: Props) => {
-  const iconClasses = classNames('icon', props.icon)
-  const inputClasses = classNames('ui fluid inverted input', {
-    'error': props.hasError
-  })
+
+function FolderModalView(props: Props) {
+  const { isValid, initialFolder, selectedItems, onSelect } = props
   return (
     <Modal>
       <>
         <div className='ui icon header'>
-          <i className={iconClasses} />
+          <i className='icon folder' />
           {props.title}
         </div>
         <div className='content'>
           <p>{props.message}</p>
-          <div className={inputClasses}>
-            <input
-              value={props.value}
-              onChange={props.onChange}
-              type='text'
-              placeholder={props.placeholder} />
-          </div>
+          <ChildFolderList
+            resourceId={initialFolder}
+            selectedItems={selectedItems}
+            selectFolder={onSelect}
+            onClick={() => null}
+          />
         </div>
         <div className='actions'>
           <button
@@ -44,7 +43,7 @@ const ConfirmationModal = (props: Props) => {
           </button>
           <button
             className='ui green ok inverted button'
-            disabled={props.hasError}
+            disabled={!isValid}
             onClick={props.onConfirm}>
             <i className='checkmark icon' />
             Ok
@@ -55,4 +54,4 @@ const ConfirmationModal = (props: Props) => {
   )
 }
 
-export default ConfirmationModal
+export default FolderModalView

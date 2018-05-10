@@ -22,9 +22,8 @@ export type State = {
 }
 
 function getListeners(context: PromptModal) {
-  const listeners = [
+  return [
     (event: KeyboardEvent) => {
-      console.log('context', context.props)
       if (event.keyCode === ENTER_KEY) {
         if (context.props.isValid) {
           context.handleConfirm()
@@ -37,7 +36,6 @@ function getListeners(context: PromptModal) {
       }
     }
   ]
-  return listeners
 }
 
 class PromptModal extends React.Component<Props, State> {
@@ -63,7 +61,6 @@ class PromptModal extends React.Component<Props, State> {
   render() {
     const modalContainer = (document.getElementById('modal') as HTMLDivElement)
     const { icon, title, message, placeholder, value, isValid, onChange, onCancel } = this.props
-    console.log('props', this.props)
     return ReactDOM.createPortal(<PromptModalView
       title={title}
       icon={icon}

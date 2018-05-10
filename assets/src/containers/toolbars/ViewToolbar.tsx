@@ -1,5 +1,10 @@
 import { getDocument } from 'actions/document-actions'
 import DocumentToolbarView from 'components/toolbars/DocumentView'
+import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
+import wrapApiResource, {
+  mapGetResource,
+  selectApiResource
+} from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
   Dispatch,
@@ -7,71 +12,64 @@ import {
 } from 'react-redux'
 import { push } from 'react-router-redux'
 import {
-  ApiResource,
-  ResourceStatus,
-  getResourceName
+  ApiResource
 } from 'service/common'
 import {
   TextDocument,
-  TextDocumentId
+  TextDocumentId,
+  isDocument
 } from 'service/document-service'
 
 import { RootState, RouterProvidedProps } from 'main/reducer'
 
 export type StateProps = {
-  documentId: string,
-  document: ApiResource<TextDocument>,
-  refreshing: boolean
+  resourceId: TextDocumentId,
+  resource: ApiResource<TextDocument>
 }
 
 type DispatchProps = {
-  getDocument: (id: TextDocumentId) => void,
+  getResource: (id: TextDocumentId) => void,
   navigate: (route: string) => void
 }
 
-export type Props = StateProps & DispatchProps
+export type Props = StateProps & DispatchProps & {
+  resource: TextDocument
+}
 
 class ViewToolbar extends React.Component<Props> {
   editDocument = () => {
-    this.props.navigate('/edit/' + this.props.documentId)
+    const { navigate, resourceId } = this.props
+    navigate('/edit/' + resourceId)
   }
 
   refreshDocument = () => {
-    const { documentId, getDocument } = this.props
-    getDocument(documentId)
+    const { resourceId, getResource } = this.props
+    getResource(resourceId)
   }
 
   render() {
-    const { document, refreshing } = this.props
+    const { resource } = this.props
     const commonProps = {
-      editDisabled: document === ResourceStatus.NotFound,
       editDocument: this.editDocument,
-      refreshing,
       refreshDocument: this.refreshDocument
     }
     return <DocumentToolbarView
       {...commonProps}
-      title={getResourceName(document)}
+      title={resource.name}
     />
   }
 }
 
-const mapStateToProps = ({ model, ui }: RootState, ownProps: RouterProvidedProps): StateProps => {
-  const documentId: TextDocumentId = ownProps.match.params.documentId
-  const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
-  const { refreshing } = ui.page.editorToolbar
-  return {
-    document,
-    documentId,
-    refreshing
-  }
+const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
+  const resourceId: TextDocumentId = ownProps.match.params.documentId
+  return selectApiResource<TextDocument>(state, 'documents', resourceId)
 }
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
-    getDocument: (id: TextDocumentId) => getDocument(dispatch, { id }),
+    ...mapGetResource(dispatch, getDocument),
     navigate: (route: string) => dispatch(push(route))
   }
 }
-
-export default connect(mapStateToProps, mapDispatchToProps)(ViewToolbar)
+const wrappedResource = wrapApiResource<TextDocument, Props>(isDocument)(ViewToolbar, ToolbarLoadingView)
+export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

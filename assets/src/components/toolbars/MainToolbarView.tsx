@@ -5,10 +5,8 @@ import MenuButton from './MenuButton'
 
 export type Props = {
   title: string,
-  refreshing: boolean,
   moveDisabled: boolean,
   deleteDisabled: boolean,
-  disabled: boolean,
   refreshFolder: () => void
   createFolder: () => void,
   createDocument: () => void,
@@ -27,8 +25,8 @@ export default (props: Props) => {
       </div>
       <MenuButton
         onClick={props.refreshFolder}
-        loading={props.refreshing}
-        disabled={props.disabled}
+        loading={false}
+        disabled={false}
         icon='refresh' />
       <MenuButton
         onClick={props.createFolder}

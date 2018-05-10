@@ -13,7 +13,7 @@ type OwnProps = {
   selected: boolean,
   onSelect: (resource: Folder) => void,
   onClick: (resource: Folder) => void,
-  onResourceNotFound: (id: ApiResourceId) => void
+  onResourceNotFound?: (id: ApiResourceId) => void
 }
 
 type Props = ListItemProps<Folder> & OwnProps & ApiResourceDispatch & {

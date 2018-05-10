@@ -11,9 +11,9 @@ import {
   setSelectedItems
 } from 'actions/page-actions'
 import LoadingComponent from 'components/Loading'
-import DocumentCardsView from 'components/documents/DocumentCardsView'
-import DocumentListView from 'components/documents/DocumentListView'
-import LayoutSelection from 'components/documents/LayoutSelection'
+import DocumentBrowserCardsView from 'components/browser/DocumentBrowserCardsView'
+import DocumentBrowserListView from 'components/browser/DocumentBrowserListView'
+import LayoutSelection from 'components/browser/LayoutSelection'
 import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
@@ -58,10 +58,10 @@ function sortResource(documents: Array<ApiResourceId>): Array<ApiResourceId> {
 function selectLayoutView(layout: string) {
   switch (layout) {
     case 'cards': {
-      return DocumentCardsView
+      return DocumentBrowserCardsView
     }
     default: {
-      return DocumentListView
+      return DocumentBrowserListView
     }
   }
 }
