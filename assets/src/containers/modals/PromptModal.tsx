@@ -18,33 +18,37 @@ const ESC_KEY = 27
 const ENTER_KEY = 13
 
 export type State = {
-  response: string
+  listeners: Array<(event: KeyboardEvent) => void>
 }
 
-class PromptModal extends React.Component<Props> {
-  componentDidMount() {
-    window.addEventListener('keydown', this.dismissListener)
-    window.addEventListener('keydown', this.onConfirmListener)
-  }
-  componentWillUnmount() {
-    window.removeEventListener('keydown', this.dismissListener)
-    window.removeEventListener('keydown', this.onConfirmListener)
-  }
-
-  dismissListener = (event: KeyboardEvent) => {
-    if (event.keyCode === ESC_KEY) {
-      this.props.onCancel()
-    }
-  }
-
-  onConfirmListener = (event: KeyboardEvent) => {
-    console.log('onConfirmListener', this.props)
-    if (event.keyCode === ENTER_KEY) {
-      console.log(this.props)
-      if (this.props.isValid) {
-        this.handleConfirm()
+function getListeners(context: PromptModal) {
+  const listeners = [
+    (event: KeyboardEvent) => {
+      console.log('context', context.props)
+      if (event.keyCode === ENTER_KEY) {
+        if (context.props.isValid) {
+          context.handleConfirm()
+        }
+      }
+    },
+    (event: KeyboardEvent) => {
+      if (event.keyCode === ESC_KEY) {
+        context.props.onCancel()
       }
     }
+  ]
+  return listeners
+}
+
+class PromptModal extends React.Component<Props, State> {
+  componentDidMount() {
+    const listeners = getListeners(this)
+    listeners.forEach(listener => document.addEventListener('keydown', listener))
+    this.setState({ listeners })
+  }
+  componentWillUnmount() {
+    const { listeners } = this.state
+    listeners.forEach(listener => document.addEventListener('keydown', listener))
   }
 
   handleChange = (event: React.FormEvent<HTMLInputElement>) => {
