@@ -66,10 +66,13 @@ function selectLayoutView(layout: string) {
   }
 }
 class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
-
   handleClickFolder = (folder: Folder) => {
-    const { showFolder } = this.props
-    showFolder(folder.id)
+    const { resource, showFolder } = this.props
+    if (folder === resource) {
+      showFolder(folder.parent)
+    } else {
+      showFolder(folder.id)
+    }
   }
 
   handleClickDocument = (document: TextDocument) => {
