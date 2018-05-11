@@ -22,6 +22,7 @@ import { RootState } from 'main/reducer'
 type OwnProps = {
   resourceId: FolderId,
   selectedItems: Map<HasId>,
+  disabledItems?: Map<HasId>,
   onClick: (resource: Folder) => void
   selectFolder: (resource: Folder) => void
 }
@@ -36,15 +37,15 @@ type Props = StateProps & OwnProps & {
 
 class ChildFolderList extends React.Component<Props> {
   render() {
-    const { resource, selectedItems, selectFolder, onClick } = this.props
+    const { resource, selectedItems, disabledItems, selectFolder, onClick } = this.props
     return <div className='ui inverted divided selection list'>
       <FolderListItems
         folder={resource}
         selected={selectedItems}
+        disabled={disabledItems || {}}
         clickFolder={onClick}
         folders={resource.children}
         selectResource={selectFolder}
-        parentFolder={() => null}
       />
     </div>
   }

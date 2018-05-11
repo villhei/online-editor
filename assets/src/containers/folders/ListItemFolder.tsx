@@ -11,6 +11,7 @@ import { Folder, isFolder } from 'service/folder-service'
 type OwnProps = {
   resourceId: ApiResourceId
   selected: boolean,
+  disabled: boolean,
   onSelect: (resource: Folder) => void,
   onClick: (resource: Folder) => void,
   onResourceNotFound?: (id: ApiResourceId) => void
@@ -22,12 +23,13 @@ type Props = ListItemProps<Folder> & OwnProps & ApiResourceDispatch & {
 
 class ListItemFolder extends ListItem<Folder, Props> {
   render() {
-    const { selected, resource, resourceId } = this.props
+    const { selected, disabled, resource, resourceId } = this.props
     return (
       <FolderItem
         resource={resource}
         resourceId={resourceId}
         selected={selected}
+        disabled={disabled}
         onClick={this.handleOnClick}
         onSelect={this.handleOnSelect} />
     )

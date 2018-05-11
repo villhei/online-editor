@@ -8,12 +8,13 @@ type Props = {
   resourceId: FolderId,
   resource: Folder,
   selected: boolean,
+  disabled: boolean,
   onSelect: () => void,
   onClick: () => void
 }
 
 export default (props: Props) => {
-  const { resource, selected, onSelect, onClick } = props
+  const { resource, selected, disabled, onSelect, onClick } = props
   const buttonClasses = classNames('ui', {
     basic: !selected
   }, 'blue icon button')
@@ -22,7 +23,7 @@ export default (props: Props) => {
       heading={resource.name}
       onClick={onClick}
       icon='blue folder'>
-      <button className={buttonClasses} onClick={onSelect} >
+      <button className={buttonClasses} onClick={onSelect} disabled={disabled} >
         <i className='check icon' />
       </button>
     </ListItem >)

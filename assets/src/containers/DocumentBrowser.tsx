@@ -67,11 +67,6 @@ function selectLayoutView(layout: string) {
 }
 class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
 
-  parentFolder = () => {
-    const { resource, showFolder } = this.props
-    showFolder(resource.parent)
-  }
-
   handleClickFolder = (folder: Folder) => {
     const { showFolder } = this.props
     showFolder(folder.id)
@@ -131,14 +126,14 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
       <SelectedLayout
         getFolderById={getResource}
         selected={selected}
+        disabled={{}}
         selectResource={this.selectResource}
         clickFolder={this.handleClickFolder}
         clickDocument={this.handleClickDocument}
         onResourceNotFound={this.handleResourceNotFound}
         folder={resource}
         folders={sortedFolders}
-        documents={sortedDocuments}
-        parentFolder={this.parentFolder} />
+        documents={sortedDocuments} />
     </>
   }
 }

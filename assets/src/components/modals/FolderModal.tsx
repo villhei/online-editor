@@ -4,20 +4,22 @@ import * as React from 'react'
 import { HasId, Map } from 'service/common'
 import { Folder, FolderId } from 'service/folder-service'
 
-type Props = {
+export type Props = {
   title: string,
   message: string,
-  initialFolder: FolderId,
-  items: Array<FolderId>,
-  selectedItems: Map<HasId>
+  folder: FolderId,
+  selected: Folder | undefined,
+  disabledItems: Map<HasId>
   isValid: boolean,
+  onClickFolder: (folder: Folder) => void,
   onConfirm: () => void,
   onSelect: (resource: Folder) => void,
   onCancel: () => void
 }
 
 function FolderModalView(props: Props) {
-  const { isValid, initialFolder, selectedItems, onSelect } = props
+  const { isValid, folder, selected, disabledItems, onSelect, onClickFolder } = props
+  const selectedItems = selected ? { [selected.id]: selected } : {}
   return (
     <Modal>
       <>
@@ -28,10 +30,11 @@ function FolderModalView(props: Props) {
         <div className='content'>
           <p>{props.message}</p>
           <ChildFolderList
-            resourceId={initialFolder}
+            resourceId={folder}
             selectedItems={selectedItems}
+            disabledItems={disabledItems}
             selectFolder={onSelect}
-            onClick={() => null}
+            onClick={onClickFolder}
           />
         </div>
         <div className='actions'>

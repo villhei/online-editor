@@ -24,8 +24,7 @@ type Props = {
   clickDocument: (resource: HasId) => void,
   onResourceNotFound: (id: TextDocumentId) => void,
   selectResource: (resource: HasId) => void,
-  getFolderById: (id: FolderId) => void,
-  parentFolder: () => void
+  getFolderById: (id: FolderId) => void
 }
 
 export default class DocumentCardsLayoutView extends React.Component<Props> {
@@ -37,15 +36,14 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
       clickFolder,
       selectResource,
       selected,
-      onResourceNotFound,
-      parentFolder
+      onResourceNotFound
     } = this.props
     return (
       <div className='ui twelve wide centered column'>
         <div className='ui four doubling cards'>
           <CurrentFolderCard folder={folder}
             disabled={!folder.parent}
-            buttonAction={parentFolder} />
+            buttonAction={() => clickFolder(folder)} />
           {folders.map((folderId: FolderId) =>
             <FolderCard key={folderId}
               selectFolder={selectResource}

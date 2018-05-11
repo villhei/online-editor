@@ -14,13 +14,13 @@ type Props = {
   folders: Array<FolderId>,
   folder: Folder,
   selected: Map<HasId>,
+  disabled: Map<HasId>,
   clickFolder: (resource: Folder) => void,
   onResourceNotFound?: (id: FolderId) => void,
-  selectResource: (resource: Folder) => void,
-  parentFolder: () => void
+  selectResource: (resource: Folder) => void
 }
 
-export default class DocumentCardsLayoutView extends React.Component<Props> {
+export default class FolderListView extends React.Component<Props> {
   render() {
     const {
       clickFolder,
@@ -28,21 +28,22 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
       folders,
       selectResource,
       selected,
-      onResourceNotFound,
-      parentFolder
+      disabled,
+      onResourceNotFound
     } = this.props
     return (
       <>
         <CurrentFolderItem
           name={folder.name}
           disabled={Boolean(!folder.parent)}
-          onClick={parentFolder}
+          onClick={() => clickFolder(folder)}
         />
         {folders.map((folderId) => (
           <ListItemFolder
             key={folderId}
             onResourceNotFound={onResourceNotFound}
             selected={Boolean(selected[folderId])}
+            disabled={Boolean(disabled[folderId])}
             resourceId={folderId}
             onClick={clickFolder}
             onSelect={selectResource} />

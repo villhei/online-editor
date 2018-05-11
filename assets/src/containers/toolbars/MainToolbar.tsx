@@ -47,7 +47,7 @@ type DispatchProps = {
   getResource: (id: FolderId) => void
   createFolder: (name: string, parent: FolderId) => void,
   createDocument: (name: string, folder: FolderId) => void,
-  moveItems: (items: Map<HasId>) => void,
+  moveItems: (items: Map<HasId>, destination: Folder) => void,
   deleteItems: (items: Map<HasId>) => void,
   clearSelection: () => void
 }
@@ -82,7 +82,8 @@ const initialState: State = {
     onConfirm: dummy,
     onCancel: dummy
   },
-  modalInput: ''
+  modalInput: '',
+  destinationFolder: undefined
 }
 
 class MainToolbar extends React.Component<Props, State> {
@@ -166,7 +167,8 @@ class MainToolbar extends React.Component<Props, State> {
   }
 
   handleMoveItems = () => {
-    const { selectedItems } = this.props
+    const { selectedItems, moveItems } = this.props
+    const { destinationFolder } = this.state
     const itemCount = Object.keys(selectedItems).length
     this.setState({
       modal: {
@@ -176,7 +178,9 @@ class MainToolbar extends React.Component<Props, State> {
         message: `Move selected ${itemCount} items to folder:`,
         placeholder: '',
         onConfirm: () => {
-          return null
+          if (destinationFolder) {
+            moveItems(selectedItems, destinationFolder)
+          }
         },
         onCancel: () => this.setState(initialState)
       }
@@ -202,12 +206,11 @@ class MainToolbar extends React.Component<Props, State> {
         />
         {modal.display === 'folder' && <FolderModal
           {...modal}
-          onSelectionChange={this.handleSelectDestination}
+          onSelect={this.handleSelectDestination}
           isValid={Boolean(destinationFolder)}
           selected={destinationFolder}
-          selectedItems={selectedItems}
+          disabledItems={selectedItems}
           initialFolder={resourceId}
-          items={[]}
         />}
         {modal.display === 'prompt' && <PromptModal
           {...modal}
@@ -234,7 +237,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     ...mapGetResource(dispatch, getFolder),
     createFolder: (name: string, parent: FolderId) => dispatch(createFolderAndRefresh({ resource: { name, parent } })),
     createDocument: (name: string, folder: FolderId) => dispatch(createAndSelect({ resource: { name, folder } })),
-    moveItems: (_items: Map<HasId>) => null,
+    moveItems: (_items: Map<HasId>, _destination: Folder) => null,
     deleteItems: (items: Map<HasId>) => {
       dispatch(deleteItems(items))
     },

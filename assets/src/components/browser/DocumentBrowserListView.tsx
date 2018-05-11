@@ -21,15 +21,15 @@ type Props = {
   folders: Array<FolderId>,
   folder: Folder,
   selected: Map<HasId>,
+  disabled: Map<HasId>,
   clickFolder: (resource: Folder) => void,
   clickDocument: (resource: TextDocument) => void,
   onResourceNotFound: (id: TextDocumentId) => void,
   selectResource: (resource: HasId) => void,
-  getFolderById: (id: FolderId) => void,
-  parentFolder: () => void
+  getFolderById: (id: FolderId) => void
 }
 
-export default class DocumentCardsLayoutView extends React.Component<Props> {
+export default class DocumentBrowserListView extends React.Component<Props> {
   render() {
     const { documents,
       clickFolder,
@@ -38,8 +38,8 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
       folders,
       selectResource,
       selected,
-      onResourceNotFound,
-      parentFolder
+      disabled,
+      onResourceNotFound
     } = this.props
     return (
       <div className='ui divided item list'>
@@ -47,8 +47,8 @@ export default class DocumentCardsLayoutView extends React.Component<Props> {
           folder={folder}
           folders={folders}
           selected={selected}
+          disabled={disabled}
           clickFolder={clickFolder}
-          parentFolder={parentFolder}
           onResourceNotFound={onResourceNotFound}
           selectResource={selectResource}
         />
