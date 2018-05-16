@@ -219,7 +219,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
   return {
     getDocument: (id: ApiResourceId) => getDocument(dispatch, { id }),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
-    saveDocument: (id: ApiResourceId, document: PartialTextDocument) => dispatch(updateAndRefresh({ id, document })),
+    saveDocument: (id: ApiResourceId, resource: PartialTextDocument) => dispatch(updateAndRefresh({ id, resource })),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
     deleteAndRefresh: (document: TextDocument) => {
       dispatch(deleteAndRefresh({ resource: document }))

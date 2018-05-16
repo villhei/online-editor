@@ -24,7 +24,8 @@ export const endpoints = configureApiEndpoints<Folder>('/api/folders')
 
 export const {
   create,
-  getAll
+  getAll,
+  update
 } = endpoints
 
 export function isFolder(object: Object): object is Folder {

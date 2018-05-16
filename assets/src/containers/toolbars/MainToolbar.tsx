@@ -7,6 +7,7 @@ import {
 } from 'actions/folder-actions'
 import {
   deleteItems,
+  moveItems,
   setSelectedItems
 } from 'actions/page-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
@@ -47,7 +48,7 @@ type DispatchProps = {
   getResource: (id: FolderId) => void
   createFolder: (name: string, parent: FolderId) => void,
   createDocument: (name: string, folder: FolderId) => void,
-  moveItems: (items: Map<HasId>, destination: Folder) => void,
+  moveItems: (items: Map<HasId>, destination: FolderId) => void,
   deleteItems: (items: Map<HasId>) => void,
   clearSelection: () => void
 }
@@ -167,8 +168,7 @@ class MainToolbar extends React.Component<Props, State> {
   }
 
   handleMoveItems = () => {
-    const { selectedItems, moveItems } = this.props
-    const { destinationFolder } = this.state
+    const { selectedItems, moveItems, clearSelection } = this.props
     const itemCount = Object.keys(selectedItems).length
     this.setState({
       modal: {
@@ -178,8 +178,12 @@ class MainToolbar extends React.Component<Props, State> {
         message: `Move selected ${itemCount} items to folder:`,
         placeholder: '',
         onConfirm: () => {
+          const { destinationFolder } = this.state
+          console.log('onConfirm', selectedItems, destinationFolder)
           if (destinationFolder) {
-            moveItems(selectedItems, destinationFolder)
+            moveItems(selectedItems, destinationFolder.id)
+            this.setState(initialState)
+            clearSelection()
           }
         },
         onCancel: () => this.setState(initialState)
@@ -237,7 +241,7 @@ const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
     ...mapGetResource(dispatch, getFolder),
     createFolder: (name: string, parent: FolderId) => dispatch(createFolderAndRefresh({ resource: { name, parent } })),
     createDocument: (name: string, folder: FolderId) => dispatch(createAndSelect({ resource: { name, folder } })),
-    moveItems: (_items: Map<HasId>, _destination: Folder) => null,
+    moveItems: (selection: Map<HasId>, destination: FolderId) => dispatch(moveItems({ selection, destination })),
     deleteItems: (items: Map<HasId>) => {
       dispatch(deleteItems(items))
     },

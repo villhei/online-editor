@@ -3,7 +3,8 @@ import {
   ByIdParams,
   ByResourceParams,
   HasId,
-  Map
+  Map,
+  UpdateByIdParams
 } from 'service/common'
 import {
   Folder,
@@ -14,7 +15,8 @@ import {
   deleteMultiple,
   findByParent,
   getByFolderId,
-  getRoot
+  getRoot,
+  update
 } from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'
 
@@ -27,6 +29,7 @@ export const ACTION_GET_CHILDREN = 'ACTION_GET_CHILDREN'
 export const ACTION_SELECT_FOLDER = 'ACTION_SELECT_FOLDER'
 export const ACTION_DELETE_FOLDER = 'ACTION_DELETE_FOLDER'
 export const ACTION_DELETE_FOLDERS = 'ACTION_DELETE_FOLDERS'
+export const ACTION_UPDATE_FOLDER = 'ACTION_UPDATE_FOLDER'
 
 const actionCreator = actionCreatorFactory()
 
@@ -41,6 +44,9 @@ export const getChildrenAction = actionCreator
 
 export const createFolderAction = actionCreator
   .async<ByResourceParams<PartialFolder>, Folder, {}>(ACTION_CREATE_FOLDER)
+
+export const updateFolderAction = actionCreator
+  .async<UpdateByIdParams<PartialFolder>, Folder, {}>(ACTION_UPDATE_FOLDER)
 
 export const deleteFolderaction = actionCreator
   .async<ByResourceParams<Folder>, FolderId, {}>(ACTION_DELETE_FOLDER)
@@ -60,6 +66,9 @@ export const getChildren = wrapAsyncWorker(getChildrenAction,
 
 export const createFolder = wrapAsyncWorker(createFolderAction, ({ resource }) =>
   create(resource))
+
+export const updateFolder = wrapAsyncWorker(updateFolderAction, ({ id, resource }) =>
+  update(id, resource))
 
 export const deleteFolder = wrapAsyncWorker(deleteFolderaction, ({ resource }) =>
   deleteByFolder(resource))
