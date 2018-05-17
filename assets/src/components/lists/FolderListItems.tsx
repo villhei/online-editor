@@ -1,4 +1,4 @@
-import CurrentFolderItem from 'components/lists/CurrentFolderItem'
+import ListItemCurrentFolder from 'containers/folders/ListItemCurrentFolder'
 import ListItemFolder from 'containers/folders/ListItemFolder'
 import * as React from 'react'
 import {
@@ -11,7 +11,6 @@ import {
 } from 'service/folder-service'
 
 type Props = {
-  folders: Array<FolderId>,
   folder: Folder,
   selected: Map<HasId>,
   disabled: Map<HasId>,
@@ -20,12 +19,11 @@ type Props = {
   selectResource: (resource: Folder) => void
 }
 
-export default class FolderListView extends React.Component<Props> {
+export default class FolderListItems extends React.Component<Props> {
   render() {
     const {
       clickFolder,
       folder,
-      folders,
       selectResource,
       selected,
       disabled,
@@ -33,12 +31,12 @@ export default class FolderListView extends React.Component<Props> {
     } = this.props
     return (
       <>
-        <CurrentFolderItem
-          name={folder.name}
-          disabled={Boolean(!folder.parent)}
-          onClick={() => clickFolder(folder)}
+        <ListItemCurrentFolder
+          resourceId={folder.id}
+          disabled={!folder.parent}
+          onClick={clickFolder}
         />
-        {folders.map((folderId) => (
+        {folder.children.map((folderId) => (
           <ListItemFolder
             key={folderId}
             onResourceNotFound={onResourceNotFound}

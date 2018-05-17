@@ -16,18 +16,14 @@ export type Props = {
   onCancel: () => void
 }
 
-class FolderModal extends React.Component<Props> {
+class FolderModalContainer extends React.Component<Props> {
   render() {
     const modalContainer = (document.getElementById('modal') as HTMLDivElement)
-    const viewProps = {
-      ...this.props,
-      folder: this.props.initialFolder,
-      onClickFolder: () => null
-    }
+    const viewProps = this.props
     return ReactDOM.createPortal(<FolderModalView
       {...viewProps} />
       , modalContainer)
   }
 }
 
-export default FolderModal
+export default FolderModalContainer

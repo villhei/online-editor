@@ -129,8 +129,8 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
       <SelectedLayout
         getFolderById={getResource}
         selected={selected}
-        disabled={{}}
         selectResource={this.selectResource}
+        disabled={{}}
         clickFolder={this.handleClickFolder}
         clickDocument={this.handleClickDocument}
         onResourceNotFound={this.handleResourceNotFound}

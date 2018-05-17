@@ -179,7 +179,6 @@ class MainToolbar extends React.Component<Props, State> {
         placeholder: '',
         onConfirm: () => {
           const { destinationFolder } = this.state
-          console.log('onConfirm', selectedItems, destinationFolder)
           if (destinationFolder) {
             moveItems(selectedItems, destinationFolder.id)
             this.setState(initialState)

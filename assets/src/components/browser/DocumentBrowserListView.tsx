@@ -1,5 +1,5 @@
 import DocumentListView from 'components/lists/DocumentListItems'
-import FolderListView from 'components/lists/FolderListItems'
+import FolderListItems from 'components/lists/FolderListItems'
 
 import * as React from 'react'
 import {
@@ -18,7 +18,6 @@ import {
 
 type Props = {
   documents: Array<ApiResourceId>,
-  folders: Array<FolderId>,
   folder: Folder,
   selected: Map<HasId>,
   disabled: Map<HasId>,
@@ -35,7 +34,6 @@ export default class DocumentBrowserListView extends React.Component<Props> {
       clickFolder,
       clickDocument,
       folder,
-      folders,
       selectResource,
       selected,
       disabled,
@@ -43,9 +41,8 @@ export default class DocumentBrowserListView extends React.Component<Props> {
     } = this.props
     return (
       <div className='ui divided item list'>
-        <FolderListView
+        <FolderListItems
           folder={folder}
-          folders={folders}
           selected={selected}
           disabled={disabled}
           clickFolder={clickFolder}

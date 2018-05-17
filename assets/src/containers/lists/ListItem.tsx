@@ -6,7 +6,7 @@ import { ApiResource, ApiResourceId, HasId } from 'service/common'
 
 type OwnProps = {
   resource: HasId,
-  onSelect: (resource: HasId) => void,
+  onSelect?: (resource: HasId) => void,
   onClick: (resource: HasId) => void
 }
 
@@ -27,7 +27,9 @@ export default class ListItem<T, Props> extends React.Component<ListItemProps<T>
 
   handleOnSelect = () => {
     const { onSelect, resource } = this.props
-    onSelect(resource)
+    if (typeof onSelect === 'function') {
+      onSelect(resource)
+    }
   }
 }
 
