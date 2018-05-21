@@ -53,7 +53,7 @@ defmodule OnlineEditorWeb.FolderController do
     end
   end
 
-  defp is_child(folder_id, nil) do
+  defp is_child(_, nil) do
     {:ok, false}
   end
 
@@ -67,38 +67,7 @@ defmodule OnlineEditorWeb.FolderController do
     end
   end
 
-  def update(conn, %{"id" => id, "parent" => parent_id} = params) do
-    case parent_id do
-      ^id ->
-        conn |> respond_with_error(400, "400.json", error: "Cannot set parent to self")
-
-      nil ->
-        conn |> respond_with_error(400, "400.json", error: "Parent cannot be non-uuid value")
-
-      _ ->
-        with {:ok, false} <- is_child(id, parent_id),
-             %Folder{} = folder <- Query.get_by_id(id),
-             changeset <- Folder.changeset(folder, params),
-             {:ok, folder} <- Query.update(changeset) do
-          conn
-          |> put_status(200)
-          |> render("show.json", folder: folder)
-        else
-          {:ok, true} ->
-            conn
-            |> respond_with_error(
-              400,
-              "400.json",
-              error: "The new parent cannot have the folder as it's ancestor"
-            )
-
-          error ->
-            handle_access_error(conn, error)
-        end
-    end
-  end
-
-  def update(conn, %{"id" => id} = params) do
+  defp do_update(conn, %{"id" => id} = params) do
     with %Folder{} = folder <- Query.get_by_id(id),
          changeset <- Folder.changeset(folder, params),
          {:ok, folder} <- Query.update(changeset) do
@@ -108,6 +77,35 @@ defmodule OnlineEditorWeb.FolderController do
     else
       error -> handle_access_error(conn, error)
     end
+  end
+
+  def update(conn, %{"id" => id, "parent" => parent_id} = params) do
+    case parent_id do
+      ^id ->
+        conn |> respond_with_error(400, "400.json", error: "Cannot set parent to self")
+
+      nil ->
+        conn |> respond_with_error(400, "400.json", error: "Parent cannot be non-uuid value")
+
+      _ ->
+        case is_child(id, parent_id) do
+          {:ok, false} ->
+            conn
+            |> do_update(params)
+
+          {:ok, true} ->
+            conn
+            |> respond_with_error(
+              400,
+              "400.json",
+              error: "The new parent cannot have the folder as it's ancestor"
+            )
+        end
+    end
+  end
+
+  def update(conn, params) do
+    do_update(conn, params)
   end
 
   def delete(conn, %{"id" => id}) do
