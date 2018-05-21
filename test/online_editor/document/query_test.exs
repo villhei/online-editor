@@ -1,50 +1,29 @@
 defmodule OnlineEditorWeb.DocumentQueryTest do
   use OnlineEditor.DataCase
-  import OnlineEditor.Factory
   alias OnlineEditor.Document
-  alias Document.Query
 
-  test "find_by_folder returns documents in a directory" do
-    folder = insert(:folder)
-
-    document =
-      insert(%Document{
-        name: "Child",
-        folder: folder,
-        deleted: false
-      })
-
-    actual = Query.get_by_folder(folder.id)
-
-    assert [document] == actual
+  test "the create changeset should require folder and name" do
+    assert %{
+             valid?: false,
+             errors: [
+               name: {_, [validation: :required]},
+               folder_id: {_, [validation: :required]}
+             ]
+           } = Document.create_changeset(%Document{}, %{})
   end
 
-  test "deleting flags entries se deleted" do
-    folder = insert(:folder)
-
-    document =
-      insert(%Document{
-        name: "Child",
-        folder: folder,
-        deleted: false
-      })
-
-    actual = Query.delete(document.id)
-
-    assert {:ok, %{deleted: true}} = actual
+  test "the create changeset should accept name and folder as valid document" do
+    assert %{valid?: true} =
+             Document.create_changeset(%Document{}, %{"name" => "foo", "folder" => "root"})
   end
 
-  test "find_by_folder does not return deleted documents in a directory" do
-    folder = insert(:folder)
+  test "the create changeset should transform folder to folder_id for database use" do
+    assert %{changes: %{folder_id: "root"}} =
+             Document.create_changeset(%Document{}, %{"folder" => "root"})
+  end
 
-    insert(%Document{
-      name: "Child",
-      folder: folder,
-      deleted: true
-    })
-
-    actual = Query.get_by_folder(folder.id)
-
-    assert [] == actual
+  test "the changeset should transform folder to folder_id for database use" do
+    assert %{changes: %{folder_id: "root"}} =
+             Document.changeset(%Document{}, %{"folder" => "root"})
   end
 end

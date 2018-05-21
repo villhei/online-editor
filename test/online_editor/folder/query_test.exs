@@ -39,14 +39,25 @@ defmodule OnlineEditorWeb.FolderQueryTest do
         deleted: false
       })
 
-    child = %{child | parent: @unloaded_parent, children: @unloaded_children, documents: @unloaded_documents}
+    child = %{
+      child
+      | parent: @unloaded_parent,
+        children: @unloaded_children,
+        documents: @unloaded_documents
+    }
 
     actual = Query.get_by_name("Root")
 
-    expected = %{parent | parent: @unloaded_parent, children: [child], deleted: false, documents: []}
+    expected = %{
+      parent
+      | parent: @unloaded_parent,
+        children: [child],
+        deleted: false,
+        documents: []
+    }
+
     assert expected == actual
   end
-
 
   test "deleting flags entries se deleted" do
     folder = insert(:folder)

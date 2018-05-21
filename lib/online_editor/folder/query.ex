@@ -14,7 +14,9 @@ defmodule OnlineEditor.Folder.Query do
   end
 
   def get_by_id(id) do
-    Repo.get_by(Folder, [id: id, deleted: false]) |> Repo.preload(:children) |> Repo.preload(:documents)
+    Repo.get_by(Folder, id: id, deleted: false)
+    |> Repo.preload(:children)
+    |> Repo.preload(:documents)
   end
 
   def get_by_name(name) do
@@ -27,6 +29,10 @@ defmodule OnlineEditor.Folder.Query do
       )
 
     Repo.one(query)
+  end
+
+  def update(changeset) do
+    Repo.update(changeset)
   end
 
   def get_by_parent(parent_id) do
