@@ -6,6 +6,7 @@ import { ApiResource, ApiResourceId, HasId } from 'service/common'
 
 type OwnProps = {
   resource: HasId,
+  disabled?: boolean,
   onSelect?: (resource: HasId) => void,
   onClick: (resource: HasId) => void
 }
@@ -21,13 +22,15 @@ type MappedProps<T> = {
 
 export default class ListItem<T, Props> extends React.Component<ListItemProps<T> & Props> {
   handleOnClick = () => {
-    const { onClick, resource } = this.props
-    onClick(resource)
+    const { onClick, resource, disabled } = this.props
+    if (!disabled) {
+      onClick(resource)
+    }
   }
 
   handleOnSelect = () => {
-    const { onSelect, resource } = this.props
-    if (typeof onSelect === 'function') {
+    const { onSelect, resource, disabled } = this.props
+    if (typeof onSelect === 'function' && !disabled) {
       onSelect(resource)
     }
   }

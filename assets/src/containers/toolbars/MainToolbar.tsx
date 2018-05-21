@@ -41,7 +41,8 @@ type StateProps = {
   resourceId: FolderId,
   resource: ApiResource<Folder>,
   itemsSelected: boolean,
-  selectedItems: Map<HasId>
+  selectedItems: Map<HasId>,
+  disabledItems: Map<Folder>
 }
 
 type DispatchProps = {
@@ -191,7 +192,7 @@ class MainToolbar extends React.Component<Props, State> {
   }
 
   render() {
-    const { resource, resourceId, itemsSelected, selectedItems } = this.props
+    const { resource, resourceId, itemsSelected, disabledItems } = this.props
     const { modal } = this.state
     const { modalInput, destinationFolder } = this.state
     const isValid = modalInput.length > 0
@@ -212,7 +213,7 @@ class MainToolbar extends React.Component<Props, State> {
           onSelect={this.handleSelectDestination}
           isValid={Boolean(destinationFolder)}
           selected={destinationFolder}
-          disabledItems={selectedItems}
+          disabledItems={disabledItems}
           initialFolder={resourceId}
         />}
         {modal.display === 'prompt' && <PromptModal
@@ -228,10 +229,25 @@ class MainToolbar extends React.Component<Props, State> {
 const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps): StateProps => {
   const itemsSelected = Object.keys(state.ui.page.selectedItems).length === 0
   const { selectedItems } = state.ui.page
+  const selectedFolders = Object.values(selectedItems)
+    .map(({ id }) => state.model.folders.byId[id])
+    .filter(isFolder)
+
+  const childFolders: Map<Folder> = selectedFolders
+    .reduce((acc: FolderId[], { children }) => acc.concat(children), [])
+    .map((id) => state.model.folders.byId[id])
+    .filter(isFolder)
+    .concat(selectedFolders)
+    .reduce((acc, folder) => ({
+      ...acc,
+      [folder.id]: folder
+    }), {})
+
   return {
     ...selectApiResource(state, 'folders', ownProps.match.params.folderId),
     itemsSelected,
-    selectedItems
+    selectedItems,
+    disabledItems: childFolders
   }
 }
 
