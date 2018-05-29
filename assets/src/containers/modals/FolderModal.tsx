@@ -8,20 +8,57 @@ export type Props = {
   title: string,
   message: string,
   initialFolder: FolderId,
-  selected: Folder | undefined,
+  selectedCount: number,
+  selected: FolderId | undefined,
   disabledItems: Map<HasId>,
   isValid: boolean,
   onConfirm: () => void,
-  onSelect: (resource: Folder) => void,
+  onSelect: (id: FolderId) => void,
   onCancel: () => void
 }
 
-class FolderModalContainer extends React.Component<Props> {
+type State = {
+  selectedFolder: FolderId
+}
+
+const modalContainer = (document.getElementById('modal') as HTMLDivElement)
+
+function createOnSelectHandler(context: FolderModalContainer): (folder: Folder) => void {
+  const { onSelect, selected, initialFolder } = context.props
+  return (folder: Folder) => {
+    if ((selected && folder.id === selected || folder.id === initialFolder)) {
+      context.setState({
+        selectedFolder: folder.parent
+      })
+      onSelect(folder.parent)
+    } else {
+      context.setState({
+        selectedFolder: folder.id
+      })
+      onSelect(folder.id)
+    }
+  }
+}
+
+class FolderModalContainer extends React.Component<Props, State> {
+  constructor(props: Props) {
+    super(props)
+    this.state = {
+      selectedFolder: this.props.initialFolder
+    }
+  }
+
   render() {
-    const modalContainer = (document.getElementById('modal') as HTMLDivElement)
     const viewProps = this.props
-    return ReactDOM.createPortal(<FolderModalView
-      {...viewProps} />
+    const { selectedCount } = viewProps
+    return ReactDOM.createPortal(
+      <FolderModalView
+        {...{
+          ...viewProps,
+          folderId: this.state.selectedFolder,
+          onSelect: createOnSelectHandler(this),
+          message: !Boolean(viewProps.selected) ? viewProps.message : `Click to confirm the move of ${selectedCount} items.`
+        }} />
       , modalContainer)
   }
 }

@@ -9,8 +9,8 @@ type Props = {
   resource: Folder,
   selected: boolean,
   disabled: boolean,
-  onSelect: () => void,
-  onClick: () => void
+  onClick: () => void,
+  onSelect?: () => void
 }
 
 export default (props: Props) => {
@@ -22,9 +22,11 @@ export default (props: Props) => {
     <ListItem
       heading={resource.name}
       onClick={onClick}
+      disabled={disabled}
       icon='blue folder'>
-      <button className={buttonClasses} onClick={onSelect} disabled={disabled} >
+      {onSelect && <button className={buttonClasses} onClick={onSelect} disabled={disabled} >
         <i className='check icon' />
       </button>
+      }
     </ListItem >)
 }

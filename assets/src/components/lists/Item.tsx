@@ -5,12 +5,15 @@ type Props = {
   children?: JSX.Element | string,
   onClick: () => void,
   heading: string,
-  icon: string
+  icon: string,
+  disabled?: boolean
 }
 
 export default (props: Props) => {
-  const { heading, icon, onClick } = props
-  const iconClasses = classNames('circular inverted large', icon, 'icon')
+  const { disabled, heading, icon, onClick } = props
+  const iconClasses = classNames('circular inverted large', {
+    'disabled': disabled
+  }, icon, 'icon')
   return (
     < div className='item' >
       <div className='ui content grid'>

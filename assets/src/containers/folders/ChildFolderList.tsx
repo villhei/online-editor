@@ -27,48 +27,24 @@ type OwnProps = {
 }
 
 type StateProps = {
-  resource: ApiResource<Folder>
+  resource: ApiResource<Folder>,
+  resourceId: FolderId
 }
 type Props = StateProps & OwnProps & {
   resource: Folder,
   getResource: (id: FolderId) => void
 }
 
-type State = {
-  folder?: FolderId
-}
-
-class ChildFolderList extends React.Component<Props, State> {
-  state: State = {}
-
-  handleClickFolder = (folder: Folder) => {
-    const { resourceId } = this.props
-    if (folder.id === (this.state.folder || resourceId)) {
-      this.setState({
-        folder: folder.parent
-      })
-    } else {
-      this.setState({
-        folder: folder.id
-      })
-    }
-  }
-
-  componentDidMount() {
-    this.setState({
-      folder: this.props.resourceId
-    })
-  }
+class ChildFolderList extends React.Component<Props> {
   render() {
     const { resourceId, selectedItems, disabledItems, selectFolder } = this.props
-    const folder = this.state.folder || resourceId
+    const folder = resourceId
     return <div className='ui inverted divided selection list'>
       <FolderListItems
         resourceId={folder}
         selectedItems={selectedItems}
         disabledItems={disabledItems || {}}
-        clickFolder={this.handleClickFolder}
-        selectFolder={selectFolder}
+        clickFolder={selectFolder}
       />
     </div>
   }

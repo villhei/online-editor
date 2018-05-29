@@ -16,7 +16,7 @@ type Props = {
   disabled: Map<HasId>,
   clickFolder: (resource: Folder) => void,
   onResourceNotFound?: (id: FolderId) => void,
-  selectResource: (resource: Folder) => void
+  selectResource?: (resource: Folder) => void
 }
 
 export default class FolderListItems extends React.Component<Props> {

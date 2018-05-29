@@ -69,7 +69,7 @@ type State = {
     onCancel: () => void
   },
   modalInput: string,
-  destinationFolder?: Folder
+  destinationFolderId?: FolderId
 }
 
 const dummy = () => null
@@ -85,7 +85,7 @@ const initialState: State = {
     onCancel: dummy
   },
   modalInput: '',
-  destinationFolder: undefined
+  destinationFolderId: undefined
 }
 
 class MainToolbar extends React.Component<Props, State> {
@@ -105,9 +105,9 @@ class MainToolbar extends React.Component<Props, State> {
     })
   }
 
-  handleSelectDestination = (destinationFolder: Folder | undefined) => {
+  handleSelectDestination = (destinationFolderId: FolderId | undefined) => {
     this.setState({
-      destinationFolder
+      destinationFolderId
     })
   }
 
@@ -179,9 +179,9 @@ class MainToolbar extends React.Component<Props, State> {
         message: `Move selected ${itemCount} items to folder:`,
         placeholder: '',
         onConfirm: () => {
-          const { destinationFolder } = this.state
-          if (destinationFolder) {
-            moveItems(selectedItems, destinationFolder.id)
+          const { destinationFolderId } = this.state
+          if (destinationFolderId) {
+            moveItems(selectedItems, destinationFolderId)
             this.setState(initialState)
             clearSelection()
           }
@@ -192,9 +192,9 @@ class MainToolbar extends React.Component<Props, State> {
   }
 
   render() {
-    const { resource, resourceId, itemsSelected, disabledItems } = this.props
+    const { resource, resourceId, itemsSelected, selectedItems, disabledItems } = this.props
     const { modal } = this.state
-    const { modalInput, destinationFolder } = this.state
+    const { modalInput, destinationFolderId } = this.state
     const isValid = modalInput.length > 0
     return (
       <>
@@ -209,12 +209,15 @@ class MainToolbar extends React.Component<Props, State> {
           createDocument={this.handleCreateDocument}
         />
         {modal.display === 'folder' && <FolderModal
-          {...modal}
-          onSelect={this.handleSelectDestination}
-          isValid={Boolean(destinationFolder)}
-          selected={destinationFolder}
-          disabledItems={disabledItems}
-          initialFolder={resourceId}
+          {...{
+            ...modal,
+            onSelect: this.handleSelectDestination,
+            isValid: Boolean(destinationFolderId),
+            selected: destinationFolderId,
+            disabledItems: disabledItems,
+            initialFolder: resourceId,
+            selectedCount: Object.keys(selectedItems).length
+          }}
         />}
         {modal.display === 'prompt' && <PromptModal
           {...modal}

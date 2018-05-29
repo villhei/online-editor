@@ -23,8 +23,8 @@ type OwnProps = {
   selectedItems: Map<HasId>,
   disabledItems?: Map<HasId>,
   onResourceNotFound?: (id: FolderId) => void,
+  selectFolder?: (id: Folder) => void
   clickFolder: (resource: Folder) => void
-  selectFolder: (resource: Folder) => void
 }
 type Props = OwnProps & {
   resource: Folder,

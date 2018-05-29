@@ -23,7 +23,7 @@ type MappedProps<T> = {
 export default class ListItem<T, Props> extends React.Component<ListItemProps<T> & Props> {
   handleOnClick = () => {
     const { onClick, resource, disabled } = this.props
-    if (!disabled) {
+    if (typeof onClick === 'function' && !disabled) {
       onClick(resource)
     }
   }
