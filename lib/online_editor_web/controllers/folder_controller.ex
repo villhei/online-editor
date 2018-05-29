@@ -53,16 +53,59 @@ defmodule OnlineEditorWeb.FolderController do
     end
   end
 
-  def update(conn, %{"id" => id} = params) do
+  defp is_child(_, nil) do
+    {:ok, false}
+  end
+
+  defp is_child(parent_id, candidate_id) do
+    %Folder{} = maybe_child = Query.get_by_id(candidate_id)
+
+    if maybe_child.parent_id == parent_id do
+      {:ok, true}
+    else
+      is_child(parent_id, maybe_child.parent_id)
+    end
+  end
+
+  defp do_update(conn, %{"id" => id} = params) do
     with %Folder{} = folder <- Query.get_by_id(id),
          changeset <- Folder.changeset(folder, params),
-         {:ok, folder} <- Repo.update(changeset) do
+         {:ok, folder} <- Query.update(changeset) do
       conn
-        |> put_status(200)
-        |> render("show.json", folder: folder)
+      |> put_status(200)
+      |> render("show.json", folder: folder)
     else
       error -> handle_access_error(conn, error)
     end
+  end
+
+  def update(conn, %{"id" => id, "parent" => parent_id} = params) do
+    case parent_id do
+      ^id ->
+        conn |> respond_with_error(400, "400.json", error: "Cannot set parent to self")
+
+      nil ->
+        conn |> respond_with_error(400, "400.json", error: "Parent cannot be non-uuid value")
+
+      _ ->
+        case is_child(id, parent_id) do
+          {:ok, false} ->
+            conn
+            |> do_update(params)
+
+          {:ok, true} ->
+            conn
+            |> respond_with_error(
+              400,
+              "400.json",
+              error: "The new parent cannot have the folder as it's ancestor"
+            )
+        end
+    end
+  end
+
+  def update(conn, params) do
+    do_update(conn, params)
   end
 
   def delete(conn, %{"id" => id}) do

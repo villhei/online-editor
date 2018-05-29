@@ -1,11 +1,14 @@
 import {
-  deleteDocument
+  deleteDocument,
+  updateDocument
 } from 'actions/document-actions'
 import {
   deleteFolder,
   deleteFoldersAction,
+  getFolder,
   getRootAction,
-  getRootFolder
+  getRootFolder,
+  updateFolder
 } from 'actions/folder-actions'
 import { Dispatch } from 'react-redux'
 import { push } from 'react-router-redux'
@@ -34,12 +37,18 @@ export const TOGGLE_MENU = 'TOGGLE_MENU'
 
 export const CLEAR_ERROR = 'CLEAR_ERROR'
 
+export const SELECT_LAYOUT = 'SELECT_LAYOUT'
+
 export const SET_SELECTED_ITEMS = 'SET_SELECTED_ITEMS'
 
 export const ACTION_DELETE_DOCUMENT = 'ACTION_DELETE_DOCUMENT'
 
+export const MOVE_SELECTED_ITEMS = 'MOVE_SELECTED_ITEMS'
+
 export const deleteDocumentAction = actionCreator
   .async<ByIdParams, ByResourceParams<TextDocument>>(ACTION_DELETE_DOCUMENT)
+
+export type Layout = 'cards' | 'list'
 
 export type ToggleMenu = {
   menu: string
@@ -49,9 +58,18 @@ export type SelectedItems = {
   selection: Map<HasId>
 }
 
+export type MoveSelectedItems = SelectedItems & {
+  destination: FolderId
+}
+
 export const toggleMenu = actionCreator<ToggleMenu>(TOGGLE_MENU)
 export const clearError = actionCreator<undefined>(CLEAR_ERROR)
+export const selectLayout = actionCreator<Layout>(SELECT_LAYOUT)
+
 export const setSelectedItems = actionCreator<SelectedItems>(SET_SELECTED_ITEMS)
+
+export const moveSelectedItemsAction = actionCreator
+  .async<MoveSelectedItems, Array<Folder>>(MOVE_SELECTED_ITEMS)
 
 export const selectRootFolder = bindThunkAction(getRootAction, async (_params, dispatch): Promise<Folder> => {
   const folder = await getRootFolder(dispatch, undefined)
@@ -59,10 +77,29 @@ export const selectRootFolder = bindThunkAction(getRootAction, async (_params, d
   return folder
 })
 
-export const moveItems = bindThunkAction(getRootAction, async (_params, dispatch): Promise<Folder> => {
-  const folder = await getRootFolder(dispatch, undefined)
-  dispatch(push('/folder/' + folder.id))
-  return folder
+export const moveItems = bindThunkAction(moveSelectedItemsAction, async ({ selection, destination }, dispatch): Promise<Array<Folder>> => {
+  const items = Object.values(selection)
+  const documents = items.filter(isDocument)
+  const folders = items.filter(isFolder)
+
+  const affectedFolders = [destination]
+    .concat(documents.map(document => document.folder))
+    .concat(folders.map(folder => folder.parent))
+
+  const modifiedDocuments = documents
+    .map(document => ({
+      ...document,
+      folder: destination
+    }))
+    .map(document => updateDocument(dispatch, { id: document.id, resource: document }))
+  const modifiedFolders = folders
+    .map(folder => ({
+      ...folder,
+      parent: destination
+    })).map(folder => updateFolder(dispatch, { id: folder.id, resource: folder }))
+  await Promise.all(modifiedDocuments)
+  await Promise.all(modifiedFolders)
+  return Promise.all(affectedFolders.map(id => getFolder(dispatch, { id })))
 })
 
 function deleteEntities<T extends HasId>(

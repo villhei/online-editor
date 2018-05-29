@@ -83,20 +83,74 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     conn = get(conn, "/api/folders/?find=Root")
 
     assigns = [
-      folders: [%{
-        parent
-        | children: [child], documents: []
-      }]
+      folders: [
+        %{
+          parent
+          | children: [child],
+            documents: []
+        }
+      ]
     ]
 
     assert json_response(conn, 200) == render_json("index.json", assigns)
   end
 
-  test "PUT 200 - update path allows updating documents", %{conn: conn} do
+  test "PUT 200 - update path allows updating folders", %{conn: conn} do
     folder = insert(:folder)
     conn = put(conn, "/api/folders/#{folder.id}", %{name: "new name"})
     body = json_response(conn, 200)
     assert body["name"] == "new name"
+  end
+
+  test "PUT 404 - update path returns a 404 on missing folder", %{conn: conn} do
+    conn = put(conn, "/api/folders/#{UUID.uuid4()}", %{name: "new name"})
+    assert json_response(conn, 404) == ErrorView.render("404.json")
+  end
+
+  test "PUT 400 - update path does not allow setting parent to self", %{conn: conn} do
+    folder = insert(:folder)
+    conn = put(conn, "/api/folders/#{folder.id}", %{parent: folder.id})
+
+    assert json_response(conn, 400) ==
+             ErrorView.render("400.json", %{error: "Cannot set parent to self"})
+  end
+
+  test "PUT 400 - Cannot unset a parent", %{conn: conn} do
+    root = insert(:folder)
+
+    child =
+      insert(%Folder{
+        name: "Child",
+        parent: root
+      })
+
+    conn = put(conn, "/api/folders/#{child.id}", %{parent: nil})
+
+    assert json_response(conn, 400) ==
+             ErrorView.render("400.json", %{error: "Parent cannot be non-uuid value"})
+  end
+
+  test "PUT 400 - Cannot set a parent, if new parent exists in children", %{conn: conn} do
+    root = insert(:folder)
+
+    child =
+      insert(%Folder{
+        name: "Child",
+        parent: root
+      })
+
+    grandchild =
+      insert(%Folder{
+        name: "Grandchild",
+        parent: child
+      })
+
+    conn = put(conn, "/api/folders/#{child.id}", %{parent: grandchild.id})
+
+    assert json_response(conn, 400) ==
+             ErrorView.render("400.json", %{
+               error: "The new parent cannot have the folder as it's ancestor"
+             })
   end
 
   test "DELETE 204 - delete path allows deleting folders", %{conn: conn} do
@@ -109,5 +163,4 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     conn = delete(conn, "/api/folders/#{UUID.uuid4()}")
     assert json_response(conn, 404) == ErrorView.render("404.json")
   end
-
 end

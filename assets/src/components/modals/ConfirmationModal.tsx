@@ -1,4 +1,5 @@
 import * as classNames from 'classnames'
+import Modal from 'components/modals/Modal'
 import * as React from 'react'
 
 type Props = {
@@ -10,10 +11,9 @@ type Props = {
 }
 const ConfirmationModal = (props: Props) => {
   const iconClasses = classNames('icon', props.icon)
-  const dimmerClasses = classNames('ui dimmer visible active')
   return (
-    <div className={dimmerClasses}>
-      <div className='ui mini basic modal transition visible active'>
+    <Modal>
+      <>
         <div className='ui icon header'>
           <i className={iconClasses} />
           {props.title}
@@ -35,8 +35,8 @@ const ConfirmationModal = (props: Props) => {
             Ok
           </button>
         </div>
-      </div>
-    </div>
+      </>
+    </Modal>
   )
 }
 

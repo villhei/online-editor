@@ -104,9 +104,7 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
 
   test "POST 200 - create path allows creating documents with only folder and name", %{conn: conn} do
     folder = insert(:folder)
-    payload = %{
-      :name => "title",
-      :folder => folder.id}
+    payload = %{:name => "title", :folder => folder.id}
     conn = post(conn, "/api/documents", payload)
 
     document =

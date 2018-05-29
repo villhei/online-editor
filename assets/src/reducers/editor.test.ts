@@ -49,7 +49,7 @@ describe('Editor reducer', () => {
   })
 
   it('should reset the modifications on document update', () => {
-    const action = updateDocumentAction.done({ params: { id: document.id, document }, result: document })
+    const action = updateDocumentAction.done({ params: { id: document.id, resource: document }, result: document })
     expect(editorReducer(modifiedState, action)).toEqual(initialState)
   })
 })

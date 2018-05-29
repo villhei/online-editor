@@ -2,7 +2,8 @@ import {
   ByIdParams,
   ByResourceParams,
   HasId,
-  Map
+  Map,
+  UpdateByIdParams
 } from 'service/common'
 import {
   PartialTextDocument,
@@ -22,7 +23,6 @@ import actionCreatorFactory from 'typescript-fsa'
 
 import { wrapAsyncWorker } from './async'
 
-export type UpdateDocumentParams = ByIdParams & { document: PartialTextDocument }
 export type GetDocumentByFolderParams = { folder: FolderId }
 
 export const ACTION_GET_DOCUMENT = 'ACTION_GET_DOCUMENT'
@@ -49,7 +49,7 @@ export const getDocumentsByFolderAction = actionCreator
   .async<GetDocumentByFolderParams, Array<TextDocument>, {}>(ACTION_GET_DOCUMENTS_BY_FOLDER)
 
 export const updateDocumentAction = actionCreator
-  .async<UpdateDocumentParams, TextDocument, {}>(ACTION_UPDATE_DOCUMENT)
+  .async<UpdateByIdParams<PartialTextDocument>, TextDocument, {}>(ACTION_UPDATE_DOCUMENT)
 
 export const deleteDocumentAction = actionCreator
   .async<ByResourceParams<TextDocument>, TextDocumentId>(ACTION_DELETE_DOCUMENT)
@@ -60,6 +60,6 @@ export const deleteDocumentsAction = actionCreator
 export const createDocument = wrapAsyncWorker(createDocumentAction, (params: ByResourceParams<PartialTextDocument>) => create(params.resource))
 export const getDocument = wrapAsyncWorker(getDocumentAction, (params: ByIdParams) => getById(params.id))
 export const getDocuments = wrapAsyncWorker(getDocumentsAction, getAll)
-export const updateDocument = wrapAsyncWorker(updateDocumentAction, (params: UpdateDocumentParams) => update(params.id, params.document))
+export const updateDocument = wrapAsyncWorker(updateDocumentAction, (params: UpdateByIdParams<PartialTextDocument>) => update(params.id, params.resource))
 export const deleteDocument = wrapAsyncWorker(deleteDocumentAction, (params: ByResourceParams<TextDocument>) => deleteByDocument(params.resource))
 export const deleteDocuments = wrapAsyncWorker(deleteDocumentsAction, items => deleteMultiple(items))

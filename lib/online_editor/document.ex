@@ -19,16 +19,17 @@ defmodule OnlineEditor.Document do
 
   @doc false
 
-  def create_changeset(%Document{} = document, %{"folder" => folder_id} = attrs) do
-    with_folder_id =
-      attrs
-      |> Map.drop(["folder"])
-      |> Map.put("folder_id", folder_id)
-
-    create_changeset(document, with_folder_id)
+  defp transform_folder(%{"folder" => folder_id} = attrs) do
+    attrs
+    |> Map.drop(["folder"])
+    |> Map.put("folder_id", folder_id)
   end
 
+  defp transform_folder(attrs), do: attrs
+
   def create_changeset(%Document{} = document, attrs) do
+    attrs = transform_folder(attrs)
+
     document
     |> change(%{})
     |> Map.put(:empty_values, [""])
@@ -37,6 +38,8 @@ defmodule OnlineEditor.Document do
   end
 
   def changeset(%Document{} = document, attrs) do
+    attrs = transform_folder(attrs)
+
     document
     |> change(%{})
     |> cast(attrs, [:name, :content, :folder_id])

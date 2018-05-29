@@ -3,11 +3,11 @@ import { resetDocumentChanges, updatedocumentContent } from 'actions/editor-acti
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
 import Loading from 'components/Loading'
-import wrapApiResource from 'containers/ApiResourceHOC'
+import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { Dispatch, connect } from 'react-redux'
-import { ApiResource, ApiResourceId } from 'service/common'
+import { ApiResourceId } from 'service/common'
 import { TextDocument, isDocument } from 'service/document-service'
 
 import { RootState, RouterProvidedProps } from '../reducer'
@@ -60,14 +60,12 @@ class Editor extends React.PureComponent<EditorProps> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvidedProps) => {
+const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: ApiResourceId = ownProps.match.params.documentId
-  const resource: ApiResource<TextDocument> = model.documents.byId[resourceId]
-  const { modifiedContent } = state.editor
-  const { saving } = ui.page.editorToolbar
+  const { modifiedContent } = state.state.editor
+  const { saving } = state.ui.page.editorToolbar
   return {
-    resource,
-    resourceId,
+    ...selectApiResource(state, 'documents', resourceId),
     modifiedContent,
     saving
   }
@@ -75,7 +73,7 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvid
 
 const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
   return {
-    getResource: (id: string) => getDocument(dispatch, { id }),
+    ...mapGetResource(dispatch, getDocument),
     updateDocumentContent: (value: string) => dispatch(updatedocumentContent({ value })),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined))
   }

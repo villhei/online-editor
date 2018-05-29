@@ -1,13 +1,12 @@
 import { getFolder } from 'actions/folder-actions'
 import { push } from 'react-router-redux'
-import { ByResourceParams } from 'service/common'
-import { TextDocument, TextDocumentId, create, deleteByDocument } from 'service/document-service'
+import { ByResourceParams, UpdateByIdParams } from 'service/common'
+import { PartialTextDocument, TextDocument, TextDocumentId, create, deleteByDocument } from 'service/document-service'
 import { Folder, PartialFolder } from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'
 import { bindThunkAction } from 'typescript-fsa-redux-thunk'
 
 import {
-  UpdateDocumentParams,
   createDocumentAction,
   deleteDocumentAction,
   updateDocument,
@@ -63,7 +62,7 @@ export const createFolderAndRefresh = bindThunkAction(createFolderAction, async 
   return folder
 })
 
-export const updateAndRefresh = bindThunkAction(updateDocumentAction, async (params: UpdateDocumentParams, dispatch): Promise<TextDocument> => {
+export const updateAndRefresh = bindThunkAction(updateDocumentAction, async (params: UpdateByIdParams<PartialTextDocument>, dispatch): Promise<TextDocument> => {
   const document = await updateDocument(dispatch, params)
   await getFolder(dispatch, { id: document.folder })
   return document

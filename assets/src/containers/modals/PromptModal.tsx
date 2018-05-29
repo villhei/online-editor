@@ -14,24 +14,53 @@ export type Props = {
   onCancel: () => void
 }
 
+const ESC_KEY = 27
+const ENTER_KEY = 13
+
 export type State = {
-  response: string
+  listeners: Array<(event: KeyboardEvent) => void>
 }
 
-class PromptModal extends React.Component<Props> {
+function getListeners(context: PromptModal) {
+  return [
+    (event: KeyboardEvent) => {
+      if (event.keyCode === ENTER_KEY) {
+        if (context.props.isValid) {
+          context.handleConfirm()
+        }
+      }
+    },
+    (event: KeyboardEvent) => {
+      if (event.keyCode === ESC_KEY) {
+        context.props.onCancel()
+      }
+    }
+  ]
+}
+
+class PromptModal extends React.Component<Props, State> {
+  componentDidMount() {
+    const listeners = getListeners(this)
+    listeners.forEach(listener => document.addEventListener('keydown', listener))
+    this.setState({ listeners })
+  }
+  componentWillUnmount() {
+    const { listeners } = this.state
+    listeners.forEach(listener => document.addEventListener('keydown', listener))
+  }
 
   handleChange = (event: React.FormEvent<HTMLInputElement>) => {
     this.props.onChange(event)
   }
 
   handleConfirm = () => {
-    this.props.onConfirm()
+    const { onConfirm } = this.props
+    onConfirm()
   }
 
   render() {
     const modalContainer = (document.getElementById('modal') as HTMLDivElement)
     const { icon, title, message, placeholder, value, isValid, onChange, onCancel } = this.props
-
     return ReactDOM.createPortal(<PromptModalView
       title={title}
       icon={icon}
