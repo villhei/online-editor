@@ -8,7 +8,7 @@ import * as React from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { Dispatch, connect } from 'react-redux'
 import { ApiResourceId } from 'service/common'
-import { TextDocument, isDocument } from 'service/document-service'
+import { PartialTextDocument, TextDocument, isDocument } from 'service/document-service'
 
 import { RootState, RouterProvidedProps } from '../reducer'
 
@@ -60,10 +60,15 @@ class Editor extends React.PureComponent<EditorProps> {
   }
 }
 
+function isModified(modifiedDocument: PartialTextDocument | null): modifiedDocument is PartialTextDocument | { content: string } {
+  return Boolean(modifiedDocument && typeof modifiedDocument.content === 'string')
+}
+
 const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: ApiResourceId = ownProps.match.params.documentId
-  const { modifiedContent } = state.state.editor
+  const { modifiedDocument } = state.state.editor
   const { saving } = state.ui.page.editorToolbar
+  const modifiedContent = isModified(modifiedDocument) ? modifiedDocument.content : undefined
   return {
     ...selectApiResource(state, 'documents', resourceId),
     modifiedContent,

@@ -14,7 +14,13 @@ const updateNameAction = updateDocumentName({ value: 'updated name' })
 
 const resetAction = resetDocumentChanges(undefined)
 
-const modifiedState = { ...initialState, modifiedContent: 'foo', modifiedName: 'bar' }
+const modifiedState = {
+  ...initialState,
+  modifiedDocument: {
+    content: 'foo',
+    modifiedName: 'bar'
+  }
+}
 
 export const document: TextDocument = {
   id: 'foo',
@@ -27,29 +33,54 @@ export const document: TextDocument = {
 }
 
 describe('Editor reducer', () => {
+
+  it('should have a falsy isModified initialy', () => {
+    const state = editorReducer(initialState, {
+      type: 'NOP'
+    })
+    expect(state.isModified).toBeFalsy()
+  })
   it('should return the state as-is if action is not recognized', () => {
     expect(editorReducer(initialState, {
       type: 'NOP'
     })).toEqual(initialState)
   })
 
-  it('should set the updated editor content', () => {
+  it('should set the updated editor content on updateContentAction', () => {
     const state = editorReducer(initialState, updateContentAction)
-    expect(state.modifiedContent).toEqual('updated value')
+    expect(state.modifiedDocument).toEqual({ content: 'updated value' })
   })
 
-  it('should set the updated document name', () => {
+  it('should set the document as modified on updateContentAction', () => {
+    const state = editorReducer(initialState, updateContentAction)
+    expect(state.isModified).toBeTruthy()
+  })
+
+  it('should set the updated document name on updateNameAction', () => {
     const state = editorReducer(initialState, updateNameAction)
-    expect(state.modifiedName).toEqual('updated name')
+    expect(state.modifiedDocument).toEqual({ name: 'updated name' })
+  })
+
+  it('should set the document as modified on updateNameAction', () => {
+    const state = editorReducer(initialState, updateNameAction)
+    expect(state.isModified).toBeTruthy()
   })
 
   it('should reset the modifications to document', () => {
     const state = editorReducer(modifiedState, resetAction)
-    expect(state).toEqual(initialState)
+    expect(state.modifiedDocument).toEqual(initialState.modifiedDocument)
   })
 
   it('should reset the modifications on document update', () => {
     const action = updateDocumentAction.done({ params: { id: document.id, resource: document }, result: document })
-    expect(editorReducer(modifiedState, action)).toEqual(initialState)
+    const state = editorReducer(modifiedState, action)
+    expect(state.modifiedDocument).toEqual(initialState.modifiedDocument)
   })
+
+  it('should reset the modified status on navigate action', () => {
+    const action = updateDocumentAction.done({ params: { id: document.id, resource: document }, result: document })
+    const state = editorReducer(modifiedState, action)
+    expect(state.isModified).toBeFalsy()
+  })
+
 })

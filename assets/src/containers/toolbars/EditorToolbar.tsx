@@ -48,8 +48,7 @@ export type StateProps = {
   documentId: string,
   document: ApiResource<TextDocument>,
   isModified: boolean,
-  modifiedContent: string | undefined,
-  modifiedName: string | undefined,
+  modifiedDocument: null | PartialTextDocument,
   deleting: boolean,
   refreshing: boolean,
   saving: boolean
@@ -87,6 +86,10 @@ type State = {
   modal: ModalParams | null
 }
 
+function isNameModified(modifiedDocument: PartialTextDocument | null): modifiedDocument is { name: string } {
+  return Boolean(modifiedDocument && typeof modifiedDocument.name === 'string')
+}
+
 class EditorToolbar extends React.Component<Props, State> {
   state = {
     modal: null
@@ -102,6 +105,7 @@ class EditorToolbar extends React.Component<Props, State> {
         onConfirm: () => {
           getDocument(documentId)
           resetDocumentChanges()
+          this.setState({ modal: null })
         },
         onCancel: () => this.setState({ modal: null })
       }
@@ -128,14 +132,14 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 
   updateDocumentContent = () => {
-    const { isModified, document, documentId, modifiedName, modifiedContent } = this.props
-    if (isDocument(document) && isModified) {
-      const modifiedDocument = {
-        content: modifiedContent,
-        name: modifiedName,
-        updated_at: document.updated_at
+    const { document, documentId, modifiedDocument } = this.props
+    if (isDocument(document) && modifiedDocument !== null) {
+      const payload = {
+        ...document,
+        content: modifiedDocument.content,
+        name: modifiedDocument.name || undefined
       }
-      this.props.saveDocument(documentId, modifiedDocument)
+      this.props.saveDocument(documentId, payload)
     }
   }
 
@@ -165,7 +169,7 @@ class EditorToolbar extends React.Component<Props, State> {
       documentId,
       document,
       isModified,
-      modifiedName,
+      modifiedDocument,
       deleting,
       saving,
       refreshing
@@ -183,7 +187,7 @@ class EditorToolbar extends React.Component<Props, State> {
       refreshing,
       documentId
     }
-    const resourceName = modifiedName !== undefined ? modifiedName : getResourceName(document)
+    const resourceName: string = isNameModified(modifiedDocument) ? modifiedDocument.name : getResourceName(document)
     return (
       <>
         <EditorToolbarView
@@ -202,15 +206,14 @@ class EditorToolbar extends React.Component<Props, State> {
 const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvidedProps): StateProps => {
   const documentId: ApiResourceId = ownProps.match.params.documentId
   const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
-  const { modifiedContent, modifiedName } = state.editor
+  const { modifiedDocument, isModified } = state.editor
   const { editorToolbar } = ui.page
-  const isModified = Boolean(document && (modifiedContent || modifiedName))
+
   return {
     document,
     documentId,
     isModified,
-    modifiedName,
-    modifiedContent,
+    modifiedDocument,
     ...editorToolbar
   }
 }
