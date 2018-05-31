@@ -68,10 +68,10 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: ApiResourceId = ownProps.match.params.documentId
   const { modifiedDocument } = state.state.editor
   const { saving } = state.ui.page.editorToolbar
-  const modifiedContent = isModified(modifiedDocument) ? modifiedDocument.content : undefined
+  const content = isModified(modifiedDocument) ? modifiedDocument.content : undefined
   return {
     ...selectApiResource(state, 'documents', resourceId),
-    modifiedContent,
+    modifiedContent: content,
     saving
   }
 }
