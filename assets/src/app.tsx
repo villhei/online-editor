@@ -8,7 +8,7 @@ import { Provider } from 'react-redux'
 import { ConnectedRouter } from 'react-router-redux'
 import { history } from 'reducers/router'
 
-import { store } from './reducer'
+import { store } from './store'
 
 const APP_ROOT: string = 'main'
 

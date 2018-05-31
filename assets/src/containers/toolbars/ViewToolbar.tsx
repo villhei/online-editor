@@ -20,7 +20,7 @@ import {
   isDocument
 } from 'service/document-service'
 
-import { RootState, RouterProvidedProps } from 'main/reducer'
+import { RootState, RouterProvidedProps } from 'main/store'
 
 export type StateProps = {
   resourceId: TextDocumentId,

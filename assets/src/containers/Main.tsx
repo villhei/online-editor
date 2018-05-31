@@ -5,7 +5,7 @@ import Main from 'components/Main'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
 
-import { RootState } from '../reducer'
+import { RootState } from 'main/store'
 
 type StateProps = {
   error: {

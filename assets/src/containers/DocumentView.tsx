@@ -10,7 +10,7 @@ import {
 } from 'react-redux'
 import { TextDocument, TextDocumentId, isDocument } from 'service/document-service'
 
-import { RootState, RouterProvidedProps } from '../reducer'
+import { RootState, RouterProvidedProps } from 'main/store'
 
 export type DocumentViewProps = {
   getResource: (id: string) => Promise<TextDocument>,

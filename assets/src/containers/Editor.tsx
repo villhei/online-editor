@@ -10,7 +10,7 @@ import { Dispatch, connect } from 'react-redux'
 import { ApiResourceId } from 'service/common'
 import { PartialTextDocument, TextDocument, isDocument } from 'service/document-service'
 
-import { RootState, RouterProvidedProps } from '../reducer'
+import { RootState, RouterProvidedProps } from 'main/store'
 
 const EDITOR_OPTIONS = {
   lineNumbers: true,
@@ -60,7 +60,7 @@ class Editor extends React.PureComponent<EditorProps> {
   }
 }
 
-function isModified(modifiedDocument: PartialTextDocument | null): modifiedDocument is PartialTextDocument | { content: string } {
+function isModified(modifiedDocument: PartialTextDocument | null): modifiedDocument is { content: string } {
   return Boolean(modifiedDocument && typeof modifiedDocument.content === 'string')
 }
 

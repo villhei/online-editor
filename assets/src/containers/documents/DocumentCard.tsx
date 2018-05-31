@@ -17,7 +17,7 @@ import {
   isDocument
 } from 'service/document-service'
 
-import { RootState } from 'main/reducer'
+import { RootState } from 'main/store'
 
 type OwnProps = {
   resourceId: TextDocumentId,

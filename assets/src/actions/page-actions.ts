@@ -30,7 +30,7 @@ import {
 import actionCreatorFactory from 'typescript-fsa'
 import { bindThunkAction } from 'typescript-fsa-redux-thunk'
 
-import { RootState } from '../reducer'
+import { RootState } from 'main/store'
 const actionCreator = actionCreatorFactory()
 
 export const TOGGLE_MENU = 'TOGGLE_MENU'

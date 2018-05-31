@@ -35,7 +35,7 @@ import {
 } from 'service/folder-service'
 
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
-import { RootState, RouterProvidedProps } from 'main/reducer'
+import { RootState, RouterProvidedProps } from 'main/store'
 
 type StateProps = {
   resourceId: FolderId,

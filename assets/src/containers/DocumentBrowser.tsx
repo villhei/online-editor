@@ -33,7 +33,7 @@ import {
   isFolder
 } from 'service/folder-service'
 
-import { RootState, RouterProvidedProps } from 'main/reducer'
+import { RootState, RouterProvidedProps } from 'main/store'
 
 type Props = {
   getResource: (id: FolderId) => typeof getDocument,

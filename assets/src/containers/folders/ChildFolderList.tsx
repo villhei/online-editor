@@ -17,7 +17,7 @@ import {
   isFolder
 } from 'service/folder-service'
 
-import { RootState } from 'main/reducer'
+import { RootState } from 'main/store'
 
 type OwnProps = {
   resourceId: FolderId,

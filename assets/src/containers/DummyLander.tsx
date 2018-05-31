@@ -3,7 +3,7 @@ import Loading from 'components/Loading'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
 
-import { RootState } from '../reducer'
+import { RootState } from 'main/store'
 
 type DispatchProps = {
   selectRootFolder: () => void

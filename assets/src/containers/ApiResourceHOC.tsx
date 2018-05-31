@@ -1,6 +1,6 @@
 
 import NotFoundCard from 'components/notfound/NotFoundCard'
-import { RootState } from 'main/reducer'
+import { RootState } from 'main/store'
 import * as React from 'react'
 import { Dispatch } from 'react-redux'
 import { ApiResource, ApiResourceId, ByIdParams, ResourceStatus, isAxiosError } from 'service/common'
