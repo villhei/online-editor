@@ -34,7 +34,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   return selectApiResource<TextDocument>(state, 'documents', resourceId)
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => mapGetResource(dispatch, getDocument)
+const mapDispatchToProps = (dispatch: Dispatch) => mapGetResource(dispatch, getDocument)
 
 const wrappedResource = wrapApiResource<TextDocument, DocumentViewProps>(isDocument)(DocumentView, LoadingComponent)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

@@ -8,8 +8,9 @@ import {
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
 import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
+import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
+import { Action } from 'redux'
 import {
   ApiResource,
   ApiResourceId,
@@ -23,6 +24,7 @@ import {
 } from 'service/document-service'
 
 import { RootState, RouterProvidedProps } from 'main/store'
+import { ThunkDispatch } from 'redux-thunk'
 
 export type DispatchProps = {
   getDocument: (id: ApiResourceId) => void,
@@ -218,7 +220,7 @@ const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvid
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): DispatchProps => {
   return {
     getDocument: (id: ApiResourceId) => getDocument(dispatch, { id }),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),

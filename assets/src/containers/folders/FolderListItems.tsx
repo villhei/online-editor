@@ -48,7 +48,7 @@ const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
   return selectApiResource<Folder>(state, 'folders', resourceId)
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return mapGetResource(dispatch, getFolder)
 }
 

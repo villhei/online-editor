@@ -61,7 +61,7 @@ const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     ...mapGetResource(dispatch, getDocument),
     editResource: (id: string) => dispatch(push('/edit/' + id))

@@ -65,7 +65,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   return selectApiResource<TextDocument>(state, 'documents', resourceId)
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
   return {
     ...mapGetResource(dispatch, getDocument),
     navigate: (route: string) => dispatch(push(route))

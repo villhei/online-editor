@@ -5,7 +5,7 @@ export function wrapAsyncWorker<P, S, E>(
   asyncAction: AsyncActionCreators<P, S, E>,
   worker: (params: P) => Promise<S>
 ) {
-  return function wrappedWorker(dispatch: Dispatch<S>, params: P): Promise<S> {
+  return function wrappedWorker(dispatch: Dispatch, params: P): Promise<S> {
     dispatch(asyncAction.started(params))
     return worker(params).then(result => {
       dispatch(asyncAction.done({ params, result }))

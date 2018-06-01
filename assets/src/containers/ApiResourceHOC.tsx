@@ -88,13 +88,13 @@ export function selectApiResource<T>(
   }
 }
 
-export type ResourceFetcher = (dispatch: Dispatch<RootState>, params: ByIdParams) => void
+export type ResourceFetcher<T> = (dispatch: Dispatch, params: ByIdParams) => Promise<T>
 
 export type ApiResourceDispatch = {
   getResource: (id: ApiResourceId) => void
 }
 
-export function mapGetResource(dispatch: Dispatch<RootState>, getResource: ResourceFetcher): ApiResourceDispatch {
+export function mapGetResource<T>(dispatch: Dispatch, getResource: ResourceFetcher<T>): ApiResourceDispatch {
   return {
     getResource: (id: ApiResourceId) => getResource(dispatch, { id })
   }

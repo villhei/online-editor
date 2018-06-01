@@ -33,7 +33,7 @@ const mapStateToProps = ({ state }: RootState): StateProps => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
+const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
   return {
     clearError: () => dispatch(clearError(undefined))
   }

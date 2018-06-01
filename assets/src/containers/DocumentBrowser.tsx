@@ -150,7 +150,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     ...mapGetResource(dispatch, getFolder),
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),

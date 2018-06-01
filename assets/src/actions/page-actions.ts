@@ -30,7 +30,6 @@ import {
 import actionCreatorFactory from 'typescript-fsa'
 import { bindThunkAction } from 'typescript-fsa-redux-thunk'
 
-import { RootState } from 'main/store'
 const actionCreator = actionCreatorFactory()
 
 export const TOGGLE_MENU = 'TOGGLE_MENU'
@@ -72,7 +71,7 @@ export const moveSelectedItemsAction = actionCreator
   .async<MoveSelectedItems, Array<Folder>>(MOVE_SELECTED_ITEMS)
 
 export const selectRootFolder = bindThunkAction(getRootAction, async (_params, dispatch): Promise<Folder> => {
-  const folder = await getRootFolder(dispatch, undefined)
+  const folder = await getRootFolder(dispatch, {})
   dispatch(push('/folder/' + folder.id))
   return folder
 })
@@ -102,10 +101,10 @@ export const moveItems = bindThunkAction(moveSelectedItemsAction, async ({ selec
   return Promise.all(affectedFolders.map(id => getFolder(dispatch, { id })))
 })
 
-function deleteEntities<T extends HasId>(
+function deleteEntities<T extends HasId,>(
   entities: Array<T>,
-  dispatch: Dispatch<RootState>,
-  action: (dispatch: Dispatch<RootState>, params: { resource: T }) => Promise<ApiResourceId>
+  dispatch: Dispatch,
+  action: (dispatch: Dispatch, params: { resource: T }) => Promise<ApiResourceId>
 )
   : Promise<Array<ApiResourceId>> {
   const deletions = entities

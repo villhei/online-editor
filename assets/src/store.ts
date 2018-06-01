@@ -49,11 +49,16 @@ export type RouterProvidedProps = {
   }
 }
 
+const ui: Reducer<{
+  router: RouterState,
+  page: PageState
+}> = combineReducers({
+  router,
+  page: pageReducer
+})
+
 export const rootReducer: Reducer<RootState> = combineReducers({
-  ui: combineReducers({
-    router,
-    page: pageReducer
-  }),
+  ui,
   model: combineReducers({
     folders: folderReducer,
     documents: documentReducer

@@ -1,6 +1,7 @@
 import createBrowserHistory from 'history/createBrowserHistory'
-import { routerReducer } from 'react-router-redux'
+import { RouterState, routerReducer } from 'react-router-redux'
+import { Reducer } from 'redux'
 
 export const history = createBrowserHistory()
 
-export const router = routerReducer
+export const router = routerReducer as Reducer<RouterState>

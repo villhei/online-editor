@@ -34,7 +34,7 @@ export const ACTION_UPDATE_FOLDER = 'ACTION_UPDATE_FOLDER'
 const actionCreator = actionCreatorFactory()
 
 export const getRootAction = actionCreator
-  .async<undefined, Folder, {}>(ACTION_GET_ROOT_FOLDER)
+  .async<{}, Folder>(ACTION_GET_ROOT_FOLDER)
 
 export const getFolderAction = actionCreator
   .async<ByIdParams, Folder, {}>(ACTION_GET_FOLDER)

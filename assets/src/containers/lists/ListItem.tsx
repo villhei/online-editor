@@ -49,8 +49,8 @@ export function createResourceMapper<T, P>(stateKey: 'folders' | 'documents') {
   }
 }
 
-export type ApiResourceDispatcher = (dispatch: Dispatch<RootState>) => ApiResourceDispatch
+export type ApiResourceDispatcher = (dispatch: Dispatch) => ApiResourceDispatch
 
-export function createDispatchMapper(getResource: ResourceFetcher): ApiResourceDispatcher {
-  return (dispatch: Dispatch<RootState>): ApiResourceDispatch => mapGetResource(dispatch, getResource)
+export function createDispatchMapper<T>(getResource: ResourceFetcher<T>): ApiResourceDispatcher {
+  return (dispatch: Dispatch): ApiResourceDispatch => mapGetResource(dispatch, getResource)
 }

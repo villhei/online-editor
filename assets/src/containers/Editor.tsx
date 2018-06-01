@@ -67,8 +67,8 @@ function isModified(modifiedDocument: PartialTextDocument | null): modifiedDocum
 const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: ApiResourceId = ownProps.match.params.documentId
   const { modifiedDocument } = state.state.editor
+  const content = isModified(modifiedDocument) ? modifiedDocument.content : undefined
   const { saving } = state.ui.page.editorToolbar
-  let content = isModified(modifiedDocument) ? modifiedDocument.content : undefined
   return {
     ...selectApiResource(state, 'documents', resourceId),
     modifiedContent: content,
@@ -76,7 +76,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>) => {
+const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     ...mapGetResource(dispatch, getDocument),
     updateDocumentContent: (value: string) => dispatch(updatedocumentContent({ value })),

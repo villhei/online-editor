@@ -20,9 +20,10 @@ import FolderModal from 'containers/modals/FolderModal'
 import PromptModal from 'containers/modals/PromptModal'
 import * as React from 'react'
 import {
-  Dispatch,
   connect
 } from 'react-redux'
+import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 import {
   ApiResource,
   HasId,
@@ -254,7 +255,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps): State
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): DispatchProps => {
   return {
     ...mapGetResource(dispatch, getFolder),
     createFolder: (name: string, parent: FolderId) => dispatch(createFolderAndRefresh({ resource: { name, parent } })),

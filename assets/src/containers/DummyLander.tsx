@@ -1,10 +1,10 @@
 import { selectRootFolder } from 'actions/page-actions'
 import Loading from 'components/Loading'
-import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
-
 import { RootState } from 'main/store'
-
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 type DispatchProps = {
   selectRootFolder: () => void
 }
@@ -18,9 +18,9 @@ class LandingPage extends React.Component<DispatchProps> {
   }
 }
 
-const mapDispatchToProps = (dispatch: Dispatch<RootState>): DispatchProps => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): DispatchProps => {
   return {
-    selectRootFolder: () => dispatch(selectRootFolder(undefined))
+    selectRootFolder: () => dispatch(selectRootFolder({}))
   }
 }
 export default connect(undefined, mapDispatchToProps)(LandingPage)
