@@ -3,7 +3,7 @@
     "outDir": "ts-build",
     "sourceMap": true,
     "module": "commonjs",
-    "target": "es6",
+    "target": "es5",
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "strict": true,
