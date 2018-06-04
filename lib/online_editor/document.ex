@@ -11,6 +11,7 @@ defmodule OnlineEditor.Document do
     field(:content, :string, default: "")
     field(:name, :string)
     field(:owner, :string)
+    field(:starred, :boolean)
     field(:deleted, :boolean)
     field(:deleted_at, :naive_datetime)
     belongs_to(:folder, Folder)
