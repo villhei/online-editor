@@ -1,7 +1,7 @@
 import { getDocument } from 'actions/document-actions'
 import LoadingCard from 'components/LoadingCard'
 import DocumentCardView from 'components/cards/DocumentCardView'
-import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
   Dispatch,
@@ -69,4 +69,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  wrapApiResource<TextDocument, Props>(isDocument)(DocumentCard, LoadingCard))
+  createApiResourceWrapper<TextDocument, Props>(isDocument)(DocumentCard, LoadingCard))

@@ -3,7 +3,7 @@ import {
 } from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderListItems from 'components/lists/FolderListItems'
-import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
 import {
@@ -53,4 +53,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  wrapApiResource<Folder, Props>(isFolder)(FolderListItemsContainer, LoadingCard))
+  createApiResourceWrapper<Folder, Props>(isFolder)(FolderListItemsContainer, LoadingCard))

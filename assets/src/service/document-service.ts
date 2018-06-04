@@ -17,6 +17,7 @@ export type TextDocument = {
   readonly content: string,
   readonly owner: string,
   readonly folder: string,
+  readonly starred: boolean,
   readonly inserted_at: string,
   readonly updated_at: string
 }

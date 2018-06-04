@@ -2,7 +2,7 @@ import {
   getFolder
 } from 'actions/folder-actions'
 import Loading from 'components/Loading'
-import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import FolderListItems from 'containers/folders/FolderListItems'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
@@ -62,4 +62,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  wrapApiResource<Folder, Props>(isFolder)(ChildFolderList, Loading))
+  createApiResourceWrapper<Folder, Props>(isFolder)(ChildFolderList, Loading))
