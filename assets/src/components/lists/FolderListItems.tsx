@@ -1,10 +1,10 @@
 import ListItemCurrentFolder from 'containers/folders/ListItemCurrentFolder'
 import ListItemFolder from 'containers/folders/ListItemFolder'
-import * as React from 'react'
 import {
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
 import {
   Folder,
   FolderId

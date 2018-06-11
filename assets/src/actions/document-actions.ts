@@ -4,7 +4,7 @@ import {
   HasId,
   Map,
   UpdateByIdParams
-} from 'service/common'
+} from 'library/service/common'
 import {
   PartialTextDocument,
   TextDocument,

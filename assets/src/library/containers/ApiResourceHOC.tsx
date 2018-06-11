@@ -1,10 +1,9 @@
 
-import { AxiosError } from 'axios'
 import NotFoundCard from 'components/notfound/NotFoundCard'
-import { RootState } from 'main/store'
+import { MappedModel } from 'library/reducers/common'
+import { ApiResource, ApiResourceId, ByIdParams, ResourceStatus, isAxiosError } from 'library/service/common'
 import * as React from 'react'
 import { Dispatch } from 'react-redux'
-import { ApiResource, ApiResourceId, ByIdParams, ResourceStatus, isAxiosError } from 'service/common'
 
 export interface Props<T> {
   resourceId: ApiResourceId,
@@ -36,8 +35,7 @@ function wrapApiResource<T, P extends ChildProps<T>>(
 
     handleGetResource = () => {
       const { resource, resourceId, onResourceNotFound, getResource } = this.props
-      const isResourceLoaded = (
-        isValueResolved(resource)
+      const isResourceLoaded = (isValueResolved(resource)
         || isAxiosError(resource)
         || resource === ResourceStatus.Loading
         || resource === ResourceStatus.NotFound)
@@ -59,7 +57,7 @@ function wrapApiResource<T, P extends ChildProps<T>>(
       if (isAxiosError(resource)) {
         return (
           <div className='ui container'>
-            <h1>Error</h1> {(resource as AxiosError).message}
+            <h1>Error</h1> {(resource).message}
           </div>
         )
       } else if (resource === ResourceStatus.NotFound) {
@@ -90,11 +88,10 @@ export type ApiResourceSelection<T> = {
 }
 
 export function selectApiResource<T>(
-  { model }: RootState,
-  modelKey: 'folders' | 'documents',
+  model: MappedModel<T>,
   resourceId: ApiResourceId
 ): ApiResourceSelection<T> {
-  const resource: ApiResource<T> = (model[modelKey].byId[resourceId] as ApiResource<T>)
+  const resource: ApiResource<T> | undefined = (model.byId[resourceId])
   return {
     resource,
     resourceId

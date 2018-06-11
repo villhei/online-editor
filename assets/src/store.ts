@@ -17,11 +17,11 @@ import {
 
 import thunk from 'redux-thunk'
 
+import { Map } from 'library/service/common'
 import editorReducer, { EditorState } from 'reducers/editor'
 import errorReducer, { ErrorState } from 'reducers/error'
 import pageReducer, { PageState } from 'reducers/page'
 import { history, router } from 'reducers/router'
-import { Map } from 'service/common'
 
 const reactRouterMiddleware = routerMiddleware(history)
 

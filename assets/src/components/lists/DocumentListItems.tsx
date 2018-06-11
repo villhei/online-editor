@@ -1,11 +1,11 @@
 import ListItemDocument from 'containers/documents/ListItemDocument'
 
-import * as React from 'react'
 import {
   ApiResourceId,
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
 import {
   TextDocument,
   TextDocumentId

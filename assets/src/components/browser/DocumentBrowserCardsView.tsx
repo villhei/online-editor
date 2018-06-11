@@ -1,12 +1,12 @@
 import CurrentFolderCard from 'components/cards/CurrentFolderCard'
 import DocumentCard from 'containers/documents/DocumentCard'
 import FolderCard from 'containers/folders/FolderCard'
-import * as React from 'react'
 import {
   ApiResourceId,
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
 import {
   TextDocumentId
 } from 'service/document-service'

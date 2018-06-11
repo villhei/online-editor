@@ -7,16 +7,16 @@ import {
 } from 'actions/editor-actions'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
-import * as React from 'react'
-import { connect } from 'react-redux'
-import { push } from 'react-router-redux'
-import { Action } from 'redux'
 import {
   ApiResource,
   ApiResourceId,
   getResourceName,
   isResourceAvailable
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
+import { connect } from 'react-redux'
+import { push } from 'react-router-redux'
+import { Action } from 'redux'
 import {
   PartialTextDocument,
   TextDocument,

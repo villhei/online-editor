@@ -7,7 +7,7 @@ import {
   Partial,
   configureApiEndpoints,
   isAxiosError
-} from './common'
+} from 'library/service/common'
 
 export type TextDocumentId = ApiResourceId
 

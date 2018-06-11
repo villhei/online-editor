@@ -2,15 +2,15 @@ import {
   getFolder
 } from 'actions/folder-actions'
 import Loading from 'components/Loading'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import FolderListItems from 'containers/folders/FolderListItems'
-import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
 import {
   ApiResource,
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
 import {
   Folder,
   FolderId,
@@ -52,7 +52,7 @@ class ChildFolderList extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState, ownProps: OwnProps): StateProps => {
   const { resourceId } = ownProps
-  return selectApiResource<Folder>(state, 'folders', resourceId)
+  return selectApiResource<Folder>(state.model.folders, resourceId)
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

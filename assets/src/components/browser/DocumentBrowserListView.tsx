@@ -1,12 +1,12 @@
 import DocumentListView from 'components/lists/DocumentListItems'
 import FolderListItems from 'components/lists/FolderListItems'
 
-import * as React from 'react'
 import {
   ApiResourceId,
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
 import {
   TextDocument,
   TextDocumentId

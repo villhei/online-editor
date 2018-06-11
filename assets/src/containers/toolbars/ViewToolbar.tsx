@@ -1,19 +1,19 @@
 import { getDocument } from 'actions/document-actions'
 import DocumentToolbarView from 'components/toolbars/DocumentView'
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
-import wrapApiResource, {
+import createApiResourceWrapper, {
   mapGetResource,
   selectApiResource
-} from 'containers/ApiResourceHOC'
+} from 'library/containers/ApiResourceHOC'
+import {
+  ApiResource
+} from 'library/service/common'
 import * as React from 'react'
 import {
   Dispatch,
   connect
 } from 'react-redux'
 import { push } from 'react-router-redux'
-import {
-  ApiResource
-} from 'service/common'
 import {
   TextDocument,
   TextDocumentId,
@@ -62,7 +62,7 @@ class ViewToolbar extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: TextDocumentId = ownProps.match.params.documentId
-  return selectApiResource<TextDocument>(state, 'documents', resourceId)
+  return selectApiResource<TextDocument>(state.model.documents, resourceId)
 }
 
 const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
@@ -71,5 +71,5 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
     navigate: (route: string) => dispatch(push(route))
   }
 }
-const wrappedResource = wrapApiResource<TextDocument, Props>(isDocument)(ViewToolbar, ToolbarLoadingView)
+const wrappedResource = createApiResourceWrapper<TextDocument, Props>(isDocument)(ViewToolbar, ToolbarLoadingView)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

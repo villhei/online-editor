@@ -3,11 +3,11 @@ import { resetDocumentChanges, updatedocumentContent } from 'actions/editor-acti
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
 import Loading from 'components/Loading'
-import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import { ApiResourceId } from 'library/service/common'
 import * as React from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'
 import { Dispatch, connect } from 'react-redux'
-import { ApiResourceId } from 'service/common'
 import { PartialTextDocument, TextDocument, isDocument } from 'service/document-service'
 
 import { RootState, RouterProvidedProps } from 'main/store'
@@ -70,7 +70,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const content = isModified(modifiedDocument) ? modifiedDocument.content : undefined
   const { saving } = state.ui.page.editorToolbar
   return {
-    ...selectApiResource(state, 'documents', resourceId),
+    ...selectApiResource(state.model.documents, resourceId),
     modifiedContent: content,
     saving
   }
@@ -84,5 +84,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   }
 }
 
-const wrappedResource = wrapApiResource<TextDocument, EditorProps>(isDocument)(Editor, Loading)
+const wrappedResource = createApiResourceWrapper<TextDocument, EditorProps>(isDocument)(Editor, Loading)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

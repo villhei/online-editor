@@ -11,24 +11,24 @@ import {
   setSelectedItems
 } from 'actions/page-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
-import wrapApiResource, {
-  mapGetResource,
-  selectApiResource
-} from 'containers/ApiResourceHOC'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
 import FolderModal from 'containers/modals/FolderModal'
 import PromptModal from 'containers/modals/PromptModal'
+import createApiResourceWrapper, {
+  mapGetResource,
+  selectApiResource
+} from 'library/containers/ApiResourceHOC'
+import {
+  ApiResource,
+  HasId,
+  Map
+} from 'library/service/common'
 import * as React from 'react'
 import {
   connect
 } from 'react-redux'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
-import {
-  ApiResource,
-  HasId,
-  Map
-} from 'service/common'
 import {
   Folder,
   FolderId,
@@ -248,7 +248,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps): State
     }), {})
 
   return {
-    ...selectApiResource(state, 'folders', ownProps.match.params.folderId),
+    ...selectApiResource(state.model.folders, ownProps.match.params.folderId),
     itemsSelected,
     selectedItems,
     disabledItems: childFolders
@@ -268,5 +268,5 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): Dis
   }
 }
 
-const wrappedResource = wrapApiResource<Folder, Props>(isFolder)(MainToolbar, ToolbarLoadingView)
+const wrappedResource = createApiResourceWrapper<Folder, Props>(isFolder)(MainToolbar, ToolbarLoadingView)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

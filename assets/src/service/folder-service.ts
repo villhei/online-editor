@@ -6,7 +6,7 @@ import {
   Map,
   Partial,
   configureApiEndpoints
-} from './common'
+} from 'library/service/common'
 
 export type FolderId = ApiResourceId
 

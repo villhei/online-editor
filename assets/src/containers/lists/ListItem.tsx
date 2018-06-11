@@ -1,8 +1,9 @@
-import { ApiResourceDispatch, ResourceFetcher, mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import { ApiResourceDispatch, ResourceFetcher, mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import { MappedModel } from 'library/reducers/common'
+import { ApiResource, ApiResourceId, HasId } from 'library/service/common'
 import { RootState } from 'main/store'
 import * as React from 'react'
 import { Dispatch } from 'react-redux'
-import { ApiResource, ApiResourceId, HasId } from 'service/common'
 
 type OwnProps = {
   resource: HasId,
@@ -23,14 +24,14 @@ type MappedProps<T> = {
 export default class ListItem<T, Props> extends React.Component<ListItemProps<T> & Props> {
   handleOnClick = () => {
     const { onClick, resource, disabled } = this.props
-    if (typeof onClick === 'function' && !disabled) {
+    if (!disabled) {
       onClick(resource)
     }
   }
 
   handleOnSelect = () => {
     const { onSelect, resource, disabled } = this.props
-    if (typeof onSelect === 'function' && !disabled) {
+    if (typeof onSelect === 'function' && disabled === false) {
       onSelect(resource)
     }
   }
@@ -40,11 +41,13 @@ type HasResourceId = {
   resourceId: ApiResourceId
 }
 
-export function createResourceMapper<T, P>(stateKey: 'folders' | 'documents') {
+type Selector<T> = (state: RootState) => MappedModel<T>
+
+export function createResourceMapper<T, P>(selector: Selector<T>) {
   return (state: RootState, ownProps: P & HasResourceId): MappedProps<T> & P & HasResourceId => {
     const { resourceId } = ownProps
     return Object.assign({},
-      selectApiResource<T>(state, stateKey, resourceId),
+      selectApiResource<T>(selector(state), resourceId),
       ownProps)
   }
 }

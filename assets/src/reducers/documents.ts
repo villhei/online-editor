@@ -7,11 +7,11 @@ import {
   getDocumentsByFolderAction,
   updateDocumentAction
 } from 'actions/document-actions'
-import { Action } from 'redux'
 import {
   ApiResource,
   ResourceStatus
-} from 'service/common'
+} from 'library/service/common'
+import { Action } from 'redux'
 import { TextDocument } from 'service/document-service'
 import { isType } from 'typescript-fsa'
 
@@ -21,7 +21,7 @@ import {
   removeSingle,
   updateMany,
   updateSingle
-} from './common'
+} from 'library/reducers/common'
 
 export type DocumentReducerState = MappedModel<ApiResource<TextDocument>>
 

@@ -1,7 +1,7 @@
-import createApiResourceWrapper from 'containers/ApiResourceHOC'
 import { shallow } from 'enzyme'
+import createApiResourceWrapper from 'library/containers/ApiResourceHOC'
+import { ResourceStatus } from 'library/service/common'
 import * as React from 'react'
-import { ResourceStatus } from 'service/common'
 
 interface ModelEntry {
   id: string,

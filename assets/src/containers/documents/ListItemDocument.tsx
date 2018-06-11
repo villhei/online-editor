@@ -1,11 +1,11 @@
 import { getDocument } from 'actions/document-actions'
 import LoadingComponent from 'components/Loading'
 import DocumentItem from 'components/lists/DocumentItem'
-import createApiResourceWrapper, { ApiResourceDispatch } from 'containers/ApiResourceHOC'
 import ListItem, { ListItemProps, createDispatchMapper, createResourceMapper } from 'containers/lists/ListItem'
+import createApiResourceWrapper, { ApiResourceDispatch } from 'library/containers/ApiResourceHOC'
+import { ApiResourceId } from 'library/service/common'
 import * as React from 'react'
 import { connect } from 'react-redux'
-import { ApiResourceId } from 'service/common'
 import { TextDocument, isDocument } from 'service/document-service'
 
 type DispatchProps = ApiResourceDispatch
@@ -36,7 +36,7 @@ class ListItemDocument extends ListItem<TextDocument, Props> {
   }
 }
 
-const mapStateToProps = createResourceMapper<TextDocument, OwnProps>('documents')
+const mapStateToProps = createResourceMapper<TextDocument, OwnProps>((state => state.model.documents))
 const mapDispatchToProps = createDispatchMapper(getDocument)
 
 export default connect(mapStateToProps, mapDispatchToProps)(

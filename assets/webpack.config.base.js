@@ -6,7 +6,7 @@ const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const path = require('path')
 
-function sourcePath (subDir) {
+function sourcePath(subDir) {
   return path.join(__dirname, 'src', subDir)
 }
 
@@ -42,7 +42,8 @@ const config = {
       components: sourcePath('components'),
       service: sourcePath('service'),
       mocks: sourcePath('mocks'),
-      reducers: sourcePath('reducers')
+      reducers: sourcePath('reducers'),
+      library: sourcePath('library')
     }
   },
   module: {
@@ -69,7 +70,7 @@ const config = {
         enforce: 'pre',
         test: /\.js?$/,
         loader:
-        'source-map-loader'
+          'source-map-loader'
       },
       {
         test: /\.jpe?g$|\.gif$|\.png$|\.svg$/,

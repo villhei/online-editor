@@ -4,12 +4,12 @@ import {
 } from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderCardView from 'components/cards/FolderCardView'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
-import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
 import {
   HasId
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
 import {
   Folder,
   FolderId,
@@ -54,7 +54,7 @@ class FolderCard extends React.Component<Props> {
 const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
   const { resourceId, selected } = ownProps
   return {
-    ...selectApiResource<Folder>(state, 'folders', resourceId),
+    ...selectApiResource<Folder>(state.model.folders, resourceId),
     selected
   }
 }

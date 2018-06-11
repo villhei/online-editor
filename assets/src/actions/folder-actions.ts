@@ -1,11 +1,11 @@
-import { push } from 'react-router-redux'
 import {
   ByIdParams,
   ByResourceParams,
   HasId,
   Map,
   UpdateByIdParams
-} from 'service/common'
+} from 'library/service/common'
+import { push } from 'react-router-redux'
 import {
   Folder,
   FolderId,

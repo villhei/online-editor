@@ -14,18 +14,18 @@ import LoadingComponent from 'components/Loading'
 import DocumentBrowserCardsView from 'components/browser/DocumentBrowserCardsView'
 import DocumentBrowserListView from 'components/browser/DocumentBrowserListView'
 import LayoutSelection from 'components/browser/LayoutSelection'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import {
+  ApiResourceId,
+  HasId,
+  Map
+} from 'library/service/common'
 import * as React from 'react'
 import {
   Dispatch,
   connect
 } from 'react-redux'
 import { push } from 'react-router-redux'
-import {
-  ApiResourceId,
-  HasId,
-  Map
-} from 'service/common'
 import { TextDocument } from 'service/document-service'
 import {
   Folder,
@@ -144,7 +144,7 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
 const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: FolderId = ownProps.match.params.folderId
   return {
-    ...selectApiResource(state, 'folders', resourceId),
+    ...selectApiResource(state.model.folders, resourceId),
     selected: state.ui.page.selectedItems,
     layout: state.ui.page.layout
   }

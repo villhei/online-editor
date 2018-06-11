@@ -3,13 +3,13 @@ import {
 } from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderListItems from 'components/lists/FolderListItems'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
-import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
 import {
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
 import {
   Folder,
   FolderId,
@@ -45,7 +45,7 @@ class FolderListItemsContainer extends React.Component<Props> {
 
 const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
   const { resourceId } = ownProps
-  return selectApiResource<Folder>(state, 'folders', resourceId)
+  return selectApiResource<Folder>(state.model.folders, resourceId)
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => {

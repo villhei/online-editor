@@ -1,16 +1,16 @@
 import { getDocument } from 'actions/document-actions'
 import LoadingCard from 'components/LoadingCard'
 import DocumentCardView from 'components/cards/DocumentCardView'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import {
+  HasId
+} from 'library/service/common'
 import * as React from 'react'
 import {
   Dispatch,
   connect
 } from 'react-redux'
 import { push } from 'react-router-redux'
-import {
-  HasId
-} from 'service/common'
 import {
   TextDocument,
   TextDocumentId,
@@ -55,7 +55,7 @@ class DocumentCard extends React.Component<Props> {
 const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
   const { resourceId, selected, selectDocument } = ownProps
   return {
-    ...selectApiResource<TextDocument>(state, 'documents', resourceId),
+    ...selectApiResource<TextDocument>(state.model.documents, resourceId),
     selected,
     selectDocument
   }
