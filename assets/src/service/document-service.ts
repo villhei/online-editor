@@ -24,7 +24,7 @@ export type TextDocument = {
 
 export type PartialTextDocument = Partial<TextDocument>
 
-export function isDocument(object: Object): object is TextDocument {
+export function isDocument(object: Object | undefined): object is TextDocument {
   const candidate = object as TextDocument | undefined
   return Boolean(candidate &&
     typeof candidate.id === 'string' &&

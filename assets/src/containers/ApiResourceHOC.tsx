@@ -6,17 +6,14 @@ import * as React from 'react'
 import { Dispatch } from 'react-redux'
 import { ApiResource, ApiResourceId, ByIdParams, ResourceStatus, isAxiosError } from 'service/common'
 
-interface WrapperProps<T> {
-  resource: ApiResource<T>,
-}
-
-export interface PublicComponentProps<T> extends WrapperProps<T> {
+export interface Props<T> {
   resourceId: ApiResourceId,
+  resource: ApiResource<T>,
   getResource: (id: string) => void,
   onResourceNotFound?: (id: string) => void
 }
 
-export type ChildComponentProps<T> = {
+export interface ChildProps<T> {
   resourceId: ApiResourceId,
   getResource: (id: string) => void,
   resource: T,
@@ -25,11 +22,11 @@ export type ChildComponentProps<T> = {
 
 type TypeChecker<T> = (value: ApiResource<T>) => value is T
 
-function wrapApiResource<T, P extends PublicComponentProps<T>>(
+function wrapApiResource<T, P extends ChildProps<T>>(
   isValueResolved: TypeChecker<T>,
-  ChildComponent: React.ComponentType<P & ChildComponentProps<T>>,
-  LoadingComponent: React.ComponentType<{}>): React.ComponentClass<P & PublicComponentProps<T>> {
-  return class ApiResourceWrapper extends React.Component<P & PublicComponentProps<T>> {
+  ChildComponent: React.ComponentType<P>,
+  LoadingComponent: React.ComponentType<{}>): React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
+  return class ApiResourceWrapper extends React.Component<Omit<P, 'resource'> & Props<T>> {
     componentDidMount() {
       this.handleGetResource()
     }
@@ -39,7 +36,8 @@ function wrapApiResource<T, P extends PublicComponentProps<T>>(
 
     handleGetResource = () => {
       const { resource, resourceId, onResourceNotFound, getResource } = this.props
-      const isResourceLoaded = (isValueResolved(resource)
+      const isResourceLoaded = (
+        isValueResolved(resource)
         || isAxiosError(resource)
         || resource === ResourceStatus.Loading
         || resource === ResourceStatus.NotFound)
@@ -56,7 +54,7 @@ function wrapApiResource<T, P extends PublicComponentProps<T>>(
     render() {
       const { resource } = this.props
       if (isValueResolved(resource)) {
-        return <ChildComponent {...this.props as ChildComponentProps<T>} />
+        return <ChildComponent {...this.props as ChildProps<T>} />
       }
       if (isAxiosError(resource)) {
         return (
@@ -75,11 +73,13 @@ function wrapApiResource<T, P extends PublicComponentProps<T>>(
   }
 }
 
-export default function createApiResourceWrapper<T, P extends ChildComponentProps<T>>(isValueResolved: TypeChecker<T>) {
+type Omit<T, K> = Pick<T, Exclude<keyof T, K>>
+
+export default function createApiResourceWrapper<T, P extends ChildProps<T>>(isValueResolved: TypeChecker<T>) {
   return function (
-    childComponent: React.ComponentType<P & ChildComponentProps<T>>,
+    childComponent: React.ComponentType<P>,
     loadingComponent: React.ComponentType<{}>):
-    React.ComponentClass<P & PublicComponentProps<T>> {
+    React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
     return wrapApiResource(isValueResolved, childComponent, loadingComponent)
   }
 }

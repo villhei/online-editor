@@ -14,7 +14,7 @@ import LoadingComponent from 'components/Loading'
 import DocumentBrowserCardsView from 'components/browser/DocumentBrowserCardsView'
 import DocumentBrowserListView from 'components/browser/DocumentBrowserListView'
 import LayoutSelection from 'components/browser/LayoutSelection'
-import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
 import * as React from 'react'
 import {
   Dispatch,
@@ -160,5 +160,5 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
   }
 }
 
-const wrappedResource = wrapApiResource<Folder, Props>(isFolder)(DocumentCardsLayoutContainer, LoadingComponent)
+const wrappedResource = createApiResourceWrapper<Folder, Props>(isFolder)(DocumentCardsLayoutContainer, LoadingComponent)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

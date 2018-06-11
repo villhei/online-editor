@@ -13,11 +13,12 @@
     "baseUrl": "",
     "lib": [
       "es2017",
-      "dom"
+      "dom",
     ],
     "types": [
       "node",
-      "jest"
+      "jest",
+      "jest-enzyme"
     ],
     "paths": {
       "actions/*": [

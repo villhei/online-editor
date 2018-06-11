@@ -28,7 +28,7 @@ export const {
   update
 } = endpoints
 
-export function isFolder(object: Object): object is Folder {
+export function isFolder(object: Object | undefined): object is Folder {
   const candidate = object as (Folder | undefined)
   return Boolean(candidate &&
     typeof candidate.id === 'string' &&
