@@ -25,6 +25,22 @@ function wrapApiResource<T, P extends ChildProps<T>>(
   isValueResolved: TypeChecker<T>,
   ChildComponent: React.ComponentType<P>,
   LoadingComponent: React.ComponentType<{}>): React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
+
+  function shouldResourceBeLoaded(resource: ApiResource<T> | undefined): boolean {
+    if (isAxiosError(resource)) {
+      return false
+    }
+    if (isValueResolved(resource)) {
+      return false
+    }
+    if (resource === ResourceStatus.Loading) {
+      return false
+    }
+    if (resource === ResourceStatus.NotFound) {
+      return false
+    }
+    return true
+  }
   return class ApiResourceWrapper extends React.Component<Omit<P, 'resource'> & Props<T>> {
     componentDidMount() {
       this.handleGetResource()
@@ -35,17 +51,13 @@ function wrapApiResource<T, P extends ChildProps<T>>(
 
     handleGetResource = () => {
       const { resource, resourceId, onResourceNotFound, getResource } = this.props
-      const isResourceLoaded = (isValueResolved(resource)
-        || isAxiosError(resource)
-        || resource === ResourceStatus.Loading
-        || resource === ResourceStatus.NotFound)
       if (resource === ResourceStatus.NotFound && onResourceNotFound) {
         onResourceNotFound(resourceId)
       }
-      if (!isResourceLoaded) {
-        if (resourceId) {
-          getResource(resourceId)
-        }
+      if (shouldResourceBeLoaded(resource)) {
+        getResource(resourceId)
+      } else if (resource === ResourceStatus.NotFound && onResourceNotFound) {
+        onResourceNotFound(resourceId)
       }
     }
 

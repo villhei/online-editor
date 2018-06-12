@@ -26,7 +26,7 @@ function isModelEntry(obj: Object | undefined): obj is ModelEntry {
   return Boolean(entry && typeof entry.id === 'string' && typeof entry.someProp === 'number')
 }
 
-function minimumProps(): ViewProps {
+function minimumProps() {
   return {
     resourceId: 'foo',
     getResource: jest.fn(),
@@ -86,7 +86,10 @@ describe('ApiResourceHOC', () => {
   it('should call getResource if the props change ', () => {
     const wrapper = createApiResourceWrapper<ModelEntry, ViewProps>(isModelEntry)
     const Component = wrapper(ResourceView, LoadingComponent)
-    const props = minimumProps()
+    const props = {
+      ...minimumProps(),
+      resource: undefined
+    }
     const element = shallow(<Component {...props} />)
     element.setProps({
       ...props,
