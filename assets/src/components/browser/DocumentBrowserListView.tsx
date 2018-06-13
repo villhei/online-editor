@@ -1,5 +1,5 @@
-import DocumentListView from 'components/lists/DocumentListItems'
 import FolderListItems from 'components/lists/FolderListItems'
+import DocumentListView from 'containers/lists/DocumentListView'
 
 import {
   ApiResourceId,
@@ -50,7 +50,7 @@ export default class DocumentBrowserListView extends React.Component<Props> {
           selectResource={selectResource}
         />
         <DocumentListView
-          documents={documents}
+          resourceIds={documents}
           selected={selected}
           clickDocument={clickDocument}
           onResourceNotFound={onResourceNotFound}

@@ -1,11 +1,10 @@
 import * as classNames from 'classnames'
 import * as React from 'react'
-import { TextDocument, TextDocumentId } from 'service/document-service'
+import { TextDocument } from 'service/document-service'
 
 import ListItem from './Item'
 
 type Props = {
-  resourceId: TextDocumentId,
   resource: TextDocument,
   selected: boolean,
   onSelect: () => void,

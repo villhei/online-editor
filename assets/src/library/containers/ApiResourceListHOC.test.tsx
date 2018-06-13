@@ -1,6 +1,5 @@
 import { shallow } from 'enzyme'
 import createApiResourceListWrapper from 'library/containers/ApiResourceListHOC'
-import { ResourceStatus } from 'library/service/common'
 import * as React from 'react'
 
 import { ModelEntry, isModelEntry } from './ApiResourceHOC.test'

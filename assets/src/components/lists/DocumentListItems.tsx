@@ -1,7 +1,6 @@
 import ListItemDocument from 'containers/documents/ListItemDocument'
 
 import {
-  ApiResourceId,
   HasId,
   Map
 } from 'library/service/common'
@@ -11,33 +10,32 @@ import {
   TextDocumentId
 } from 'service/document-service'
 
-type Props = {
-  documents: Array<ApiResourceId>,
+interface Props {
+  resources: Array<TextDocument>,
   selected: Map<HasId>,
   clickDocument: (resource: TextDocument) => void,
   onResourceNotFound: (id: TextDocumentId) => void,
   selectResource: (resource: TextDocument) => void
 }
 
-export default class DocumentCardsLayoutView extends React.Component<Props> {
+export default class DocumentListView extends React.Component<Props> {
   render() {
-    const { documents,
+    const { resources,
       clickDocument,
       selectResource,
-      selected,
-      onResourceNotFound
+      selected
     } = this.props
     return (
       <>
-        {documents.map((documentId) => (
-          <ListItemDocument
-            key={documentId}
-            onResourceNotFound={onResourceNotFound}
-            selected={Boolean(selected[documentId])}
-            resourceId={documentId}
+        {resources.map((document) => {
+          const isSelected: boolean = Boolean(selected[document.id])
+          return < ListItemDocument
+            key={document.id}
+            selected={isSelected}
+            resource={document}
             onClick={clickDocument}
             onSelect={selectResource} />
-        ))}
+        })}
       </>
     )
   }

@@ -5,14 +5,14 @@ import { RootState } from 'main/store'
 import * as React from 'react'
 import { Dispatch } from 'react-redux'
 
-type OwnProps = {
+type OwnProps<T> = {
   resource: HasId,
   disabled?: boolean,
-  onSelect?: (resource: HasId) => void,
-  onClick: (resource: HasId) => void
+  onSelect?: (resource: T) => void,
+  onClick: (resource: T) => void
 }
 
-export type ListItemProps<T> = OwnProps & {
+export type ListItemProps<T> = OwnProps<T> & {
   resource: T
 }
 

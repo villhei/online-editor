@@ -1,7 +1,7 @@
 
 import { Status, StatusFlagged, getResourceStatuses } from 'library/containers/common'
 import { MappedModel, ResourceMap } from 'library/reducers/common'
-import { ApiResource, ApiResourceId, ResourceStatus, isAxiosError } from 'library/service/common'
+import { ApiResource, ApiResourceId } from 'library/service/common'
 import * as React from 'react'
 
 const {
@@ -56,10 +56,13 @@ function wrapApiResources<T, P extends ChildProps<T>>(
     }
 
     render() {
-      const { resources } = this.props as Props<T>
+      const { resources, resourceIds } = this.props as Props<T>
       const loadedResources: T[] = Object.entries(resources)
         .filter(([, resource]) => isValueResolved(resource))
         .map(([, resource]) => resource as T)
+      if (loadedResources.length < resourceIds.length) {
+        return <LoadingComponent />
+      }
       const props = Object.assign({}, this.props, { resources: loadedResources })
       return <ChildComponent {...props} />
     }
