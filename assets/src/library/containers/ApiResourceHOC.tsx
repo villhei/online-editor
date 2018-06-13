@@ -1,5 +1,7 @@
 
+import { AxiosError } from 'axios'
 import NotFoundCard from 'components/notfound/NotFoundCard'
+import { Status, TypeChecker, getResourceStatus } from 'library/containers/common'
 import { MappedModel } from 'library/reducers/common'
 import { ApiResource, ApiResourceId, ByIdParams, ResourceStatus, isAxiosError } from 'library/service/common'
 import * as React from 'react'
@@ -19,28 +21,19 @@ export interface ChildProps<T> {
   onResourceNotFound?: (id: string) => void
 }
 
-type TypeChecker<T> = (value: ApiResource<T>) => value is T
+const {
+  LOADED,
+  LOADING,
+  NOT_LOADED,
+  NOT_FOUND,
+  ERROR
+} = Status
 
 function wrapApiResource<T, P extends ChildProps<T>>(
   isValueResolved: TypeChecker<T>,
   ChildComponent: React.ComponentType<P>,
   LoadingComponent: React.ComponentType<{}>): React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
 
-  function shouldResourceBeLoaded(resource: ApiResource<T> | undefined): boolean {
-    if (isAxiosError(resource)) {
-      return false
-    }
-    if (isValueResolved(resource)) {
-      return false
-    }
-    if (resource === ResourceStatus.Loading) {
-      return false
-    }
-    if (resource === ResourceStatus.NotFound) {
-      return false
-    }
-    return true
-  }
   return class ApiResourceWrapper extends React.Component<Omit<P, 'resource'> & Props<T>> {
     componentDidMount() {
       this.handleGetResource()
@@ -51,33 +44,42 @@ function wrapApiResource<T, P extends ChildProps<T>>(
 
     handleGetResource = () => {
       const { resource, resourceId, onResourceNotFound, getResource } = this.props
-      if (resource === ResourceStatus.NotFound && onResourceNotFound) {
-        onResourceNotFound(resourceId)
-      }
-      if (shouldResourceBeLoaded(resource)) {
-        getResource(resourceId)
-      } else if (resource === ResourceStatus.NotFound && onResourceNotFound) {
-        onResourceNotFound(resourceId)
+      switch (getResourceStatus(resource, isValueResolved)) {
+        case NOT_LOADED: {
+          getResource(resourceId)
+          break
+        }
+        case NOT_FOUND: {
+          onResourceNotFound && getResource(resourceId)
+          break
+        }
       }
     }
 
     render() {
       const { resource } = this.props
-      if (isValueResolved(resource)) {
-        return <ChildComponent {...this.props as ChildProps<T>} />
-      }
-      if (isAxiosError(resource)) {
-        return (
-          <div className='ui container'>
-            <h1>Error</h1> {(resource).message}
-          </div>
-        )
-      } else if (resource === ResourceStatus.NotFound) {
-        return (<NotFoundCard />)
-      } else if (resource === ResourceStatus.Loading) {
-        return (<LoadingComponent />)
-      } else {
-        return null
+      const status = getResourceStatus(resource, isValueResolved)
+
+      switch (status) {
+        case LOADED: {
+          return <ChildComponent {...this.props as ChildProps<T>} />
+        }
+        case NOT_FOUND: {
+          return <NotFoundCard />
+        }
+        case LOADING: {
+          return <LoadingComponent />
+        }
+        case ERROR: {
+          return (
+            <div className='ui container'>
+              <h1>Error</h1> {(resource as AxiosError).message}
+            </div>
+          )
+        }
+        default: {
+          return null
+        }
       }
     }
   }

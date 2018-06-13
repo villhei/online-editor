@@ -3,7 +3,7 @@ import createApiResourceWrapper from 'library/containers/ApiResourceHOC'
 import { ResourceStatus } from 'library/service/common'
 import * as React from 'react'
 
-interface ModelEntry {
+export interface ModelEntry {
   id: string,
   someProp: number
 }
@@ -21,7 +21,7 @@ class ResourceView extends React.Component<ViewProps> {
 }
 const LoadingComponent = () => <div>Loading</div>
 
-function isModelEntry(obj: Object | undefined): obj is ModelEntry {
+export function isModelEntry(obj: Object | undefined): obj is ModelEntry {
   const entry = obj as ModelEntry | undefined
   return Boolean(entry && typeof entry.id === 'string' && typeof entry.someProp === 'number')
 }
