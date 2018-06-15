@@ -15,9 +15,10 @@ import ConfirmationModal from 'containers/modals/ConfirmationModal'
 import FolderModal from 'containers/modals/FolderModal'
 import PromptModal from 'containers/modals/PromptModal'
 import createApiResourceWrapper, {
-  mapGetResource,
   selectApiResource
 } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
+
 import {
   ApiResource,
   HasId,

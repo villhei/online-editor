@@ -14,7 +14,8 @@ import LoadingComponent from 'components/Loading'
 import DocumentBrowserCardsView from 'components/browser/DocumentBrowserCardsView'
 import DocumentBrowserListView from 'components/browser/DocumentBrowserListView'
 import LayoutSelection from 'components/browser/LayoutSelection'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
 import {
   ApiResourceId,
   HasId,

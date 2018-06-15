@@ -1,6 +1,7 @@
 
 import { ResourceMap } from 'library/reducers/common'
-import { ApiResource, ApiResourceId, ResourceStatus, isAxiosError } from 'library/service/common'
+import { ApiResource, ApiResourceId, ByIdParams, ResourceStatus, isAxiosError } from 'library/service/common'
+import { Dispatch } from 'redux'
 export type TypeChecker<T> = (value: ApiResource<T>) => value is T
 
 export enum Status {
@@ -40,4 +41,16 @@ export function getResourceStatuses<T>(resources: ResourceMap<T>, isValueResolve
     status: getResourceStatus(resource, isValueResolved),
     resource
   }))
+}
+
+export type ResourceFetcher<T> = (dispatch: Dispatch, params: ByIdParams) => Promise<T>
+
+export type ApiResourceDispatch = {
+  getResource: (id: ApiResourceId) => void
+}
+
+export function mapGetResource<T>(dispatch: Dispatch, getResource: ResourceFetcher<T>): ApiResourceDispatch {
+  return {
+    getResource: (id: ApiResourceId) => getResource(dispatch, { id })
+  }
 }

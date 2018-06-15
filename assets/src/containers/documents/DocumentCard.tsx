@@ -1,7 +1,8 @@
 import { getDocument } from 'actions/document-actions'
 import LoadingCard from 'components/LoadingCard'
 import DocumentCardView from 'components/cards/DocumentCardView'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
 import {
   HasId
 } from 'library/service/common'

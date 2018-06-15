@@ -2,7 +2,8 @@ import { getDocument } from 'actions/document-actions'
 import DocumentViewComponent from 'components/DocumentView'
 import DocumentViewEmpty from 'components/DocumentViewEmpty'
 import LoadingComponent from 'components/Loading'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
 import * as React from 'react'
 import {
   Dispatch,

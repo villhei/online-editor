@@ -4,7 +4,9 @@ import {
 } from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderCardView from 'components/cards/FolderCardView'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
+
 import {
   HasId
 } from 'library/service/common'

@@ -2,9 +2,9 @@ import { getDocument } from 'actions/document-actions'
 import DocumentToolbarView from 'components/toolbars/DocumentView'
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
 import createApiResourceWrapper, {
-  mapGetResource,
   selectApiResource
 } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
 import {
   ApiResource
 } from 'library/service/common'

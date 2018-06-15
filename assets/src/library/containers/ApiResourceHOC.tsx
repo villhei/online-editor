@@ -3,9 +3,8 @@ import { AxiosError } from 'axios'
 import NotFoundCard from 'components/notfound/NotFoundCard'
 import { Status, TypeChecker, getResourceStatus } from 'library/containers/common'
 import { MappedModel } from 'library/reducers/common'
-import { ApiResource, ApiResourceId, ByIdParams } from 'library/service/common'
+import { ApiResource, ApiResourceId } from 'library/service/common'
 import * as React from 'react'
-import { Dispatch } from 'react-redux'
 
 export interface Props<T> {
   resourceId: ApiResourceId,
@@ -109,17 +108,5 @@ export function selectApiResource<T>(
   return {
     resource,
     resourceId
-  }
-}
-
-export type ResourceFetcher<T> = (dispatch: Dispatch, params: ByIdParams) => Promise<T>
-
-export type ApiResourceDispatch = {
-  getResource: (id: ApiResourceId) => void
-}
-
-export function mapGetResource<T>(dispatch: Dispatch, getResource: ResourceFetcher<T>): ApiResourceDispatch {
-  return {
-    getResource: (id: ApiResourceId) => getResource(dispatch, { id })
   }
 }

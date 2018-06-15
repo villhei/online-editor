@@ -1,4 +1,5 @@
-import { ApiResourceDispatch, ResourceFetcher, mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { ApiResourceDispatch, ResourceFetcher, mapGetResource } from 'library/containers/common'
 import { MappedModel } from 'library/reducers/common'
 import { ApiResource, ApiResourceId, HasId } from 'library/service/common'
 import { RootState } from 'main/store'

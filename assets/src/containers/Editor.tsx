@@ -3,7 +3,8 @@ import { resetDocumentChanges, updatedocumentContent } from 'actions/editor-acti
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
 import Loading from 'components/Loading'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
 import { ApiResourceId } from 'library/service/common'
 import * as React from 'react'
 import { Controlled as CodeMirror } from 'react-codemirror2'

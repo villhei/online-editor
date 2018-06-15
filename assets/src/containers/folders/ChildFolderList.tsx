@@ -3,7 +3,8 @@ import {
 } from 'actions/folder-actions'
 import Loading from 'components/Loading'
 import FolderListItems from 'containers/folders/FolderListItems'
-import createApiResourceWrapper, { mapGetResource, selectApiResource } from 'library/containers/ApiResourceHOC'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { ApiResourceDispatch, mapGetResource } from 'library/containers/common'
 import {
   ApiResource,
   HasId,
@@ -55,11 +56,7 @@ const mapStateToProps = (state: RootState, ownProps: OwnProps): StateProps => {
   return selectApiResource<Folder>(state.model.folders, resourceId)
 }
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-  return {
-    ...mapGetResource(dispatch, getFolder)
-  }
-}
+const mapDispatchToProps = (dispatch: Dispatch): ApiResourceDispatch => mapGetResource(dispatch, getFolder)
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   createApiResourceWrapper<Folder, Props>(isFolder)(ChildFolderList, Loading))
