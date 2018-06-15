@@ -1,4 +1,5 @@
 import FolderListItems from 'components/lists/FolderListItems'
+import ListItemCurrentFolder from 'containers/folders/ListItemCurrentFolder'
 import DocumentListView from 'containers/lists/DocumentListView'
 
 import {
@@ -41,6 +42,11 @@ export default class DocumentBrowserListView extends React.Component<Props> {
     } = this.props
     return (
       <div className='ui divided item list'>
+        <ListItemCurrentFolder
+          resourceId={folder.id}
+          disabled={!folder.parent}
+          onClick={clickFolder}
+        />
         <FolderListItems
           folder={folder}
           selected={selected}

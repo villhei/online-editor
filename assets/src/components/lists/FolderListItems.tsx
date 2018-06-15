@@ -1,4 +1,3 @@
-import ListItemCurrentFolder from 'containers/folders/ListItemCurrentFolder'
 import ListItemFolder from 'containers/folders/ListItemFolder'
 import {
   HasId,
@@ -30,23 +29,16 @@ export default class FolderListItems extends React.Component<Props> {
       onResourceNotFound
     } = this.props
     return (
-      <>
-        <ListItemCurrentFolder
-          resourceId={folder.id}
-          disabled={!folder.parent}
+      folder.children.map((folderId) => (
+        <ListItemFolder
+          key={folderId}
+          onResourceNotFound={onResourceNotFound}
+          selected={Boolean(selected[folderId])}
+          disabled={Boolean(disabled[folderId])}
+          resourceId={folderId}
           onClick={clickFolder}
-        />
-        {folder.children.map((folderId) => (
-          <ListItemFolder
-            key={folderId}
-            onResourceNotFound={onResourceNotFound}
-            selected={Boolean(selected[folderId])}
-            disabled={Boolean(disabled[folderId])}
-            resourceId={folderId}
-            onClick={clickFolder}
-            onSelect={selectResource} />
-        ))}
-      </>
+          onSelect={selectResource} />
+      ))
     )
   }
 }

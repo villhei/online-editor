@@ -26,17 +26,15 @@ export default class DocumentListView extends React.Component<Props> {
       selected
     } = this.props
     return (
-      <>
-        {resources.map((document) => {
-          const isSelected: boolean = Boolean(selected[document.id])
-          return < ListItemDocument
-            key={document.id}
-            selected={isSelected}
-            resource={document}
-            onClick={clickDocument}
-            onSelect={selectResource} />
-        })}
-      </>
+      resources.map((document) => {
+        const isSelected: boolean = Boolean(selected[document.id])
+        return < ListItemDocument
+          key={document.id}
+          selected={isSelected}
+          resource={document}
+          onClick={clickDocument}
+          onSelect={selectResource} />
+      })
     )
   }
 }
