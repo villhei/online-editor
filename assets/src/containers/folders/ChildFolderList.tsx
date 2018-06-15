@@ -2,7 +2,8 @@ import {
   getFolder
 } from 'actions/folder-actions'
 import Loading from 'components/Loading'
-import FolderListItems from 'containers/folders/FolderListItems'
+import ListItemCurrentFolder from 'containers/folders/ListItemCurrentFolder'
+import FolderList from 'containers/lists/FolderList'
 import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
 import { ApiResourceDispatch, mapGetResource } from 'library/containers/common'
 import {
@@ -38,14 +39,19 @@ type Props = StateProps & OwnProps & {
 
 class ChildFolderList extends React.Component<Props> {
   render() {
-    const { resourceId, selectedItems, disabledItems, selectFolder } = this.props
-    const folder = resourceId
+    const { resource, selectedItems, disabledItems, selectFolder } = this.props
     return <div className='ui inverted divided selection list'>
-      <FolderListItems
-        resourceId={folder}
-        selectedItems={selectedItems}
-        disabledItems={disabledItems || {}}
+      <ListItemCurrentFolder
+        resource={resource}
+        disabled={!resource.parent}
+        onClick={selectFolder}
+      />
+      <FolderList
+        resourceIds={resource.children}
+        selected={selectedItems}
+        disabled={disabledItems}
         clickFolder={selectFolder}
+        onResourceNotFound={() => null}
       />
     </div>
   }

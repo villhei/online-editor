@@ -1,11 +1,10 @@
 import * as classNames from 'classnames'
 import * as React from 'react'
-import { Folder, FolderId } from 'service/folder-service'
+import { Folder } from 'service/folder-service'
 
 import ListItem from './Item'
 
 type Props = {
-  resourceId: FolderId,
   resource: Folder,
   selected: boolean,
   disabled: boolean,

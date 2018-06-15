@@ -1,8 +1,13 @@
 import { getDocument } from 'actions/document-actions'
 import LoadingComponent from 'components/Loading'
-import DocumentListViewComponent from 'components/lists/DocumentListItems'
+import ListItemDocument from 'containers/documents/ListItemDocument'
+import {
+  DispatchMappedProps,
+  StateMappedProps,
+  mapGetResource,
+  selectApiResources
+} from 'containers/lists/List'
 import createApiResourceListWrapper from 'library/containers/ApiResourceListHOC'
-import { ResourceMap } from 'library/reducers/common'
 import {
   HasId,
   Map
@@ -32,29 +37,32 @@ type Props = OwnProps & {
 
 class DocumentListView extends React.Component<Props> {
   render() {
-    return <DocumentListViewComponent {...this.props} />
-  }
-}
-const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
-  const { resourceIds } = ownProps
-  const resources: ResourceMap<TextDocument> = resourceIds.reduce((acc, id) => ({
-    ...acc,
-    [id]: state.model.documents.byId[id]
-  }), {})
-  return {
-    resources
+    const { resources,
+      clickDocument,
+      selectResource,
+      selected
+    } = this.props
+    return (
+      resources.map((document) => {
+        const isSelected: boolean = Boolean(selected[document.id])
+
+        return <ListItemDocument
+          key={document.id}
+          selected={isSelected}
+          resource={document}
+          disabled={false}
+          onClick={clickDocument}
+          onSelect={(selectResource)} />
+      })
+    )
   }
 }
 
-type DispatchMappedProps = {
-  getResource: (id: TextDocumentId) => void
-}
+const mapStateToProps = (state: RootState, ownProps: OwnProps): StateMappedProps<TextDocument> =>
+  selectApiResources(state.model.documents, ownProps.resourceIds)
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchMappedProps => {
-  return {
-    getResource: (id: TextDocumentId) => getDocument(dispatch, { id })
-  }
-}
+const mapDispatchToProps = (dispatch: Dispatch): DispatchMappedProps =>
+  mapGetResource(dispatch, getDocument)
 
 const wrappedResource = createApiResourceListWrapper<TextDocument, Props>(isDocument)(DocumentListView, LoadingComponent)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

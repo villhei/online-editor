@@ -1,10 +1,5 @@
-import { selectApiResource } from 'library/containers/ApiResourceHOC'
-import { ApiResourceDispatch, ResourceFetcher, mapGetResource } from 'library/containers/common'
-import { MappedModel } from 'library/reducers/common'
-import { ApiResource, ApiResourceId, HasId } from 'library/service/common'
-import { RootState } from 'main/store'
+import { HasId } from 'library/service/common'
 import * as React from 'react'
-import { Dispatch } from 'react-redux'
 
 type OwnProps<T> = {
   resource: HasId,
@@ -15,11 +10,6 @@ type OwnProps<T> = {
 
 export type ListItemProps<T> = OwnProps<T> & {
   resource: T
-}
-
-type MappedProps<T> = {
-  resourceId: ApiResourceId,
-  resource: ApiResource<T>
 }
 
 export default class ListItem<T, Props> extends React.Component<ListItemProps<T> & Props> {
@@ -36,25 +26,4 @@ export default class ListItem<T, Props> extends React.Component<ListItemProps<T>
       onSelect(resource)
     }
   }
-}
-
-type HasResourceId = {
-  resourceId: ApiResourceId
-}
-
-type Selector<T> = (state: RootState) => MappedModel<T>
-
-export function createResourceMapper<T, P>(selector: Selector<T>) {
-  return (state: RootState, ownProps: P & HasResourceId): MappedProps<T> & P & HasResourceId => {
-    const { resourceId } = ownProps
-    return Object.assign({},
-      selectApiResource<T>(selector(state), resourceId),
-      ownProps)
-  }
-}
-
-export type ApiResourceDispatcher = (dispatch: Dispatch) => ApiResourceDispatch
-
-export function createDispatchMapper<T>(getResource: ResourceFetcher<T>): ApiResourceDispatcher {
-  return (dispatch: Dispatch): ApiResourceDispatch => mapGetResource(dispatch, getResource)
 }

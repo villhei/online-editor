@@ -1,9 +1,8 @@
-import FolderListItems from 'components/lists/FolderListItems'
 import ListItemCurrentFolder from 'containers/folders/ListItemCurrentFolder'
-import DocumentListView from 'containers/lists/DocumentListView'
+import DocumentList from 'containers/lists/DocumentList'
+import FolderList from 'containers/lists/FolderList'
 
 import {
-  ApiResourceId,
   HasId,
   Map
 } from 'library/service/common'
@@ -18,7 +17,6 @@ import {
 } from 'service/folder-service'
 
 type Props = {
-  documents: Array<ApiResourceId>,
   folder: Folder,
   selected: Map<HasId>,
   disabled: Map<HasId>,
@@ -31,7 +29,7 @@ type Props = {
 
 export default class DocumentBrowserListView extends React.Component<Props> {
   render() {
-    const { documents,
+    const {
       clickFolder,
       clickDocument,
       folder,
@@ -43,20 +41,20 @@ export default class DocumentBrowserListView extends React.Component<Props> {
     return (
       <div className='ui divided item list'>
         <ListItemCurrentFolder
-          resourceId={folder.id}
+          resource={folder}
           disabled={!folder.parent}
           onClick={clickFolder}
         />
-        <FolderListItems
-          folder={folder}
+        <FolderList
+          resourceIds={folder.children}
           selected={selected}
           disabled={disabled}
           clickFolder={clickFolder}
           onResourceNotFound={onResourceNotFound}
           selectResource={selectResource}
         />
-        <DocumentListView
-          resourceIds={documents}
+        <DocumentList
+          resourceIds={folder.documents}
           selected={selected}
           clickDocument={clickDocument}
           onResourceNotFound={onResourceNotFound}

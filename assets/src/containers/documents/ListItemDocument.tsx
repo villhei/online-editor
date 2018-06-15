@@ -6,6 +6,7 @@ import { TextDocument } from 'service/document-service'
 type Props = {
   selected: boolean,
   resource: TextDocument,
+  disabled: boolean,
   onSelect: (resource: TextDocument) => void,
   onClick: (resource: TextDocument) => void
 }
