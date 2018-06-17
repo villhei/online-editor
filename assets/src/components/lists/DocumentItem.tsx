@@ -8,11 +8,12 @@ type Props = {
   resource: TextDocument,
   selected: boolean,
   onSelect: () => void,
-  onClick: () => void
+  onClick: () => void,
+  onClickIcon: () => void
 }
 
 export default (props: Props) => {
-  const { resource, selected, onSelect, onClick } = props
+  const { resource, selected, onSelect, onClick, onClickIcon } = props
   const buttonClasses = classNames('ui', {
     basic: !selected
   }, 'blue icon button')
@@ -20,7 +21,9 @@ export default (props: Props) => {
     <ListItem
       heading={resource.name}
       onClick={onClick}
-      icon='teal file'>
+      onClickIcon={onClickIcon}
+      icon='teal file'
+      secondaryIcon={resource.starred ? 'yellow star' : undefined}>
       <button className={buttonClasses} onClick={onSelect} >
         <i className='check icon' />
       </button>

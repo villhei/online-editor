@@ -27,6 +27,7 @@ type OwnProps = {
   selected: Map<HasId>,
   selectResource: (resource: TextDocument) => void,
   clickDocument: (resource: TextDocument) => void,
+  clickDocumentIcon: (resource: TextDocument) => void
   onResourceNotFound: (id: TextDocumentId) => void
 }
 
@@ -40,7 +41,8 @@ class DocumentListView extends React.Component<Props> {
     const { resources,
       clickDocument,
       selectResource,
-      selected
+      selected,
+      clickDocumentIcon
     } = this.props
     return (
       resources.map((document) => {
@@ -52,6 +54,7 @@ class DocumentListView extends React.Component<Props> {
           resource={document}
           disabled={false}
           onClick={clickDocument}
+          onClickIcon={clickDocumentIcon}
           onSelect={(selectResource)} />
       })
     )
@@ -61,8 +64,9 @@ class DocumentListView extends React.Component<Props> {
 const mapStateToProps = (state: RootState, ownProps: OwnProps): StateMappedProps<TextDocument> =>
   selectApiResources(state.model.documents, ownProps.resourceIds)
 
-const mapDispatchToProps = (dispatch: Dispatch): DispatchMappedProps =>
-  mapGetResource(dispatch, getDocument)
+const mapDispatchToProps = (dispatch: Dispatch): DispatchMappedProps => ({
+  ...mapGetResource(dispatch, getDocument)
+})
 
 const wrappedResource = createApiResourceListWrapper<TextDocument, Props>(isDocument)(DocumentListView, LoadingComponent)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

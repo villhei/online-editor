@@ -22,6 +22,7 @@ type Props = {
   disabled: Map<HasId>,
   clickFolder: (resource: Folder) => void,
   clickDocument: (resource: TextDocument) => void,
+  clickDocumentIcon: (resource: TextDocument) => void,
   onResourceNotFound: (id: TextDocumentId) => void,
   selectResource: (resource: HasId) => void,
   getFolderById: (id: FolderId) => void
@@ -32,6 +33,7 @@ export default class DocumentBrowserListView extends React.Component<Props> {
     const {
       clickFolder,
       clickDocument,
+      clickDocumentIcon,
       folder,
       selectResource,
       selected,
@@ -57,6 +59,7 @@ export default class DocumentBrowserListView extends React.Component<Props> {
           resourceIds={folder.documents}
           selected={selected}
           clickDocument={clickDocument}
+          clickDocumentIcon={clickDocumentIcon}
           onResourceNotFound={onResourceNotFound}
           selectResource={selectResource}
         />

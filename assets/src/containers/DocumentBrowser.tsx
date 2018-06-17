@@ -1,5 +1,6 @@
 import {
-  getDocument
+  getDocument,
+  updateDocument
 } from 'actions/document-actions'
 import {
   getFolder,
@@ -27,7 +28,7 @@ import {
   connect
 } from 'react-redux'
 import { push } from 'react-router-redux'
-import { TextDocument } from 'service/document-service'
+import { PartialTextDocument, TextDocument, TextDocumentId } from 'service/document-service'
 import {
   Folder,
   FolderId,
@@ -41,6 +42,7 @@ type Props = {
   showFolder: (id: FolderId) => typeof showFolder,
   setSelection: (selection: Map<HasId>) => typeof setSelectedItems,
   editResource: (id: ApiResourceId) => void,
+  updateDocument: (id: TextDocumentId, updated: PartialTextDocument) => void,
   setLayout: (layout: Layout) => void,
   layout: Layout
   resourceId: FolderId,
@@ -81,6 +83,10 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
     editResource(document.id)
   }
 
+  handleClickDocumentIcon = (document: TextDocument) => {
+    const { updateDocument } = this.props
+    updateDocument(document.id, { starred: !document.starred, updated_at: document.updated_at })
+  }
   handleSetLayout = (layout: Layout) => () => {
     this.props.setLayout(layout)
   }
@@ -134,6 +140,7 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
         disabled={{}}
         clickFolder={this.handleClickFolder}
         clickDocument={this.handleClickDocument}
+        clickDocumentIcon={this.handleClickDocumentIcon}
         onResourceNotFound={this.handleResourceNotFound}
         folder={resource}
         folders={sortedFolders}
@@ -157,6 +164,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),
     setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection })),
     editResource: (id: ApiResourceId) => dispatch(push('/edit/' + id)),
+    updateDocument: (id: TextDocumentId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource }),
     setLayout: (layout: Layout) => dispatch(selectLayout(layout))
   }
 }

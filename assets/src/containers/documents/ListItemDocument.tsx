@@ -8,10 +8,15 @@ type Props = {
   resource: TextDocument,
   disabled: boolean,
   onSelect: (resource: TextDocument) => void,
-  onClick: (resource: TextDocument) => void
+  onClick: (resource: TextDocument) => void,
+  onClickIcon: (resouce: TextDocument) => void
 }
 
 export default class ListItemDocument extends ListItem<TextDocument, Props> {
+  handleIconClick = () => {
+    const { onClickIcon, resource } = this.props
+    onClickIcon(resource)
+  }
   render() {
     const { selected, resource } = this.props
     return (
@@ -19,6 +24,7 @@ export default class ListItemDocument extends ListItem<TextDocument, Props> {
         resource={resource}
         selected={selected}
         onClick={this.handleOnClick}
+        onClickIcon={this.handleIconClick}
         onSelect={this.handleOnSelect} />
     )
   }

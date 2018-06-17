@@ -21,6 +21,7 @@ export default (props: Props) => {
     <ListItem
       heading={resource.name}
       onClick={onClick}
+      onClickIcon={onClick}
       disabled={disabled}
       icon='blue folder'>
       {onSelect && <button className={buttonClasses} onClick={onSelect} disabled={disabled} >
