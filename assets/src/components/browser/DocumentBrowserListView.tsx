@@ -51,7 +51,7 @@ export default class DocumentBrowserListView extends React.Component<Props> {
           resourceIds={folder.children}
           selected={selected}
           disabled={disabled}
-          orderBy={'name'}
+          orderBy='name'
           clickFolder={clickFolder}
           onResourceNotFound={onResourceNotFound}
           selectResource={selectResource}
@@ -59,7 +59,7 @@ export default class DocumentBrowserListView extends React.Component<Props> {
         <DocumentList
           resourceIds={folder.documents}
           selected={selected}
-          orderBy={'name'}
+          orderBy='name'
           clickDocument={clickDocument}
           clickDocumentIcon={clickDocumentIcon}
           onResourceNotFound={onResourceNotFound}

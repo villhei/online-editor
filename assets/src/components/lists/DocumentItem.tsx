@@ -23,7 +23,7 @@ export default (props: Props) => {
       onClick={onClick}
       onClickIcon={onClickIcon}
       icon='teal file'
-      secondaryIcon={resource.starred ? 'yellow star' : undefined}>
+      secondaryIcon={resource.starred ? 'yellow star' : 'grey star'}>
       <button className={buttonClasses} onClick={onSelect} >
         <i className='check icon' />
       </button>
