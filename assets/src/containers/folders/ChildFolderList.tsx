@@ -21,14 +21,14 @@ import {
 
 import { RootState } from 'main/store'
 
-type OwnProps = {
+interface OwnProps {
   resourceId: FolderId,
   selectedItems: Map<HasId>,
   disabledItems?: Map<HasId>,
   selectFolder: (resource: Folder) => void
 }
 
-type StateProps = {
+interface StateProps {
   resource: ApiResource<Folder>,
   resourceId: FolderId
 }

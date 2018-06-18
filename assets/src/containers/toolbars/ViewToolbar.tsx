@@ -22,12 +22,12 @@ import {
 
 import { RootState, RouterProvidedProps } from 'main/store'
 
-export type StateProps = {
+export interface StateProps {
   resourceId: TextDocumentId,
   resource: ApiResource<TextDocument>
 }
 
-type DispatchProps = {
+interface DispatchProps {
   getResource: (id: TextDocumentId) => void,
   navigate: (route: string) => void
 }

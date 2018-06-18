@@ -4,7 +4,7 @@ import { HasId, Map } from 'library/service/common'
 import * as React from 'react'
 import { Folder, FolderId } from 'service/folder-service'
 
-export type Props = {
+export interface Props {
   title: string,
   message: string,
   folderId: FolderId,

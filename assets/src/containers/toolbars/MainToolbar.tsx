@@ -39,7 +39,7 @@ import {
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
 import { RootState, RouterProvidedProps } from 'main/store'
 
-type StateProps = {
+interface StateProps {
   resourceId: FolderId,
   resource: ApiResource<Folder>,
   itemsSelected: boolean,
@@ -47,7 +47,7 @@ type StateProps = {
   disabledItems: Map<Folder>
 }
 
-type DispatchProps = {
+interface DispatchProps {
   getResource: (id: FolderId) => void
   createFolder: (name: string, parent: FolderId) => void,
   createDocument: (name: string, folder: FolderId) => void,
@@ -60,7 +60,7 @@ type Props = StateProps & DispatchProps & {
   resource: Folder
 }
 
-type State = {
+interface State {
   modal: {
     display: 'none' | 'prompt' | 'confirm' | 'folder',
     icon: string,

@@ -16,7 +16,7 @@ import {
   FolderId
 } from 'service/folder-service'
 
-type Props = {
+interface Props {
   folder: Folder,
   selected: Map<HasId>,
   disabled: Map<HasId>,

@@ -37,7 +37,7 @@ import {
 
 import { RootState, RouterProvidedProps } from 'main/store'
 
-type Props = {
+interface Props {
   getResource: (id: FolderId) => typeof getDocument,
   showFolder: (id: FolderId) => typeof showFolder,
   setSelection: (selection: Map<HasId>) => typeof setSelectedItems,

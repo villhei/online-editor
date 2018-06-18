@@ -3,7 +3,7 @@ import ListItem from 'containers/lists/ListItem'
 import * as React from 'react'
 import { TextDocument } from 'service/document-service'
 
-type Props = {
+interface Props {
   selected: boolean,
   resource: TextDocument,
   disabled: boolean,

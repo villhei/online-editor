@@ -4,7 +4,7 @@ import { ApiResourceId } from 'library/service/common'
 import * as React from 'react'
 import { Folder } from 'service/folder-service'
 
-type Props = {
+interface Props {
   resource: Folder
   disabled: boolean,
   onClick: (resource: Folder) => void,

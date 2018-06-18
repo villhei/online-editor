@@ -2,7 +2,7 @@ import * as classNames from 'classnames'
 import * as React from 'react'
 import { Folder } from 'service/folder-service'
 
-type Props = {
+interface Props {
   folder: Folder,
   disabled: boolean,
   buttonAction: () => void

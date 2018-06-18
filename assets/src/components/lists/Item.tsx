@@ -1,7 +1,7 @@
 import * as classNames from 'classnames'
 import * as React from 'react'
 
-type Props = {
+interface Props {
   children?: JSX.Element | string,
   onClick: () => void,
   onClickIcon: () => void,

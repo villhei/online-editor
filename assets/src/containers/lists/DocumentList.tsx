@@ -24,7 +24,7 @@ import {
   isDocument
 } from 'service/document-service'
 
-type OwnProps = {
+interface OwnProps {
   resourceIds: Array<TextDocumentId>,
   selected: Map<HasId>,
   orderBy: SortableKeys<TextDocument>,
@@ -34,7 +34,7 @@ type OwnProps = {
   onResourceNotFound: (id: TextDocumentId) => void
 }
 
-type Props = OwnProps & {
+interface Props extends OwnProps {
   resources: Array<TextDocument>,
   getResource: (id: TextDocumentId) => void
 }

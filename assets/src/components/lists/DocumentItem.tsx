@@ -4,7 +4,7 @@ import { TextDocument } from 'service/document-service'
 
 import ListItem from './Item'
 
-type Props = {
+interface Props {
   resource: TextDocument,
   selected: boolean,
   onSelect: () => void,

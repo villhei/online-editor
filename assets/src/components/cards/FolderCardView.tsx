@@ -4,7 +4,7 @@ import { Folder } from 'service/folder-service'
 import CardDisplay from './CardDisplay'
 import SelectedButton from './SelectedButton'
 
-type Props = {
+interface Props {
   folder: Folder,
   selected: boolean
   onClick: () => void,

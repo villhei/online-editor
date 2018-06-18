@@ -20,7 +20,7 @@ import {
 
 import { RootState } from 'main/store'
 
-type OwnProps = {
+interface OwnProps {
   resourceId: TextDocumentId,
   selected: boolean,
   onResourceNotFound: (id: TextDocumentId) => void,
@@ -28,7 +28,7 @@ type OwnProps = {
   selectDocument: (resource: HasId) => void
 }
 
-type Props = OwnProps & {
+interface Props extends OwnProps {
   resource: TextDocument,
   getResource: (id: TextDocumentId) => void
 }

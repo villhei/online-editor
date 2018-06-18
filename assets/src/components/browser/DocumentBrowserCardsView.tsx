@@ -15,7 +15,7 @@ import {
   FolderId
 } from 'service/folder-service'
 
-type Props = {
+interface Props {
   documents: Array<ApiResourceId>,
   folders: Array<FolderId>,
   folder: Folder,

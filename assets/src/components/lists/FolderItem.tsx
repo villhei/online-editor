@@ -4,7 +4,7 @@ import { Folder } from 'service/folder-service'
 
 import ListItem from './Item'
 
-type Props = {
+interface Props {
   resource: Folder,
   selected: boolean,
   disabled: boolean,

@@ -26,7 +26,7 @@ import {
 
 import { RootState } from 'main/store'
 
-type OwnProps = {
+interface OwnProps {
   resourceIds: Array<FolderId>,
   selected: Map<HasId>,
   disabled?: Map<HasId>,
@@ -36,7 +36,7 @@ type OwnProps = {
   onResourceNotFound: (id: FolderId) => void
 }
 
-type Props = OwnProps & {
+interface Props extends OwnProps {
   resources: Array<Folder>,
   getResource: (id: FolderId) => void
 }

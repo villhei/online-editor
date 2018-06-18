@@ -20,14 +20,14 @@ import {
 
 import { RootState } from 'main/store'
 
-type OwnProps = {
+interface OwnProps {
   resourceId: FolderId,
   selected: boolean,
   onResourceNotFound: (id: FolderId) => void,
   onClick: (resource: HasId) => void
   selectFolder: (resource: HasId) => void
 }
-type Props = OwnProps & {
+interface Props extends OwnProps {
   resource: Folder,
   getResource: (id: FolderId) => void,
   showFolder: (id: FolderId) => void

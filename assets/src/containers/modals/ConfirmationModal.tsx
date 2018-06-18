@@ -2,7 +2,7 @@ import ConfirmationModal from 'components/modals/ConfirmationModal'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
-export type Props = {
+export interface Props {
   icon: string,
   title: string,
   message: string,

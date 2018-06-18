@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-type Props = {
+interface Props {
   name: string,
   disabled: boolean,
   onClick: () => void

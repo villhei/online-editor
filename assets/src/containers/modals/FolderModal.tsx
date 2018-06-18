@@ -4,7 +4,7 @@ import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 import { Folder, FolderId } from 'service/folder-service'
 
-export type Props = {
+export interface Props {
   title: string,
   message: string,
   initialFolder: FolderId,

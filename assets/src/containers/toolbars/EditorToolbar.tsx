@@ -46,7 +46,7 @@ const CONFIRM_DELETE_ICON = 'trash'
 const CONFIRM_DELETE_TITLE = 'Confirm deletion'
 const CONFIRM_DELETE_MESSAGE = 'Are you sure you want to delete this document?'
 
-export type StateProps = {
+export interface StateProps {
   documentId: string,
   document: ApiResource<TextDocument>,
   isModified: boolean,

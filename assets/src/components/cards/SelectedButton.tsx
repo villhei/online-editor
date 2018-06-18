@@ -1,7 +1,7 @@
 import * as classNames from 'classnames'
 import * as React from 'react'
 
-type Props = {
+interface Props {
   selected: boolean,
   onSelect: (event: React.MouseEvent<HTMLElement>) => void
 }

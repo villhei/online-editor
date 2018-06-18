@@ -3,7 +3,7 @@ import ListItem, { ListItemProps } from 'containers/lists/ListItem'
 import * as React from 'react'
 import { Folder } from 'service/folder-service'
 
-type OwnProps = {
+interface OwnProps {
   resource: Folder,
   selected: boolean,
   disabled: boolean,
