@@ -5,9 +5,11 @@ import LoadingComponent from 'components/Loading'
 import ListItemFolder from 'containers/folders/ListItemFolder'
 import {
   DispatchMappedProps,
+  SortableKeys,
   StateMappedProps,
   mapGetResource,
-  selectApiResources
+  selectApiResources,
+  sortList
 } from 'containers/lists/List'
 import createApiResourceListWrapper from 'library/containers/ApiResourceListHOC'
 import {
@@ -28,6 +30,7 @@ type OwnProps = {
   resourceIds: Array<FolderId>,
   selected: Map<HasId>,
   disabled?: Map<HasId>,
+  orderBy: SortableKeys<Folder>,
   selectResource?: (id: Folder) => void,
   clickFolder: (resource: Folder) => void
   onResourceNotFound: (id: FolderId) => void
@@ -40,8 +43,8 @@ type Props = OwnProps & {
 
 class FolderListItemsContainer extends React.Component<Props> {
   render() {
-    const { disabled, selected, clickFolder, selectResource, resources } = this.props
-    return resources.map((folder) => {
+    const { disabled, selected, orderBy, clickFolder, selectResource, resources } = this.props
+    return sortList<Folder>(resources, orderBy).map((folder) => {
       const isDisabled = disabled ? Boolean(disabled[folder.id]) : false
       const isSelected: boolean = Boolean(selected[folder.id])
 

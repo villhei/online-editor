@@ -50,6 +50,7 @@ class ChildFolderList extends React.Component<Props> {
         resourceIds={resource.children}
         selected={selectedItems}
         disabled={disabledItems}
+        orderBy={'name'}
         clickFolder={selectFolder}
         onResourceNotFound={() => null}
       />

@@ -3,9 +3,11 @@ import LoadingComponent from 'components/Loading'
 import ListItemDocument from 'containers/documents/ListItemDocument'
 import {
   DispatchMappedProps,
+  SortableKeys,
   StateMappedProps,
   mapGetResource,
-  selectApiResources
+  selectApiResources,
+  sortList
 } from 'containers/lists/List'
 import createApiResourceListWrapper from 'library/containers/ApiResourceListHOC'
 import {
@@ -25,6 +27,7 @@ import {
 type OwnProps = {
   resourceIds: Array<TextDocumentId>,
   selected: Map<HasId>,
+  orderBy: SortableKeys<TextDocument>,
   selectResource: (resource: TextDocument) => void,
   clickDocument: (resource: TextDocument) => void,
   clickDocumentIcon: (resource: TextDocument) => void
@@ -42,10 +45,11 @@ class DocumentListView extends React.Component<Props> {
       clickDocument,
       selectResource,
       selected,
+      orderBy,
       clickDocumentIcon
     } = this.props
     return (
-      resources.map((document) => {
+      sortList<TextDocument>(resources, orderBy).map((document) => {
         const isSelected: boolean = Boolean(selected[document.id])
 
         return <ListItemDocument
