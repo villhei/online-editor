@@ -9,7 +9,7 @@ import ViewToolbar from 'containers/toolbars/ViewToolbar'
 import * as React from 'react'
 import { Route } from 'react-router-dom'
 
-type Props = {
+interface Props {
   error: {
     message: string | undefined,
     stack: string | undefined

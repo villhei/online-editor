@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import MenuButton from './MenuButton'
 
-type Props = {
+interface Props {
   title: string,
   editDocument: () => void,
   refreshDocument: () => void

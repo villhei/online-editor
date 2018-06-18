@@ -11,24 +11,25 @@ import {
   setSelectedItems
 } from 'actions/page-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
-import wrapApiResource, {
-  mapGetResource,
-  selectApiResource
-} from 'containers/ApiResourceHOC'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
 import FolderModal from 'containers/modals/FolderModal'
 import PromptModal from 'containers/modals/PromptModal'
+import createApiResourceWrapper, {
+  selectApiResource
+} from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
+
+import {
+  ApiResource,
+  HasId,
+  Map
+} from 'library/service/common'
 import * as React from 'react'
 import {
   connect
 } from 'react-redux'
 import { Action } from 'redux'
 import { ThunkDispatch } from 'redux-thunk'
-import {
-  ApiResource,
-  HasId,
-  Map
-} from 'service/common'
 import {
   Folder,
   FolderId,
@@ -38,7 +39,7 @@ import {
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
 import { RootState, RouterProvidedProps } from 'main/store'
 
-type StateProps = {
+interface StateProps {
   resourceId: FolderId,
   resource: ApiResource<Folder>,
   itemsSelected: boolean,
@@ -46,7 +47,7 @@ type StateProps = {
   disabledItems: Map<Folder>
 }
 
-type DispatchProps = {
+interface DispatchProps {
   getResource: (id: FolderId) => void
   createFolder: (name: string, parent: FolderId) => void,
   createDocument: (name: string, folder: FolderId) => void,
@@ -59,7 +60,7 @@ type Props = StateProps & DispatchProps & {
   resource: Folder
 }
 
-type State = {
+interface State {
   modal: {
     display: 'none' | 'prompt' | 'confirm' | 'folder',
     icon: string,
@@ -248,7 +249,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps): State
     }), {})
 
   return {
-    ...selectApiResource(state, 'folders', ownProps.match.params.folderId),
+    ...selectApiResource(state.model.folders, ownProps.match.params.folderId),
     itemsSelected,
     selectedItems,
     disabledItems: childFolders
@@ -268,5 +269,5 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): Dis
   }
 }
 
-const wrappedResource = wrapApiResource<Folder, Props>(isFolder)(MainToolbar, ToolbarLoadingView)
+const wrappedResource = createApiResourceWrapper<Folder, Props>(isFolder)(MainToolbar, ToolbarLoadingView)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

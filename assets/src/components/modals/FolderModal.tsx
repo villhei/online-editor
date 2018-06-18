@@ -1,10 +1,10 @@
 import Modal from 'components/modals/Modal'
 import ChildFolderList from 'containers/folders/ChildFolderList'
+import { HasId, Map } from 'library/service/common'
 import * as React from 'react'
-import { HasId, Map } from 'service/common'
 import { Folder, FolderId } from 'service/folder-service'
 
-export type Props = {
+export interface Props {
   title: string,
   message: string,
   folderId: FolderId,

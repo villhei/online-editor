@@ -1,43 +1,31 @@
-import { getDocument } from 'actions/document-actions'
-import LoadingComponent from 'components/Loading'
 import DocumentItem from 'components/lists/DocumentItem'
-import wrapApiResource, { ApiResourceDispatch } from 'containers/ApiResourceHOC'
-import ListItem, { ListItemProps, createDispatchMapper, createResourceMapper } from 'containers/lists/ListItem'
+import ListItem from 'containers/lists/ListItem'
 import * as React from 'react'
-import { connect } from 'react-redux'
-import { ApiResourceId } from 'service/common'
-import { TextDocument, isDocument } from 'service/document-service'
+import { TextDocument } from 'service/document-service'
 
-type DispatchProps = ApiResourceDispatch
-
-type OwnProps = {
-  resourceId: ApiResourceId
+interface Props {
   selected: boolean,
+  resource: TextDocument,
+  disabled: boolean,
   onSelect: (resource: TextDocument) => void,
   onClick: (resource: TextDocument) => void,
-  onResourceNotFound: (id: ApiResourceId) => void
+  onClickIcon: (resouce: TextDocument) => void
 }
 
-type Props = ListItemProps<TextDocument> & OwnProps & DispatchProps & {
-  resource: TextDocument
-}
-
-class ListItemDocument extends ListItem<TextDocument, Props> {
+export default class ListItemDocument extends ListItem<TextDocument, Props> {
+  handleIconClick = () => {
+    const { onClickIcon, resource } = this.props
+    onClickIcon(resource)
+  }
   render() {
-    const { selected, resource, resourceId } = this.props
+    const { selected, resource } = this.props
     return (
       <DocumentItem
         resource={resource}
-        resourceId={resourceId}
         selected={selected}
         onClick={this.handleOnClick}
+        onClickIcon={this.handleIconClick}
         onSelect={this.handleOnSelect} />
     )
   }
 }
-
-const mapStateToProps = createResourceMapper<TextDocument, OwnProps>('documents')
-const mapDispatchToProps = createDispatchMapper(getDocument)
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  wrapApiResource<TextDocument, Props>(isDocument)(ListItemDocument, LoadingComponent))

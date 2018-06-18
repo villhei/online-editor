@@ -31,7 +31,7 @@ export type Partial<T> = {
   [Partial in keyof T]?: T[Partial]
 }
 
-export type ApiResource<T> = T | ResourceStatus | Error
+export type ApiResource<T> = T | ResourceStatus | Error | undefined
 
 export function getResourceName(resource: ApiResource<HasName>): string {
   if (resource === ResourceStatus.Loading) {
@@ -58,7 +58,7 @@ export function isResourceAvailable<T extends HasId>(resource: ApiResource<T>): 
   return false
 }
 
-export function isAxiosError(object: Object): object is AxiosError {
+export function isAxiosError(object: Object | undefined): object is AxiosError {
   const candidate = object as AxiosError | undefined
   return Boolean(candidate && candidate.config && candidate.message && candidate.name)
 }

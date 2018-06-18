@@ -7,7 +7,7 @@ import {
   Partial,
   configureApiEndpoints,
   isAxiosError
-} from './common'
+} from 'library/service/common'
 
 export type TextDocumentId = ApiResourceId
 
@@ -17,13 +17,14 @@ export type TextDocument = {
   readonly content: string,
   readonly owner: string,
   readonly folder: string,
+  readonly starred: boolean,
   readonly inserted_at: string,
   readonly updated_at: string
 }
 
 export type PartialTextDocument = Partial<TextDocument>
 
-export function isDocument(object: Object): object is TextDocument {
+export function isDocument(object: Object | undefined): object is TextDocument {
   const candidate = object as TextDocument | undefined
   return Boolean(candidate &&
     typeof candidate.id === 'string' &&

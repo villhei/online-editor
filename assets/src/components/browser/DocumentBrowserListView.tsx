@@ -1,12 +1,12 @@
-import DocumentListView from 'components/lists/DocumentListItems'
-import FolderListItems from 'components/lists/FolderListItems'
+import ListItemCurrentFolder from 'containers/folders/ListItemCurrentFolder'
+import DocumentList from 'containers/lists/DocumentList'
+import FolderList from 'containers/lists/FolderList'
 
-import * as React from 'react'
 import {
-  ApiResourceId,
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
 import {
   TextDocument,
   TextDocumentId
@@ -16,13 +16,13 @@ import {
   FolderId
 } from 'service/folder-service'
 
-type Props = {
-  documents: Array<ApiResourceId>,
+interface Props {
   folder: Folder,
   selected: Map<HasId>,
   disabled: Map<HasId>,
   clickFolder: (resource: Folder) => void,
   clickDocument: (resource: TextDocument) => void,
+  clickDocumentIcon: (resource: TextDocument) => void,
   onResourceNotFound: (id: TextDocumentId) => void,
   selectResource: (resource: HasId) => void,
   getFolderById: (id: FolderId) => void
@@ -30,9 +30,10 @@ type Props = {
 
 export default class DocumentBrowserListView extends React.Component<Props> {
   render() {
-    const { documents,
+    const {
       clickFolder,
       clickDocument,
+      clickDocumentIcon,
       folder,
       selectResource,
       selected,
@@ -41,18 +42,26 @@ export default class DocumentBrowserListView extends React.Component<Props> {
     } = this.props
     return (
       <div className='ui divided item list'>
-        <FolderListItems
-          folder={folder}
+        <ListItemCurrentFolder
+          resource={folder}
+          disabled={!folder.parent}
+          onClick={clickFolder}
+        />
+        <FolderList
+          resourceIds={folder.children}
           selected={selected}
           disabled={disabled}
+          orderBy='name'
           clickFolder={clickFolder}
           onResourceNotFound={onResourceNotFound}
           selectResource={selectResource}
         />
-        <DocumentListView
-          documents={documents}
+        <DocumentList
+          resourceIds={folder.documents}
           selected={selected}
+          orderBy='name'
           clickDocument={clickDocument}
+          clickDocumentIcon={clickDocumentIcon}
           onResourceNotFound={onResourceNotFound}
           selectResource={selectResource}
         />

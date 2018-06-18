@@ -1,6 +1,6 @@
 import { getFolder } from 'actions/folder-actions'
+import { ByResourceParams, UpdateByIdParams } from 'library/service/common'
 import { push } from 'react-router-redux'
-import { ByResourceParams, UpdateByIdParams } from 'service/common'
 import { PartialTextDocument, TextDocument, TextDocumentId, create, deleteByDocument } from 'service/document-service'
 import { Folder, PartialFolder } from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 
 import MenuButton from './MenuButton'
 
-export type Props = {
+export interface Props {
   title: string,
   moveDisabled: boolean,
   deleteDisabled: boolean,

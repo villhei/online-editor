@@ -11,6 +11,7 @@ defmodule OnlineEditor.Document do
     field(:content, :string, default: "")
     field(:name, :string)
     field(:owner, :string)
+    field(:starred, :boolean)
     field(:deleted, :boolean)
     field(:deleted_at, :naive_datetime)
     belongs_to(:folder, Folder)
@@ -33,7 +34,7 @@ defmodule OnlineEditor.Document do
     document
     |> change(%{})
     |> Map.put(:empty_values, [""])
-    |> cast(attrs, [:name, :owner, :content, :folder_id])
+    |> cast(attrs, [:name, :owner, :content, :starred, :folder_id])
     |> validate_required([:name, :folder_id])
   end
 
@@ -42,7 +43,7 @@ defmodule OnlineEditor.Document do
 
     document
     |> change(%{})
-    |> cast(attrs, [:name, :content, :folder_id])
+    |> cast(attrs, [:name, :content, :starred, :folder_id])
   end
 
   def delete_changeset(%Document{} = document) do

@@ -4,11 +4,12 @@ import {
   HasId,
   ResourceStatus,
   isAxiosError
-} from 'service/common'
+} from 'library/service/common'
 
-export type DocumentMap<T> = { [id: string]: ApiResource<T> }
+export type ResourceMap<T> = { [id: string]: ApiResource<T> | undefined }
+
 export type MappedModel<T> = {
-  byId: DocumentMap<T>
+  byId: ResourceMap<T>
 }
 
 function transformAxiosError<T>(maybeError: ApiResource<T>): ApiResource<T> {

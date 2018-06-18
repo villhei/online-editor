@@ -11,6 +11,7 @@ defmodule OnlineEditor.Document.Query do
           id: d.id,
           name: d.name,
           owner: d.owner,
+          starred: d.starred,
           folder_id: d.folder_id,
           updated_at: d.updated_at,
           inserted_at: d.inserted_at

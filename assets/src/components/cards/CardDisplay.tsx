@@ -1,7 +1,7 @@
 import * as classNames from 'classnames'
 import * as React from 'react'
 
-type Props = {
+interface Props {
   header: JSX.Element | string
   disabled?: boolean,
   selected?: boolean,

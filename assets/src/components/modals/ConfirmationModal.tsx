@@ -2,7 +2,7 @@ import * as classNames from 'classnames'
 import Modal from 'components/modals/Modal'
 import * as React from 'react'
 
-type Props = {
+interface Props {
   title: string,
   message: string,
   icon: string,

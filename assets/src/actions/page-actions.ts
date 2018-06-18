@@ -10,15 +10,15 @@ import {
   getRootFolder,
   updateFolder
 } from 'actions/folder-actions'
-import { Dispatch } from 'react-redux'
-import { push } from 'react-router-redux'
 import {
   ApiResourceId,
   ByIdParams,
   ByResourceParams,
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import { Dispatch } from 'react-redux'
+import { push } from 'react-router-redux'
 import {
   TextDocument, isDocument
 } from 'service/document-service'

@@ -1,19 +1,19 @@
 import * as classNames from 'classnames'
 import * as React from 'react'
-import { TextDocument, TextDocumentId } from 'service/document-service'
+import { TextDocument } from 'service/document-service'
 
 import ListItem from './Item'
 
-type Props = {
-  resourceId: TextDocumentId,
+interface Props {
   resource: TextDocument,
   selected: boolean,
   onSelect: () => void,
-  onClick: () => void
+  onClick: () => void,
+  onClickIcon: () => void
 }
 
 export default (props: Props) => {
-  const { resource, selected, onSelect, onClick } = props
+  const { resource, selected, onSelect, onClick, onClickIcon } = props
   const buttonClasses = classNames('ui', {
     basic: !selected
   }, 'blue icon button')
@@ -21,7 +21,9 @@ export default (props: Props) => {
     <ListItem
       heading={resource.name}
       onClick={onClick}
-      icon='teal file'>
+      onClickIcon={onClickIcon}
+      icon='teal file'
+      secondaryIcon={resource.starred ? 'yellow star' : 'grey star'}>
       <button className={buttonClasses} onClick={onSelect} >
         <i className='check icon' />
       </button>

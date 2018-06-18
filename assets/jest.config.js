@@ -24,7 +24,12 @@ module.exports = {
     '^containers(.*)$': '<rootDir>/containers/$1',
     '^components(.*)$': '<rootDir>/components/$1',
     '^service(.*)$': '<rootDir>/service/$1',
-    '^reducers(.*)$': '<rootDir>/reducers/$1'
+    '^reducers(.*)$': '<rootDir>/reducers/$1',
+    '^library(.*)$': '<rootDir>/library/$1'
   },
-  collectCoverage: false
+  collectCoverage: false,
+  setupFiles: [
+    '<rootDir>/../test-setup.js'
+  ],
+  setupTestFrameworkScriptFile: '<rootDir>/../node_modules/jest-enzyme/lib/index.js'
 }

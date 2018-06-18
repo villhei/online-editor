@@ -4,7 +4,7 @@ import { TextDocument } from 'service/document-service'
 import CardDisplay from './CardDisplay'
 import SelectedButton from './SelectedButton'
 
-type Props = {
+interface Props {
   document: TextDocument,
   selected: boolean,
   selectDocument: (event: React.MouseEvent<HTMLElement>) => void,

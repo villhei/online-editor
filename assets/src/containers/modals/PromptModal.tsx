@@ -2,7 +2,7 @@ import PromptModalView from 'components/modals/PromptModal'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
 
-export type Props = {
+export interface Props {
   icon: string,
   title: string,
   message: string,
@@ -17,7 +17,7 @@ export type Props = {
 const ESC_KEY = 27
 const ENTER_KEY = 13
 
-export type State = {
+export interface State {
   listeners: Array<(event: KeyboardEvent) => void>
 }
 

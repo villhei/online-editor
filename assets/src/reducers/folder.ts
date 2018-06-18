@@ -4,11 +4,11 @@ import {
   getChildrenAction,
   getFolderAction
 } from 'actions/folder-actions'
-import { Action } from 'redux'
 import {
   ApiResource,
   ResourceStatus
-} from 'service/common'
+} from 'library/service/common'
+import { Action } from 'redux'
 import {
   Folder
 } from 'service/folder-service'
@@ -20,7 +20,7 @@ import {
   removeSingle,
   updateMany,
   updateSingle
-} from './common'
+} from 'library/reducers/common'
 
 export type FolderState = MappedModel<ApiResource<Folder>>
 

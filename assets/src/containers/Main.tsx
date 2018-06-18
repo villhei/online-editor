@@ -7,14 +7,14 @@ import { Dispatch, connect } from 'react-redux'
 
 import { RootState } from 'main/store'
 
-type StateProps = {
+interface StateProps {
   error: {
     message: string | undefined,
     stack: string | undefined
   }
 }
 
-type DispatchProps = {
+interface DispatchProps {
   clearError: () => void
 }
 

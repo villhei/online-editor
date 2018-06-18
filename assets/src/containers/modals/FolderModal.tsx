@@ -1,10 +1,10 @@
 import FolderModalView from 'components/modals/FolderModal'
+import { HasId, Map } from 'library/service/common'
 import * as React from 'react'
 import * as ReactDOM from 'react-dom'
-import { HasId, Map } from 'service/common'
 import { Folder, FolderId } from 'service/folder-service'
 
-export type Props = {
+export interface Props {
   title: string,
   message: string,
   initialFolder: FolderId,

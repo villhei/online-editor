@@ -1,5 +1,6 @@
 import {
-  getDocument
+  getDocument,
+  updateDocument
 } from 'actions/document-actions'
 import {
   getFolder,
@@ -14,19 +15,20 @@ import LoadingComponent from 'components/Loading'
 import DocumentBrowserCardsView from 'components/browser/DocumentBrowserCardsView'
 import DocumentBrowserListView from 'components/browser/DocumentBrowserListView'
 import LayoutSelection from 'components/browser/LayoutSelection'
-import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
+import {
+  ApiResourceId,
+  HasId,
+  Map
+} from 'library/service/common'
 import * as React from 'react'
 import {
   Dispatch,
   connect
 } from 'react-redux'
 import { push } from 'react-router-redux'
-import {
-  ApiResourceId,
-  HasId,
-  Map
-} from 'service/common'
-import { TextDocument } from 'service/document-service'
+import { PartialTextDocument, TextDocument, TextDocumentId } from 'service/document-service'
 import {
   Folder,
   FolderId,
@@ -35,11 +37,12 @@ import {
 
 import { RootState, RouterProvidedProps } from 'main/store'
 
-type Props = {
+interface Props {
   getResource: (id: FolderId) => typeof getDocument,
   showFolder: (id: FolderId) => typeof showFolder,
   setSelection: (selection: Map<HasId>) => typeof setSelectedItems,
   editResource: (id: ApiResourceId) => void,
+  updateDocument: (id: TextDocumentId, updated: PartialTextDocument) => void,
   setLayout: (layout: Layout) => void,
   layout: Layout
   resourceId: FolderId,
@@ -80,6 +83,10 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
     editResource(document.id)
   }
 
+  handleClickDocumentIcon = (document: TextDocument) => {
+    const { updateDocument } = this.props
+    updateDocument(document.id, { starred: !document.starred, updated_at: document.updated_at })
+  }
   handleSetLayout = (layout: Layout) => () => {
     this.props.setLayout(layout)
   }
@@ -133,6 +140,7 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
         disabled={{}}
         clickFolder={this.handleClickFolder}
         clickDocument={this.handleClickDocument}
+        clickDocumentIcon={this.handleClickDocumentIcon}
         onResourceNotFound={this.handleResourceNotFound}
         folder={resource}
         folders={sortedFolders}
@@ -144,7 +152,7 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
 const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: FolderId = ownProps.match.params.folderId
   return {
-    ...selectApiResource(state, 'folders', resourceId),
+    ...selectApiResource(state.model.folders, resourceId),
     selected: state.ui.page.selectedItems,
     layout: state.ui.page.layout
   }
@@ -156,9 +164,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),
     setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection })),
     editResource: (id: ApiResourceId) => dispatch(push('/edit/' + id)),
+    updateDocument: (id: TextDocumentId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource }),
     setLayout: (layout: Layout) => dispatch(selectLayout(layout))
   }
 }
 
-const wrappedResource = wrapApiResource<Folder, Props>(isFolder)(DocumentCardsLayoutContainer, LoadingComponent)
+const wrappedResource = createApiResourceWrapper<Folder, Props>(isFolder)(DocumentCardsLayoutContainer, LoadingComponent)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

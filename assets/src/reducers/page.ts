@@ -8,11 +8,11 @@ import {
   selectLayout,
   setSelectedItems
 } from 'actions/page-actions'
-import { Action } from 'redux'
 import {
   HasId,
   Map
-} from 'service/common'
+} from 'library/service/common'
+import { Action } from 'redux'
 import { isType } from 'typescript-fsa'
 
 export type PageState = {

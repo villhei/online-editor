@@ -1,11 +1,10 @@
 import * as classNames from 'classnames'
 import * as React from 'react'
-import { Folder, FolderId } from 'service/folder-service'
+import { Folder } from 'service/folder-service'
 
 import ListItem from './Item'
 
-type Props = {
-  resourceId: FolderId,
+interface Props {
   resource: Folder,
   selected: boolean,
   disabled: boolean,
@@ -22,6 +21,7 @@ export default (props: Props) => {
     <ListItem
       heading={resource.name}
       onClick={onClick}
+      onClickIcon={onClick}
       disabled={disabled}
       icon='blue folder'>
       {onSelect && <button className={buttonClasses} onClick={onSelect} disabled={disabled} >

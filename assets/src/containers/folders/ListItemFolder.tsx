@@ -1,33 +1,26 @@
-import { getFolder } from 'actions/folder-actions'
-import LoadingComponent from 'components/Loading'
 import FolderItem from 'components/lists/FolderItem'
-import wrapApiResource, { ApiResourceDispatch } from 'containers/ApiResourceHOC'
-import ListItem, { ListItemProps, createDispatchMapper, createResourceMapper } from 'containers/lists/ListItem'
+import ListItem, { ListItemProps } from 'containers/lists/ListItem'
 import * as React from 'react'
-import { connect } from 'react-redux'
-import { ApiResourceId } from 'service/common'
-import { Folder, isFolder } from 'service/folder-service'
+import { Folder } from 'service/folder-service'
 
-type OwnProps = {
-  resourceId: ApiResourceId
+interface OwnProps {
+  resource: Folder,
   selected: boolean,
   disabled: boolean,
   onClick: (resource: Folder) => void,
-  onSelect?: (resource: Folder) => void,
-  onResourceNotFound?: (id: ApiResourceId) => void
+  onSelect?: (resource: Folder) => void
 }
 
-type Props = ListItemProps<Folder> & OwnProps & ApiResourceDispatch & {
+type Props = ListItemProps<Folder> & OwnProps & {
   resource: Folder
 }
 
-class ListItemFolder extends ListItem<Folder, Props> {
+export default class ListItemFolder extends ListItem<Folder, Props> {
   render() {
-    const { selected, disabled, resource, resourceId, onSelect } = this.props
+    const { selected, disabled, resource, onSelect } = this.props
     return (
       <FolderItem
         resource={resource}
-        resourceId={resourceId}
         selected={selected}
         disabled={disabled}
         onClick={this.handleOnClick}
@@ -35,9 +28,3 @@ class ListItemFolder extends ListItem<Folder, Props> {
     )
   }
 }
-
-const mapStateToProps = createResourceMapper<Folder, OwnProps>('folders')
-const mapDispatchToProps = createDispatchMapper(getFolder)
-
-export default connect(mapStateToProps, mapDispatchToProps)(
-  wrapApiResource<Folder, Props>(isFolder)(ListItemFolder, LoadingComponent))

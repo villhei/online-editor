@@ -4,12 +4,14 @@ import {
 } from 'actions/folder-actions'
 import LoadingCard from 'components/LoadingCard'
 import FolderCardView from 'components/cards/FolderCardView'
-import wrapApiResource, { mapGetResource, selectApiResource } from 'containers/ApiResourceHOC'
-import * as React from 'react'
-import { Dispatch, connect } from 'react-redux'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
+
 import {
   HasId
-} from 'service/common'
+} from 'library/service/common'
+import * as React from 'react'
+import { Dispatch, connect } from 'react-redux'
 import {
   Folder,
   FolderId,
@@ -18,14 +20,14 @@ import {
 
 import { RootState } from 'main/store'
 
-type OwnProps = {
+interface OwnProps {
   resourceId: FolderId,
   selected: boolean,
   onResourceNotFound: (id: FolderId) => void,
   onClick: (resource: HasId) => void
   selectFolder: (resource: HasId) => void
 }
-type Props = OwnProps & {
+interface Props extends OwnProps {
   resource: Folder,
   getResource: (id: FolderId) => void,
   showFolder: (id: FolderId) => void
@@ -54,7 +56,7 @@ class FolderCard extends React.Component<Props> {
 const mapStateToProps = (state: RootState, ownProps: OwnProps) => {
   const { resourceId, selected } = ownProps
   return {
-    ...selectApiResource<Folder>(state, 'folders', resourceId),
+    ...selectApiResource<Folder>(state.model.folders, resourceId),
     selected
   }
 }
@@ -67,4 +69,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  wrapApiResource<Folder, Props>(isFolder)(FolderCard, LoadingCard))
+  createApiResourceWrapper<Folder, Props>(isFolder)(FolderCard, LoadingCard))

@@ -1,6 +1,6 @@
 import * as React from 'react'
 
-type Props = {
+interface Props {
   children?: JSX.Element | string
 }
 const Modal = (props: Props) => {

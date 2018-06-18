@@ -25,6 +25,7 @@ export const document: TextDocument = {
   owner: 'barguy',
   folder: 'rootId',
   content: 'example document',
+  starred: false,
   inserted_at: new Date().toISOString(),
   updated_at: new Date().toISOString()
 }
