@@ -48,8 +48,13 @@ class DocumentListView extends React.Component<Props> {
       orderBy,
       clickDocumentIcon
     } = this.props
+
+    const sorted = sortList<TextDocument>(resources, orderBy)
+
+    const starred = sorted.filter(document => document.starred)
+    const unstarred = sorted.filter(document => !document.starred)
     return (
-      sortList<TextDocument>(resources, orderBy).map((document) => {
+      starred.concat(unstarred).map((document) => {
         const isSelected: boolean = Boolean(selected[document.id])
 
         return <ListItemDocument
