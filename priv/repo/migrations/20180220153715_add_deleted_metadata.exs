@@ -3,8 +3,8 @@ defmodule OnlineEditor.Repo.Migrations.AddDeletedMetadata do
 
   def change do
     alter table(:documents) do
-      add :deleted, :boolean, default: false
-      add :deleted_at, :naive_datetime, null: true
+      add(:deleted, :boolean, default: false)
+      add(:deleted_at, :naive_datetime, null: true)
     end
   end
 end
