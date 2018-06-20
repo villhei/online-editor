@@ -1,7 +1,7 @@
+import ItemListHeading from 'components/lists/ItemListHeading'
 import ListItemCurrentFolder from 'containers/folders/ListItemCurrentFolder'
 import DocumentList from 'containers/lists/DocumentList'
 import FolderList from 'containers/lists/FolderList'
-
 import {
   HasId,
   Map
@@ -41,12 +41,13 @@ export default class DocumentBrowserListView extends React.Component<Props> {
       onResourceNotFound
     } = this.props
     return (
-      <div className='ui divided item list'>
+      <div className='ui divided selection list'>
         <ListItemCurrentFolder
           resource={folder}
           disabled={!folder.parent}
           onClick={clickFolder}
         />
+        <ItemListHeading />
         <FolderList
           resourceIds={folder.children}
           selected={selected}

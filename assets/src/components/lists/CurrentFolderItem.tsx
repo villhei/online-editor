@@ -23,9 +23,9 @@ const FolderIcon = (props: IconProps): JSX.Element => {
 export default (props: Props) => {
   const { name, disabled, onClick } = props
   return (<div className='item'>
-    <div className='ui content grid'>
+    <div className='ui content middle aligned grid'>
       <div className='ui row'>
-        <div className='ui twelve wide column'>
+        <div className='ui eight wide column'>
           <a onClick={() => !disabled ? onClick() : null}>
             <FolderIcon disabled={disabled} />
           </a>

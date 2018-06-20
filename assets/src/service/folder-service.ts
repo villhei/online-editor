@@ -15,7 +15,9 @@ export type Folder = {
   readonly name: string,
   readonly parent: FolderId,
   readonly children: FolderId[]
-  readonly documents: TextDocumentId[]
+  readonly documents: TextDocumentId[],
+  readonly inserted_at: string,
+  readonly updated_at: string
 }
 
 export type PartialFolder = Partial<Folder>

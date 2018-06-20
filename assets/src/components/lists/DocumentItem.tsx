@@ -1,8 +1,7 @@
 import * as classNames from 'classnames'
+import ListItem from 'components/lists/ListItem'
 import * as React from 'react'
 import { TextDocument } from 'service/document-service'
-
-import ListItem from './Item'
 
 interface Props {
   resource: TextDocument,
@@ -20,6 +19,8 @@ export default (props: Props) => {
   return (
     <ListItem
       heading={resource.name}
+      updated={resource.updated_at}
+      created={resource.inserted_at}
       onClick={onClick}
       onClickIcon={onClickIcon}
       icon='teal file'
