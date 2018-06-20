@@ -1,8 +1,7 @@
-import { getDocument } from 'actions/document-actions'
+import { getDocument, updateDocument } from 'actions/document-actions'
 import {
   deleteAndRefresh,
   resetDocumentChanges,
-  updateAndRefresh,
   updateDocumentName
 } from 'actions/editor-actions'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
@@ -224,7 +223,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): Dis
   return {
     getDocument: (id: ApiResourceId) => getDocument(dispatch, { id }),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
-    saveDocument: (id: ApiResourceId, resource: PartialTextDocument) => dispatch(updateAndRefresh({ id, resource })),
+    saveDocument: (id: ApiResourceId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource }),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
     deleteAndRefresh: (document: TextDocument) => {
       dispatch(deleteAndRefresh({ resource: document }))
