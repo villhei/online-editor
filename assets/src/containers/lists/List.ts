@@ -13,9 +13,9 @@ export function sortList<Folder>(
   reverse: boolean): Array<Folder> {
   return Array.from(resources).sort((a: Folder, b: Folder) => {
     if (reverse) {
-      return b[key].toString().localeCompare(a[key].toString())
+      return b[key].toString().localeCompare(a[key].toString(), 'fi-FI')
     }
-    return a[key].toString().localeCompare(b[key].toString())
+    return a[key].toString().localeCompare(b[key].toString(), 'fi-FI')
   })
 }
 
