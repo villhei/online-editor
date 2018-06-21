@@ -36,6 +36,9 @@
       "components/*": [
         "src/components/*"
       ],
+      "middleware/*": [
+        "src/middleware/*"
+      ],
       "service/*": [
         "src/service/*"
       ],

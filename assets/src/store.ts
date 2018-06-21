@@ -18,6 +18,7 @@ import {
 import thunk from 'redux-thunk'
 
 import { Map } from 'library/service/common'
+import autoSaveMiddleware from 'middleware/autosave'
 import editorReducer, { EditorState } from 'reducers/editor'
 import errorReducer, { ErrorState } from 'reducers/error'
 import pageReducer, { PageState } from 'reducers/page'
@@ -69,4 +70,4 @@ export const rootReducer: Reducer<RootState> = combineReducers({
   })
 })
 
-export const store = createStore(rootReducer, applyMiddleware(reactRouterMiddleware, thunk))
+export const store = createStore(rootReducer, applyMiddleware(reactRouterMiddleware, thunk, autoSaveMiddleware))

@@ -1,7 +1,7 @@
 import { getFolder } from 'actions/folder-actions'
 import { ByResourceParams } from 'library/service/common'
 import { push } from 'react-router-redux'
-import { TextDocument, TextDocumentId, create, deleteByDocument } from 'service/document-service'
+import { PartialTextDocument, TextDocument, TextDocumentId, create, deleteByDocument } from 'service/document-service'
 import { Folder, PartialFolder } from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'
 import { bindThunkAction } from 'typescript-fsa-redux-thunk'
@@ -29,14 +29,13 @@ export type ExpectConfirmAction = {
 }
 
 export type UpdateParams = {
-  value: string
+  id: TextDocumentId,
+  modifications: PartialTextDocument & { updated_at: string }
 }
 
 export const resetDocumentChanges = actionCreator<undefined>(RESET_DOCUMENT_CHANGES)
 
-export const updatedocumentContent = actionCreator<UpdateParams>(UPDATE_DOCUMENT_CONTENT)
-
-export const updateDocumentName = actionCreator<UpdateParams>(UPDATE_DOCUMENT_NAME)
+export const modifyDocument = actionCreator<UpdateParams>(UPDATE_DOCUMENT_CONTENT)
 
 export const expectConfirmAction = actionCreator<ExpectConfirmAction>(EXPECT_CONFIRM_ACTION)
 

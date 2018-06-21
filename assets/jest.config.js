@@ -23,6 +23,7 @@ module.exports = {
     '^constants(.*)$': '<rootDir>/constants/$1',
     '^containers(.*)$': '<rootDir>/containers/$1',
     '^components(.*)$': '<rootDir>/components/$1',
+    '^middleware(.*)$': '<rootDir/middleware/$1',
     '^service(.*)$': '<rootDir>/service/$1',
     '^reducers(.*)$': '<rootDir>/reducers/$1',
     '^library(.*)$': '<rootDir>/library/$1'

@@ -1,8 +1,8 @@
 import { getDocument, updateDocument } from 'actions/document-actions'
 import {
   deleteAndRefresh,
-  resetDocumentChanges,
-  updateDocumentName
+  modifyDocument,
+  resetDocumentChanges
 } from 'actions/editor-actions'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
@@ -41,8 +41,8 @@ const CONFIRM_DELETE_MESSAGE = 'Are you sure you want to delete this document?'
 export interface StateProps {
   resourceId: string,
   resource: ApiResource<TextDocument>,
+  modifiedDocument: PartialTextDocument,
   isModified: boolean,
-  modifiedDocument: null | PartialTextDocument,
   deleting: boolean,
   refreshing: boolean,
   saving: boolean
@@ -50,7 +50,7 @@ export interface StateProps {
   saveDocument: (id: TextDocumentId, document: PartialTextDocument) => void,
   resetDocumentChanges: () => void,
   deleteAndRefresh: (document: TextDocument) => void,
-  updateDocumentName: (value: string) => void,
+  updateDocumentName: (id: TextDocumentId, value: string, updated: string) => void,
   navigate: (route: string) => void
 }
 
@@ -86,10 +86,6 @@ type ModalParams = {
 
 type State = {
   modal: ModalParams | null
-}
-
-function isNameModified(modifiedDocument: PartialTextDocument | null): modifiedDocument is { name: string } {
-  return Boolean(modifiedDocument && typeof modifiedDocument.name === 'string')
 }
 
 class EditorToolbar extends React.Component<Props, State> {
@@ -132,19 +128,15 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 
   handleDocumentSave = () => {
-    const { resource, resourceId, modifiedDocument } = this.props
-    if (modifiedDocument !== null) {
-      const payload = {
-        ...resource,
-        content: modifiedDocument.content,
-        name: modifiedDocument.name || undefined
-      }
-      this.props.saveDocument(resourceId, payload)
+    const { modifiedDocument, resourceId, saveDocument, isModified } = this.props
+    if (isModified) {
+      saveDocument(resourceId, modifiedDocument)
     }
   }
 
   updateDocumentName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.props.updateDocumentName(event.target.value)
+    const { resourceId, resource: { updated_at }, updateDocumentName } = this.props
+    updateDocumentName(resourceId, event.target.value, updated_at)
   }
 
   viewDocument = () => {
@@ -169,10 +161,10 @@ class EditorToolbar extends React.Component<Props, State> {
       resourceId,
       resource,
       isModified,
-      modifiedDocument,
       deleting,
       saving,
-      refreshing
+      refreshing,
+      modifiedDocument
     } = this.props
     const { modal } = this.state
     const commonProps = {
@@ -188,12 +180,12 @@ class EditorToolbar extends React.Component<Props, State> {
       refreshing,
       resourceId
     }
-    const resourceName: string = isNameModified(modifiedDocument) ? modifiedDocument.name : resource.name
+    const document = { ...resource, ...modifiedDocument }
     return (
       <>
         <EditorToolbarView
-          title={resourceName}
-          folderUrl={'/folder/' + resource.folder}
+          title={document.name}
+          folderUrl={'/folder/' + document.folder}
           {...commonProps}
         />
         {modal &&
@@ -220,7 +212,7 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>) => {
     ...mapGetResource(dispatch, getDocument),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
     saveDocument: (id: ApiResourceId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource }),
-    updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
+    updateDocumentName: (id: ApiResourceId, name: string, updated: string) => dispatch(modifyDocument({ id, modifications: { name, updated_at: updated } })),
     deleteAndRefresh: (document: TextDocument) => {
       dispatch(deleteAndRefresh({ resource: document }))
     },

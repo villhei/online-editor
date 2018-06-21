@@ -1,5 +1,5 @@
 import { getDocument, updateDocument } from 'actions/document-actions'
-import { resetDocumentChanges, updatedocumentContent } from 'actions/editor-actions'
+import { modifyDocument, resetDocumentChanges } from 'actions/editor-actions'
 // tslint:disable-next-line:no-import-side-effect
 import 'codemirror/mode/markdown/markdown'
 import Loading from 'components/Loading'
@@ -25,13 +25,11 @@ const EDITOR_OPTIONS = {
   }
 }
 
-const AUTOSAVE_TRIGGER_DELAY_MS = 3000
-
 export type EditorProps = {
   getResource: (id: string) => Promise<TextDocument>,
-  updateDocumentContent: (value: string) => void,
+  updateDocumentContent: (id: TextDocumentId, value: string, updated: string) => void,
   resetDocumentChanges: () => void,
-  updateDocument: (id: TextDocumentId, resource: PartialTextDocument) => void,
+  updateDocument: (id: TextDocumentId, resource: PartialTextDocument, updated: string) => void,
   resourceId: string,
   resource: TextDocument,
   saving: boolean,
@@ -39,8 +37,6 @@ export type EditorProps = {
 }
 
 class Editor extends React.PureComponent<EditorProps> {
-
-  saveTimeout: number | null = null
 
   componentWillReceiveProps(nextProps: EditorProps) {
     if (nextProps.resourceId !== this.props.resourceId) {
@@ -53,27 +49,14 @@ class Editor extends React.PureComponent<EditorProps> {
   }
 
   handleDocumentChange = (_editor: IInstance, _data: CodeMirror.EditorChange, value: string) => {
-    const { updateDocumentContent, updateDocument, resourceId, resource } = this.props
-    updateDocumentContent(value)
-
-    if (this.saveTimeout) {
-      window.clearTimeout(this.saveTimeout)
-    }
-
-    this.saveTimeout = window.setTimeout(() => {
-      updateDocument(resourceId, {
-        content: value,
-        updated_at: resource.updated_at
-      })
-      this.saveTimeout = null
-    }, AUTOSAVE_TRIGGER_DELAY_MS)
+    const { updateDocumentContent, resourceId, resource: { updated_at } } = this.props
+    updateDocumentContent(resourceId, value, updated_at)
   }
 
   render() {
     const { resource, modifiedContent, saving } = this.props
     return <CodeMirror
       className='ui full height without padding'
-      autoFocus={true}
       value={modifiedContent || resource.content}
       onBeforeChange={this.handleDocumentChange}
       options={{
@@ -102,7 +85,7 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
 const mapDispatchToProps = (dispatch: Dispatch) => {
   return {
     ...mapGetResource(dispatch, getDocument),
-    updateDocumentContent: (value: string) => dispatch(updatedocumentContent({ value })),
+    updateDocumentContent: (id: TextDocumentId, content: string, updated: string) => dispatch(modifyDocument({ id, modifications: { content, updated_at: updated } })),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
     updateDocument: (id: TextDocumentId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource })
   }

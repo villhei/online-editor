@@ -40,6 +40,7 @@ const config = {
       constants: sourcePath('constants'),
       containers: sourcePath('containers'),
       components: sourcePath('components'),
+      middleware: sourcePath('middleware'),
       service: sourcePath('service'),
       mocks: sourcePath('mocks'),
       reducers: sourcePath('reducers'),

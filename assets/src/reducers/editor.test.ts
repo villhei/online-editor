@@ -1,16 +1,17 @@
 import { updateDocumentAction } from 'actions/document-actions'
 import {
-  resetDocumentChanges,
-  updateDocumentName,
-  updatedocumentContent
+  modifyDocument,
+  resetDocumentChanges
 } from 'actions/editor-actions'
 import { TextDocument } from 'service/document-service'
 
 import editorReducer, { initialState } from './editor'
 
-const updateContentAction = updatedocumentContent({ value: 'updated value' })
+const now = new Date().toISOString()
 
-const updateNameAction = updateDocumentName({ value: 'updated name' })
+const updateContentAction = modifyDocument({ id: 'foo', modifications: { content: 'updated value', updated_at: now } })
+
+const updateNameAction = modifyDocument({ id: 'foo', modifications: { name: 'updated name', updated_at: now } })
 
 const resetAction = resetDocumentChanges(undefined)
 
