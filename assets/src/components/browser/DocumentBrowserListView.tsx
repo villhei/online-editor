@@ -55,6 +55,7 @@ export default class DocumentBrowserListView extends React.Component<Props> {
         />
         <ItemListHeading
           onClickColumn={onChangeOrder}
+          ordering={ordering}
         />
         <FolderList
           resourceIds={folder.children}
