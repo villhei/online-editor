@@ -7,15 +7,12 @@ import {
   showFolder
 } from 'actions/folder-actions'
 import {
-  Layout,
-  selectLayout,
   setListOrdering,
   setSelectedItems
 } from 'actions/page-actions'
 import LoadingComponent from 'components/Loading'
-import DocumentBrowserCardsView from 'components/browser/DocumentBrowserCardsView'
+import NotFound from 'components/NotFound'
 import DocumentBrowserListView from 'components/browser/DocumentBrowserListView'
-import LayoutSelection from 'components/browser/LayoutSelection'
 import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
 import { mapGetResource } from 'library/containers/common'
 import {
@@ -47,33 +44,13 @@ interface Props {
   setOrder: (order: SortableKeys, reverse: boolean) => void,
   editResource: (id: ApiResourceId) => void,
   updateDocument: (id: TextDocumentId, updated: PartialTextDocument) => void,
-  setLayout: (layout: Layout) => void,
-  layout: Layout
   resourceId: FolderId,
   resource: Folder,
   selected: Map<HasId>,
   ordering: Ordering
 }
 
-function sortResource(documents: Array<ApiResourceId>): Array<ApiResourceId> {
-  const sorted: Array<ApiResourceId> = documents.slice(0)
-    .sort((a, b) => {
-      return a.localeCompare(b)
-    })
-  return sorted
-}
-
-function selectLayoutView(layout: string) {
-  switch (layout) {
-    case 'cards': {
-      return DocumentBrowserCardsView
-    }
-    default: {
-      return DocumentBrowserListView
-    }
-  }
-}
-class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
+class DocumentBrowserContainer extends React.Component<Props, {}> {
   handleClickFolder = (folder: Folder) => {
     const { resource, showFolder } = this.props
     if (folder === resource) {
@@ -96,9 +73,6 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
   handleClickDocumentIcon = (document: TextDocument) => {
     const { updateDocument } = this.props
     updateDocument(document.id, { starred: !document.starred, updated_at: document.updated_at })
-  }
-  handleSetLayout = (layout: Layout) => () => {
-    this.props.setLayout(layout)
   }
 
   selectResource = (resource: HasId) => {
@@ -127,38 +101,23 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
       resource,
       selected,
       getResource,
-      layout,
       ordering
     } = this.props
     const {
-      documents,
-      children
     } = resource
 
-    const sortedDocuments = sortResource(documents)
-    const sortedFolders = sortResource(children)
-    const SelectedLayout = selectLayoutView(layout)
-    return <>
-      <LayoutSelection
-        onSelectList={this.handleSetLayout('list')}
-        onSelectTree={this.handleSetLayout('cards')}
-        selected={layout}
-      />
-      <SelectedLayout
-        getFolderById={getResource}
-        selected={selected}
-        selectResource={this.selectResource}
-        onChangeOrder={this.handleOrderChange}
-        ordering={ordering}
-        disabled={{}}
-        clickFolder={this.handleClickFolder}
-        clickDocument={this.handleClickDocument}
-        clickDocumentIcon={this.handleClickDocumentIcon}
-        onResourceNotFound={this.handleResourceNotFound}
-        folder={resource}
-        folders={sortedFolders}
-        documents={sortedDocuments} />
-    </>
+    return <DocumentBrowserListView
+      getFolderById={getResource}
+      selected={selected}
+      selectResource={this.selectResource}
+      onChangeOrder={this.handleOrderChange}
+      ordering={ordering}
+      disabled={{}}
+      clickFolder={this.handleClickFolder}
+      clickDocument={this.handleClickDocument}
+      clickDocumentIcon={this.handleClickDocumentIcon}
+      onResourceNotFound={this.handleResourceNotFound}
+      folder={resource} />
   }
 }
 
@@ -167,7 +126,6 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   return {
     ...selectApiResource(state.model.folders, resourceId),
     selected: state.ui.page.selectedItems,
-    layout: state.ui.page.layout,
     ordering: state.ui.page.order
   }
 }
@@ -179,10 +137,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection })),
     setOrder: (orderBy: SortableKeys, reverse: boolean) => dispatch(setListOrdering({ orderBy, reverse })),
     editResource: (id: ApiResourceId) => dispatch(push('/edit/' + id)),
-    updateDocument: (id: TextDocumentId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource }),
-    setLayout: (layout: Layout) => dispatch(selectLayout(layout))
+    updateDocument: (id: TextDocumentId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource })
   }
 }
 
-const wrappedResource = createApiResourceWrapper<Folder, Props>(isFolder)(DocumentCardsLayoutContainer, LoadingComponent)
+const wrappedResource = createApiResourceWrapper<Folder, Props>(isFolder)(DocumentBrowserContainer, LoadingComponent, NotFound)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

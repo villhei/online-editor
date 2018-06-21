@@ -1,6 +1,5 @@
 
 import { AxiosError } from 'axios'
-import NotFoundCard from 'components/notfound/NotFoundCard'
 import { Status, TypeChecker, getResourceStatus } from 'library/containers/common'
 import { MappedModel } from 'library/reducers/common'
 import { ApiResource, ApiResourceId } from 'library/service/common'
@@ -31,7 +30,8 @@ const {
 function wrapApiResource<T, P extends ChildProps<T>>(
   isValueResolved: TypeChecker<T>,
   ChildComponent: React.ComponentType<P>,
-  LoadingComponent: React.ComponentType<{}>): React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
+  LoadingComponent: React.ComponentType<{}>,
+  NotFound: React.ComponentType<{}>): React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
 
   return class ApiResourceWrapper extends React.Component<Omit<P, 'resource'> & Props<T>> {
     componentDidMount() {
@@ -64,7 +64,7 @@ function wrapApiResource<T, P extends ChildProps<T>>(
           return <ChildComponent {...this.props as ChildProps<T>} />
         }
         case NOT_FOUND: {
-          return <NotFoundCard />
+          return <NotFound />
         }
         case LOADING: {
           return <LoadingComponent />
@@ -89,9 +89,10 @@ type Omit<T, K> = Pick<T, Exclude<keyof T, K>>
 export default function createApiResourceWrapper<T, P extends ChildProps<T>>(isValueResolved: TypeChecker<T>) {
   return function (
     childComponent: React.ComponentType<P>,
-    loadingComponent: React.ComponentType<{}>):
+    loadingComponent: React.ComponentType<{}>,
+    notFoundComponent: React.ComponentType<{}>):
     React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
-    return wrapApiResource(isValueResolved, childComponent, loadingComponent)
+    return wrapApiResource(isValueResolved, childComponent, loadingComponent, notFoundComponent)
   }
 }
 

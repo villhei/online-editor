@@ -50,8 +50,6 @@ export const SET_LIST_ORDERING = 'SET_LIST_ORDERING'
 export const deleteDocumentAction = actionCreator
   .async<ByIdParams, ByResourceParams<TextDocument>>(ACTION_DELETE_DOCUMENT)
 
-export type Layout = 'cards' | 'list'
-
 export type ToggleMenu = {
   menu: string
 }
@@ -71,7 +69,6 @@ export type ListOrder = {
 
 export const toggleMenu = actionCreator<ToggleMenu>(TOGGLE_MENU)
 export const clearError = actionCreator<undefined>(CLEAR_ERROR)
-export const selectLayout = actionCreator<Layout>(SELECT_LAYOUT)
 
 export const setSelectedItems = actionCreator<SelectedItems>(SET_SELECTED_ITEMS)
 

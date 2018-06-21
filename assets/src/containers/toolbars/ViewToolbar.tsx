@@ -1,6 +1,7 @@
 import { getDocument } from 'actions/document-actions'
 import DocumentToolbarView from 'components/toolbars/DocumentView'
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
+import ToolbarNotFound from 'components/toolbars/ToolbarNotFound'
 import createApiResourceWrapper, {
   selectApiResource
 } from 'library/containers/ApiResourceHOC'
@@ -71,5 +72,5 @@ const mapDispatchToProps = (dispatch: Dispatch): DispatchProps => {
     navigate: (route: string) => dispatch(push(route))
   }
 }
-const wrappedResource = createApiResourceWrapper<TextDocument, Props>(isDocument)(ViewToolbar, ToolbarLoadingView)
+const wrappedResource = createApiResourceWrapper<TextDocument, Props>(isDocument)(ViewToolbar, ToolbarLoadingView, ToolbarNotFound)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

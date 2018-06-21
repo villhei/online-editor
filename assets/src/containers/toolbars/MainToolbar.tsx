@@ -11,6 +11,7 @@ import {
   setSelectedItems
 } from 'actions/page-actions'
 import MainToolbarView from 'components/toolbars/MainToolbarView'
+import ToolbarNotFound from 'components/toolbars/ToolbarNotFound'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
 import FolderModal from 'containers/modals/FolderModal'
 import PromptModal from 'containers/modals/PromptModal'
@@ -269,5 +270,5 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): Dis
   }
 }
 
-const wrappedResource = createApiResourceWrapper<Folder, Props>(isFolder)(MainToolbar, ToolbarLoadingView)
+const wrappedResource = createApiResourceWrapper<Folder, Props>(isFolder)(MainToolbar, ToolbarLoadingView, ToolbarNotFound)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

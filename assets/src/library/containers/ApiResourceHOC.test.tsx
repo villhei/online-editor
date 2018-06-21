@@ -21,6 +21,8 @@ class ResourceView extends React.Component<ViewProps> {
 }
 const LoadingComponent = () => <div>Loading</div>
 
+const NotFoundComponent = () => <div>404</div>
+
 export function isModelEntry(obj: Object | undefined): obj is ModelEntry {
   const entry = obj as ModelEntry | undefined
   return Boolean(entry && typeof entry.id === 'string' && typeof entry.someProp === 'number')
@@ -44,7 +46,7 @@ describe('ApiResourceHOC', () => {
 
   it('should display a the component when the resource is resolved', () => {
     const wrapper = createApiResourceWrapper<ModelEntry, ViewProps>(isModelEntry)
-    const Component = wrapper(ResourceView, LoadingComponent)
+    const Component = wrapper(ResourceView, LoadingComponent, NotFoundComponent)
     const props = minimumProps()
     const element = shallow(<Component {...props} />)
     expect(element.matchesElement(<ResourceView {...props} />)).toBeTruthy()
@@ -52,7 +54,7 @@ describe('ApiResourceHOC', () => {
 
   it('should display a the component when the resource is resolved', () => {
     const wrapper = createApiResourceWrapper<ModelEntry, ViewProps>(isModelEntry)
-    const Component = wrapper(ResourceView, LoadingComponent)
+    const Component = wrapper(ResourceView, LoadingComponent, NotFoundComponent)
     const props = {
       ...minimumProps(),
       resource: ResourceStatus.Loading
@@ -63,7 +65,7 @@ describe('ApiResourceHOC', () => {
 
   it('should not render anything if the resource is undefined', () => {
     const wrapper = createApiResourceWrapper<ModelEntry, ViewProps>(isModelEntry)
-    const Component = wrapper(ResourceView, LoadingComponent)
+    const Component = wrapper(ResourceView, LoadingComponent, NotFoundComponent)
     const props = {
       ...minimumProps(),
       resource: undefined
@@ -74,7 +76,7 @@ describe('ApiResourceHOC', () => {
 
   it('should attempt to fetch the give resourceId if resource is undefined ', () => {
     const wrapper = createApiResourceWrapper<ModelEntry, ViewProps>(isModelEntry)
-    const Component = wrapper(ResourceView, LoadingComponent)
+    const Component = wrapper(ResourceView, LoadingComponent, NotFoundComponent)
     const props = {
       ...minimumProps(),
       resource: undefined
@@ -85,7 +87,7 @@ describe('ApiResourceHOC', () => {
 
   it('should call getResource if the props change ', () => {
     const wrapper = createApiResourceWrapper<ModelEntry, ViewProps>(isModelEntry)
-    const Component = wrapper(ResourceView, LoadingComponent)
+    const Component = wrapper(ResourceView, LoadingComponent, NotFoundComponent)
     const props = {
       ...minimumProps(),
       resource: undefined

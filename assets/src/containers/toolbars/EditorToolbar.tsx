@@ -6,6 +6,7 @@ import {
 } from 'actions/editor-actions'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
+import ToolbarNotFound from 'components/toolbars/ToolbarNotFound'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
 import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
 import { mapGetResource } from 'library/containers/common'
@@ -226,6 +227,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>) => {
     navigate: (route: string) => dispatch(push(route))
   }
 }
-const wrappedComponent = createApiResourceWrapper<TextDocument, Props>(isDocument)(EditorToolbar, ToolbarLoadingView)
+const wrappedComponent = createApiResourceWrapper<TextDocument, Props>(isDocument)(EditorToolbar, ToolbarLoadingView, ToolbarNotFound)
 
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedComponent)

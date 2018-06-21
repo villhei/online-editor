@@ -2,6 +2,7 @@ import { getDocument } from 'actions/document-actions'
 import DocumentViewComponent from 'components/DocumentView'
 import DocumentViewEmpty from 'components/DocumentViewEmpty'
 import LoadingComponent from 'components/Loading'
+import NotFound from 'components/NotFound'
 import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
 import { mapGetResource } from 'library/containers/common'
 import * as React from 'react'
@@ -37,5 +38,5 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
 
 const mapDispatchToProps = (dispatch: Dispatch) => mapGetResource(dispatch, getDocument)
 
-const wrappedResource = createApiResourceWrapper<TextDocument, DocumentViewProps>(isDocument)(DocumentView, LoadingComponent)
+const wrappedResource = createApiResourceWrapper<TextDocument, DocumentViewProps>(isDocument)(DocumentView, LoadingComponent, NotFound)
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedResource)

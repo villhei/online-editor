@@ -4,8 +4,6 @@ import {
   updateDocumentAction
 } from 'actions/document-actions'
 import {
-  Layout,
-  selectLayout,
   setListOrdering,
   setSelectedItems
 } from 'actions/page-actions'
@@ -28,7 +26,6 @@ export interface PageState {
     saving: boolean,
     deleting: boolean
   },
-  layout: Layout,
   order: Ordering,
   selectedItems: Map<HasId>
 }
@@ -39,7 +36,6 @@ export const initialState: PageState = {
     saving: false,
     deleting: false
   },
-  layout: 'list',
   order: {
     orderBy: 'name',
     reverse: false
@@ -63,12 +59,6 @@ export default function pageReducer(state: PageState = initialState, action: Act
     return {
       ...state,
       selectedItems: action.payload.selection
-    }
-  }
-  if (isType(action, selectLayout)) {
-    return {
-      ...state,
-      layout: action.payload
     }
   }
   if (isType(action, deleteDocumentAction.started)) {
