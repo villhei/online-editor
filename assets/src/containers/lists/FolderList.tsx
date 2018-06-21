@@ -5,7 +5,6 @@ import LoadingComponent from 'components/Loading'
 import ListItemFolder from 'containers/folders/ListItemFolder'
 import {
   DispatchMappedProps,
-  SortableKeys,
   StateMappedProps,
   mapGetResource,
   selectApiResources,
@@ -18,6 +17,7 @@ import {
 } from 'library/service/common'
 import * as React from 'react'
 import { Dispatch, connect } from 'react-redux'
+import { Ordering } from 'reducers/page'
 import {
   Folder,
   FolderId,
@@ -30,7 +30,7 @@ interface OwnProps {
   resourceIds: Array<FolderId>,
   selected: Map<HasId>,
   disabled?: Map<HasId>,
-  orderBy: SortableKeys<Folder>,
+  ordering: Ordering,
   selectResource?: (id: Folder) => void,
   clickFolder: (resource: Folder) => void
   onResourceNotFound: (id: FolderId) => void
@@ -43,8 +43,13 @@ interface Props extends OwnProps {
 
 class FolderListItemsContainer extends React.Component<Props> {
   render() {
-    const { disabled, selected, orderBy, clickFolder, selectResource, resources } = this.props
-    return sortList<Folder>(resources, orderBy).map((folder) => {
+    const { disabled,
+      selected,
+      ordering: { orderBy, reverse },
+      clickFolder,
+      selectResource,
+      resources } = this.props
+    return sortList<Folder>(resources, orderBy, reverse).map((folder) => {
       const isDisabled = disabled ? Boolean(disabled[folder.id]) : false
       const isSelected: boolean = Boolean(selected[folder.id])
 

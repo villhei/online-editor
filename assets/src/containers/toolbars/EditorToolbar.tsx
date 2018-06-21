@@ -5,34 +5,26 @@ import {
   updateDocumentName
 } from 'actions/editor-actions'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
+import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
+import createApiResourceWrapper, { selectApiResource } from 'library/containers/ApiResourceHOC'
+import { mapGetResource } from 'library/containers/common'
 import {
   ApiResource,
-  ApiResourceId,
-  getResourceName,
-  isResourceAvailable
+  ApiResourceId
 } from 'library/service/common'
+import { RootState, RouterProvidedProps } from 'main/store'
 import * as React from 'react'
 import { connect } from 'react-redux'
 import { push } from 'react-router-redux'
 import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 import {
   PartialTextDocument,
   TextDocument,
+  TextDocumentId,
   isDocument
 } from 'service/document-service'
-
-import { RootState, RouterProvidedProps } from 'main/store'
-import { ThunkDispatch } from 'redux-thunk'
-
-export type DispatchProps = {
-  getDocument: (id: ApiResourceId) => void,
-  saveDocument: (id: ApiResourceId, document: PartialTextDocument) => void,
-  resetDocumentChanges: () => void,
-  deleteAndRefresh: (document: TextDocument) => void,
-  updateDocumentName: (value: string) => void,
-  navigate: (route: string) => void
-}
 
 const CONFIRM_VIEW_ICON = 'share'
 const CONFIRM_ARE_YOU_SURE_TITLE = 'Are you sure?'
@@ -46,16 +38,24 @@ const CONFIRM_DELETE_TITLE = 'Confirm deletion'
 const CONFIRM_DELETE_MESSAGE = 'Are you sure you want to delete this document?'
 
 export interface StateProps {
-  documentId: string,
-  document: ApiResource<TextDocument>,
+  resourceId: string,
+  resource: ApiResource<TextDocument>,
   isModified: boolean,
   modifiedDocument: null | PartialTextDocument,
   deleting: boolean,
   refreshing: boolean,
   saving: boolean
+  getResource: (id: TextDocumentId) => void,
+  saveDocument: (id: TextDocumentId, document: PartialTextDocument) => void,
+  resetDocumentChanges: () => void,
+  deleteAndRefresh: (document: TextDocument) => void,
+  updateDocumentName: (value: string) => void,
+  navigate: (route: string) => void
 }
 
-export type Props = DispatchProps & StateProps
+export interface Props extends StateProps {
+  resource: TextDocument
+}
 
 const ACTIONS = {
   'delete': {
@@ -97,14 +97,14 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 
   refreshDocument = () => {
-    const { documentId, isModified, getDocument, resetDocumentChanges } = this.props
+    const { resourceId, isModified, getResource, resetDocumentChanges } = this.props
     if (!isModified) {
-      getDocument(documentId)
+      getResource(resourceId)
     } else {
       const modal: ModalParams = {
         ...ACTIONS['refresh'],
         onConfirm: () => {
-          getDocument(documentId)
+          getResource(resourceId)
           resetDocumentChanges()
           this.setState({ modal: null })
         },
@@ -117,30 +117,28 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 
   deleteDocument = () => {
-    const { document, deleteAndRefresh } = this.props
-    if (isDocument(document)) {
-      const modal: ModalParams = {
-        ...ACTIONS['delete'],
-        onConfirm: () => {
-          deleteAndRefresh(document)
-        },
-        onCancel: () => this.setState({ modal: null })
-      }
-      this.setState({
-        modal
-      })
+    const { resource, deleteAndRefresh } = this.props
+    const modal: ModalParams = {
+      ...ACTIONS['delete'],
+      onConfirm: () => {
+        deleteAndRefresh(resource)
+      },
+      onCancel: () => this.setState({ modal: null })
     }
+    this.setState({
+      modal
+    })
   }
 
-  updateDocumentContent = () => {
-    const { document, documentId, modifiedDocument } = this.props
-    if (isDocument(document) && modifiedDocument !== null) {
+  handleDocumentSave = () => {
+    const { resource, resourceId, modifiedDocument } = this.props
+    if (modifiedDocument !== null) {
       const payload = {
-        ...document,
+        ...resource,
         content: modifiedDocument.content,
         name: modifiedDocument.name || undefined
       }
-      this.props.saveDocument(documentId, payload)
+      this.props.saveDocument(resourceId, payload)
     }
   }
 
@@ -149,15 +147,15 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 
   viewDocument = () => {
-    const { documentId, isModified, navigate } = this.props
+    const { resourceId, isModified, navigate } = this.props
     if (!isModified) {
-      navigate('/view/' + documentId)
+      navigate('/view/' + resourceId)
     } else {
       this.setState({
         modal: {
           ...ACTIONS['view'],
           onConfirm: () => {
-            navigate('/view/' + documentId)
+            navigate('/view/' + resourceId)
           },
           onCancel: () => this.setState({ modal: null })
         }
@@ -167,8 +165,8 @@ class EditorToolbar extends React.Component<Props, State> {
 
   render() {
     const {
-      documentId,
-      document,
+      resourceId,
+      resource,
       isModified,
       modifiedDocument,
       deleting,
@@ -178,22 +176,23 @@ class EditorToolbar extends React.Component<Props, State> {
     const { modal } = this.state
     const commonProps = {
       refreshDocument: this.refreshDocument,
-      updateDocument: this.updateDocumentContent,
+      updateDocument: this.handleDocumentSave,
       deleteDocument: this.deleteDocument,
-      updateDocumentName: this.updateDocumentName,
+      onNameChange: this.updateDocumentName,
       viewDocument: this.viewDocument,
       saveDisabled: !isModified,
+      resource,
       deleting,
       saving,
       refreshing,
-      documentId
+      resourceId
     }
-    const resourceName: string = isNameModified(modifiedDocument) ? modifiedDocument.name : getResourceName(document)
+    const resourceName: string = isNameModified(modifiedDocument) ? modifiedDocument.name : resource.name
     return (
       <>
         <EditorToolbarView
           title={resourceName}
-          disabled={!isResourceAvailable(document)}
+          folderUrl={'/folder/' + resource.folder}
           {...commonProps}
         />
         {modal &&
@@ -204,24 +203,20 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvidedProps): StateProps => {
-  const documentId: ApiResourceId = ownProps.match.params.documentId
-  const document: ApiResource<TextDocument> | undefined = model.documents.byId[documentId]
+const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvidedProps) => {
   const { modifiedDocument, isModified } = state.editor
   const { editorToolbar } = ui.page
-
   return {
-    document,
-    documentId,
+    ...selectApiResource(model.documents, ownProps.match.params.documentId),
     isModified,
     modifiedDocument,
     ...editorToolbar
   }
 }
 
-const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): DispatchProps => {
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>) => {
   return {
-    getDocument: (id: ApiResourceId) => getDocument(dispatch, { id }),
+    ...mapGetResource(dispatch, getDocument),
     resetDocumentChanges: () => dispatch(resetDocumentChanges(undefined)),
     saveDocument: (id: ApiResourceId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource }),
     updateDocumentName: (name: string) => dispatch(updateDocumentName({ value: name })),
@@ -231,5 +226,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>): Dis
     navigate: (route: string) => dispatch(push(route))
   }
 }
+const wrappedComponent = createApiResourceWrapper<TextDocument, Props>(isDocument)(EditorToolbar, ToolbarLoadingView)
 
-export default connect(mapStateToProps, mapDispatchToProps)(EditorToolbar)
+export default connect(mapStateToProps, mapDispatchToProps)(wrappedComponent)

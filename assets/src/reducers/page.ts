@@ -6,6 +6,7 @@ import {
 import {
   Layout,
   selectLayout,
+  setListOrdering,
   setSelectedItems
 } from 'actions/page-actions'
 import {
@@ -13,15 +14,22 @@ import {
   Map
 } from 'library/service/common'
 import { Action } from 'redux'
+import { SortableKeys } from 'service/common'
 import { isType } from 'typescript-fsa'
 
-export type PageState = {
+export interface Ordering {
+  orderBy: SortableKeys,
+  reverse: boolean
+}
+
+export interface PageState {
   editorToolbar: {
     refreshing: boolean,
     saving: boolean,
     deleting: boolean
   },
   layout: Layout,
+  order: Ordering,
   selectedItems: Map<HasId>
 }
 
@@ -32,6 +40,10 @@ export const initialState: PageState = {
     deleting: false
   },
   layout: 'list',
+  order: {
+    orderBy: 'name',
+    reverse: false
+  },
   selectedItems: {}
 }
 
@@ -76,6 +88,12 @@ export default function pageReducer(state: PageState = initialState, action: Act
   }
   if (isType(action, updateDocumentAction.done) || isType(action, updateDocumentAction.failed)) {
     return updateToolbarItem(state, 'saving', false)
+  }
+  if (isType(action, setListOrdering)) {
+    return {
+      ...state,
+      order: action.payload
+    }
   }
   return state
 }

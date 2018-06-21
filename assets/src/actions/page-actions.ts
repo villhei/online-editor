@@ -19,6 +19,7 @@ import {
 } from 'library/service/common'
 import { Dispatch } from 'react-redux'
 import { push } from 'react-router-redux'
+import { SortableKeys } from 'service/common'
 import {
   TextDocument, isDocument
 } from 'service/document-service'
@@ -44,6 +45,8 @@ export const ACTION_DELETE_DOCUMENT = 'ACTION_DELETE_DOCUMENT'
 
 export const MOVE_SELECTED_ITEMS = 'MOVE_SELECTED_ITEMS'
 
+export const SET_LIST_ORDERING = 'SET_LIST_ORDERING'
+
 export const deleteDocumentAction = actionCreator
   .async<ByIdParams, ByResourceParams<TextDocument>>(ACTION_DELETE_DOCUMENT)
 
@@ -61,11 +64,18 @@ export type MoveSelectedItems = SelectedItems & {
   destination: FolderId
 }
 
+export type ListOrder = {
+  orderBy: SortableKeys,
+  reverse: boolean
+}
+
 export const toggleMenu = actionCreator<ToggleMenu>(TOGGLE_MENU)
 export const clearError = actionCreator<undefined>(CLEAR_ERROR)
 export const selectLayout = actionCreator<Layout>(SELECT_LAYOUT)
 
 export const setSelectedItems = actionCreator<SelectedItems>(SET_SELECTED_ITEMS)
+
+export const setListOrdering = actionCreator<ListOrder>(SET_LIST_ORDERING)
 
 export const moveSelectedItemsAction = actionCreator
   .async<MoveSelectedItems, Array<Folder>>(MOVE_SELECTED_ITEMS)

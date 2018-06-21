@@ -1,18 +1,20 @@
 import { ResourceFetcher } from 'library/containers/common'
 import { MappedModel, ResourceMap } from 'library/reducers/common'
-import { ApiResourceId } from 'library/service/common'
+import { ApiResourceId, SortableKeysOf } from 'library/service/common'
 import { Dispatch } from 'redux'
 
 export type StateMappedProps<T> = {
   resources: ResourceMap<T>
 }
 
-type SortableKey = string | number
-
-export type SortableKeys<T> = { [K in keyof T]: T[K] extends SortableKey ? K : never }[keyof T]
-
-export function sortList<Folder>(resources: Array<Folder>, key: SortableKeys<Folder>): Array<Folder> {
+export function sortList<Folder>(
+  resources: Array<Folder>,
+  key: SortableKeysOf<Folder>,
+  reverse: boolean): Array<Folder> {
   return Array.from(resources).sort((a: Folder, b: Folder) => {
+    if (reverse) {
+      return b[key].toString().localeCompare(a[key].toString())
+    }
     return a[key].toString().localeCompare(b[key].toString())
   })
 }

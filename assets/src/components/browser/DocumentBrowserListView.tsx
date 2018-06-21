@@ -7,6 +7,8 @@ import {
   Map
 } from 'library/service/common'
 import * as React from 'react'
+import { Ordering } from 'reducers/page'
+import { SortableKeys } from 'service/common'
 import {
   TextDocument,
   TextDocumentId
@@ -20,6 +22,8 @@ interface Props {
   folder: Folder,
   selected: Map<HasId>,
   disabled: Map<HasId>,
+  ordering: Ordering,
+  onChangeOrder: (order: SortableKeys) => void,
   clickFolder: (resource: Folder) => void,
   clickDocument: (resource: TextDocument) => void,
   clickDocumentIcon: (resource: TextDocument) => void,
@@ -35,6 +39,8 @@ export default class DocumentBrowserListView extends React.Component<Props> {
       clickDocument,
       clickDocumentIcon,
       folder,
+      ordering,
+      onChangeOrder,
       selectResource,
       selected,
       disabled,
@@ -47,12 +53,14 @@ export default class DocumentBrowserListView extends React.Component<Props> {
           disabled={!folder.parent}
           onClick={clickFolder}
         />
-        <ItemListHeading />
+        <ItemListHeading
+          onClickColumn={onChangeOrder}
+        />
         <FolderList
           resourceIds={folder.children}
           selected={selected}
           disabled={disabled}
-          orderBy='name'
+          ordering={ordering}
           clickFolder={clickFolder}
           onResourceNotFound={onResourceNotFound}
           selectResource={selectResource}
@@ -60,7 +68,7 @@ export default class DocumentBrowserListView extends React.Component<Props> {
         <DocumentList
           resourceIds={folder.documents}
           selected={selected}
-          orderBy='name'
+          ordering={ordering}
           clickDocument={clickDocument}
           clickDocumentIcon={clickDocumentIcon}
           onResourceNotFound={onResourceNotFound}

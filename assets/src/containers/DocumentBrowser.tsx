@@ -9,6 +9,7 @@ import {
 import {
   Layout,
   selectLayout,
+  setListOrdering,
   setSelectedItems
 } from 'actions/page-actions'
 import LoadingComponent from 'components/Loading'
@@ -28,6 +29,8 @@ import {
   connect
 } from 'react-redux'
 import { push } from 'react-router-redux'
+import { Ordering } from 'reducers/page'
+import { SortableKeys } from 'service/common'
 import { PartialTextDocument, TextDocument, TextDocumentId } from 'service/document-service'
 import {
   Folder,
@@ -41,13 +44,15 @@ interface Props {
   getResource: (id: FolderId) => typeof getDocument,
   showFolder: (id: FolderId) => typeof showFolder,
   setSelection: (selection: Map<HasId>) => typeof setSelectedItems,
+  setOrder: (order: SortableKeys, reverse: boolean) => void,
   editResource: (id: ApiResourceId) => void,
   updateDocument: (id: TextDocumentId, updated: PartialTextDocument) => void,
   setLayout: (layout: Layout) => void,
   layout: Layout
   resourceId: FolderId,
   resource: Folder,
-  selected: Map<HasId>
+  selected: Map<HasId>,
+  ordering: Ordering
 }
 
 function sortResource(documents: Array<ApiResourceId>): Array<ApiResourceId> {
@@ -76,6 +81,11 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
     } else {
       showFolder(folder.id)
     }
+  }
+
+  handleOrderChange = (order: SortableKeys) => {
+    const { setOrder, ordering: { orderBy, reverse } } = this.props
+    setOrder(order, orderBy === order ? !reverse : false)
   }
 
   handleClickDocument = (document: TextDocument) => {
@@ -117,7 +127,8 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
       resource,
       selected,
       getResource,
-      layout
+      layout,
+      ordering
     } = this.props
     const {
       documents,
@@ -137,6 +148,8 @@ class DocumentCardsLayoutContainer extends React.Component<Props, {}> {
         getFolderById={getResource}
         selected={selected}
         selectResource={this.selectResource}
+        onChangeOrder={this.handleOrderChange}
+        ordering={ordering}
         disabled={{}}
         clickFolder={this.handleClickFolder}
         clickDocument={this.handleClickDocument}
@@ -154,7 +167,8 @@ const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   return {
     ...selectApiResource(state.model.folders, resourceId),
     selected: state.ui.page.selectedItems,
-    layout: state.ui.page.layout
+    layout: state.ui.page.layout,
+    ordering: state.ui.page.order
   }
 }
 
@@ -163,6 +177,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => {
     ...mapGetResource(dispatch, getFolder),
     showFolder: (id: FolderId) => dispatch(showFolder({ id })),
     setSelection: (selection: Map<HasId>) => dispatch(setSelectedItems({ selection })),
+    setOrder: (orderBy: SortableKeys, reverse: boolean) => dispatch(setListOrdering({ orderBy, reverse })),
     editResource: (id: ApiResourceId) => dispatch(push('/edit/' + id)),
     updateDocument: (id: TextDocumentId, resource: PartialTextDocument) => updateDocument(dispatch, { id, resource }),
     setLayout: (layout: Layout) => dispatch(selectLayout(layout))

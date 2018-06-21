@@ -31,6 +31,10 @@ export type Partial<T> = {
   [Partial in keyof T]?: T[Partial]
 }
 
+type SortableKey = string | number
+
+export type SortableKeysOf<T> = { [K in keyof T]: T[K] extends SortableKey ? K : never }[keyof T]
+
 export type ApiResource<T> = T | ResourceStatus | Error | undefined
 
 export function getResourceName(resource: ApiResource<HasName>): string {

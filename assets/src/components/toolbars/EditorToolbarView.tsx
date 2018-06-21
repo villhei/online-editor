@@ -5,8 +5,7 @@ import MenuButton from './MenuButton'
 
 export interface Props {
   title: string,
-  documentId: string,
-  disabled: boolean,
+  folderUrl: string,
   saveDisabled: boolean,
   saving: boolean,
   refreshing: boolean,
@@ -15,24 +14,26 @@ export interface Props {
   updateDocument: () => void,
   deleteDocument: () => void,
   viewDocument: () => void
-  updateDocumentName: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onNameChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 }
 
 export default (props: Props) => {
   return (
     <div className='ui row'>
-      <Link to='/' className='ui item'>
-        <i className='ui icon home' />
+      <Link className='ui item' to={props.folderUrl}>
+        <i className='ui icons'>
+          <i className='folder icon' />
+        </i>
       </Link>
       <div className='item title field mobile hidden'>
         <div className='ui basic inverted labeled input'>
-          <input type='text' value={props.title} onChange={props.updateDocumentName} />
+          <input type='text' value={props.title} onChange={props.onNameChange} />
         </div>
       </div>
       <MenuButton
         onClick={props.refreshDocument}
         loading={props.refreshing}
-        disabled={props.disabled}
+        disabled={false}
         icon='refresh' />
       <MenuButton
         onClick={props.viewDocument}
@@ -43,12 +44,12 @@ export default (props: Props) => {
       <MenuButton
         onClick={props.updateDocument}
         loading={props.saving}
-        disabled={props.disabled || props.saveDisabled}
+        disabled={props.saveDisabled}
         icon='save outline' />
       <MenuButton
         onClick={props.deleteDocument}
         loading={props.deleting}
-        disabled={props.disabled}
+        disabled={false}
         icon='trash alternate' />
     </div>
   )

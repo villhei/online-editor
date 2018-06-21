@@ -3,7 +3,6 @@ import LoadingComponent from 'components/Loading'
 import ListItemDocument from 'containers/documents/ListItemDocument'
 import {
   DispatchMappedProps,
-  SortableKeys,
   StateMappedProps,
   mapGetResource,
   selectApiResources,
@@ -17,6 +16,7 @@ import {
 import { RootState } from 'main/store'
 import * as React from 'react'
 import { connect } from 'react-redux'
+import { Ordering } from 'reducers/page'
 import { Dispatch } from 'redux'
 import {
   TextDocument,
@@ -27,7 +27,7 @@ import {
 interface OwnProps {
   resourceIds: Array<TextDocumentId>,
   selected: Map<HasId>,
-  orderBy: SortableKeys<TextDocument>,
+  ordering: Ordering,
   selectResource: (resource: TextDocument) => void,
   clickDocument: (resource: TextDocument) => void,
   clickDocumentIcon: (resource: TextDocument) => void
@@ -45,11 +45,11 @@ class DocumentListView extends React.Component<Props> {
       clickDocument,
       selectResource,
       selected,
-      orderBy,
+      ordering: { orderBy, reverse },
       clickDocumentIcon
     } = this.props
 
-    const sorted = sortList<TextDocument>(resources, orderBy)
+    const sorted = sortList<TextDocument>(resources, orderBy, reverse)
 
     const starred = sorted.filter(document => document.starred)
     const unstarred = sorted.filter(document => !document.starred)
