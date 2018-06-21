@@ -6,7 +6,7 @@ const WriteFilePlugin = require('write-file-webpack-plugin')
 
 const path = require('path')
 
-function sourcePath(subDir) {
+function sourcePath (subDir) {
   return path.join(__dirname, 'src', subDir)
 }
 
