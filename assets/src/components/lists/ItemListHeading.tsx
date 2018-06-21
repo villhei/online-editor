@@ -8,9 +8,9 @@ interface Props {
 
 function getCaret(ordering: Ordering, itemName: string): JSX.Element {
   if (ordering.orderBy !== itemName) {
-    return <i className='icon small caret right' />
+    return <i className='icon small disabled circle' />
   }
-  const iconClasses = classNames('icon small caret', {
+  const iconClasses = classNames('icon small chevron circle', {
     up: ordering.reverse,
     down: !ordering.reverse
   })
