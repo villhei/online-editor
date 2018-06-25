@@ -10,7 +10,8 @@ let saveTimeout: number | null = null
 const autoSaveMiddleware: Middleware =
   (api: MiddlewareAPI<Dispatch<AnyAction>, RootState>) =>
     (next: Dispatch<AnyAction>) => (action: AnyAction) => {
-      if (isType(action, updateDocumentAction.started) && saveTimeout !== null) {
+      if (isType(action, updateDocumentAction.started)
+        && typeof saveTimeout === 'number') {
         window.clearTimeout(saveTimeout)
       }
       if (isType(action, modifyDocument)) {

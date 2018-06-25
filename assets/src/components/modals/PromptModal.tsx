@@ -29,6 +29,9 @@ const ConfirmationModal = (props: Props) => {
           <p>{props.message}</p>
           <div className={inputClasses}>
             <input
+              ref={(input) => {
+                input && input.focus()
+              }}
               value={props.value}
               onChange={props.onChange}
               type='text'
