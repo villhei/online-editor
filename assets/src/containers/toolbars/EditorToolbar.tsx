@@ -5,6 +5,7 @@ import {
   resetDocumentChanges
 } from 'actions/editor-actions'
 import EditorToolbarView from 'components/toolbars/EditorToolbarView'
+import ToolbarError from 'components/toolbars/ToolbarError'
 import ToolbarLoadingView from 'components/toolbars/ToolbarLoadingView'
 import ToolbarNotFound from 'components/toolbars/ToolbarNotFound'
 import ConfirmationModal from 'containers/modals/ConfirmationModal'
@@ -219,6 +220,6 @@ const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>) => {
     navigate: (route: string) => dispatch(push(route))
   }
 }
-const wrappedComponent = createApiResourceWrapper<TextDocument, Props>(isDocument)(EditorToolbar, ToolbarLoadingView, ToolbarNotFound)
+const wrappedComponent = createApiResourceWrapper<TextDocument, Props>(isDocument)(EditorToolbar, ToolbarLoadingView, ToolbarNotFound, ToolbarError)
 
 export default connect(mapStateToProps, mapDispatchToProps)(wrappedComponent)

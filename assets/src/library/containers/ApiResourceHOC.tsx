@@ -1,5 +1,5 @@
 
-import { AxiosError } from 'axios'
+import DefaultErrorComponent from 'components/ErrorComponent'
 import { Status, TypeChecker, getResourceStatus } from 'library/containers/common'
 import { MappedModel } from 'library/reducers/common'
 import { ApiResource, ApiResourceId } from 'library/service/common'
@@ -10,6 +10,10 @@ export interface Props<T> {
   resource: ApiResource<T>,
   getResource: (id: string) => void,
   onResourceNotFound?: (id: string) => void
+}
+
+export interface ErrorProps {
+  error: Error
 }
 
 export interface ChildProps<T> {
@@ -31,7 +35,8 @@ function wrapApiResource<T, P extends ChildProps<T>>(
   isValueResolved: TypeChecker<T>,
   ChildComponent: React.ComponentType<P>,
   LoadingComponent: React.ComponentType<{}>,
-  NotFound: React.ComponentType<{}>): React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
+  NotFound: React.ComponentType<{}>,
+  ErrorComponent: React.ComponentType<ErrorProps>): React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
 
   return class ApiResourceWrapper extends React.Component<Omit<P, 'resource'> & Props<T>> {
     componentDidMount() {
@@ -70,11 +75,7 @@ function wrapApiResource<T, P extends ChildProps<T>>(
           return <LoadingComponent />
         }
         case ERROR: {
-          return (
-            <div className='ui container'>
-              <h1>Error</h1> {(resource as AxiosError).message}
-            </div>
-          )
+          return <ErrorComponent error={resource as Error} />
         }
         default: {
           return null
@@ -90,9 +91,10 @@ export default function createApiResourceWrapper<T, P extends ChildProps<T>>(isV
   return function (
     childComponent: React.ComponentType<P>,
     loadingComponent: React.ComponentType<{}>,
-    notFoundComponent: React.ComponentType<{}>):
+    notFoundComponent: React.ComponentType<{}>,
+    errorComponent: React.ComponentType<ErrorProps> = DefaultErrorComponent):
     React.ComponentClass<Omit<P, 'resource'> & Props<T>> {
-    return wrapApiResource(isValueResolved, childComponent, loadingComponent, notFoundComponent)
+    return wrapApiResource(isValueResolved, childComponent, loadingComponent, notFoundComponent, errorComponent)
   }
 }
 
