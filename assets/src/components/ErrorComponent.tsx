@@ -8,9 +8,14 @@ interface Props {
 
 function formatError(error: Error | AxiosError) {
   if (isAxiosError(error)) {
-    return JSON.stringify(error.response!.data, null, 2)
-  }
-  return error.stack!
+    try {
+      return (<pre>
+        {JSON.stringify(error.response!.data, null, 2)}
+      </pre>)
+    } catch (e) {
+      return error.response
+    }
+  } return error
 }
 
 export default (props: Props) => {
@@ -22,9 +27,7 @@ export default (props: Props) => {
         <h1>Error</h1>
         <span>{error.message}</span>
         <div className='ui container left aligned'>
-          <pre>
-            {formatError(error)}
-          </pre>
+          {formatError(error)}
         </div>
       </div>
     </div >)

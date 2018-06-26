@@ -1,8 +1,24 @@
-import { updateDocumentAction } from 'actions/document-actions'
-import { getRootAction } from 'actions/folder-actions'
+import {
+  createDocumentAction,
+  getDocumentAction,
+  getDocumentsAction,
+  updateDocumentAction
+} from 'actions/document-actions'
+import {
+  createFolderAction,
+  getChildrenAction,
+  getFolderAction,
+  getRootAction,
+  updateFolderAction
+} from 'actions/folder-actions'
 import { clearError } from 'actions/page-actions'
-import { Action } from 'redux'
-import { isType } from 'typescript-fsa'
+import { AxiosError } from 'axios'
+import {
+  Action,
+  AsyncActionCreators,
+  Failure,
+  isType
+} from 'typescript-fsa'
 
 export type ErrorState = {
   message: string | undefined,
@@ -14,21 +30,33 @@ export const initialState: ErrorState = {
   stack: undefined
 }
 
+const RECORDED_API_ACTIONS = [
+  createDocumentAction,
+  getDocumentAction,
+  getDocumentsAction,
+  updateDocumentAction,
+  createFolderAction,
+  getChildrenAction,
+  getFolderAction,
+  getRootAction,
+  updateFolderAction
+]
+
 // tslint:disable-next-line
-function updateError(state: ErrorState, error: any): ErrorState {
+function updateError(state: ErrorState, error: Error): ErrorState {
   return {
     ...state,
-    message: (error as Error).message ? (error as Error).message : undefined,
-    stack: (error as Error).stack ? (error as Error).stack : undefined
+    message: error.message ? error.message : undefined,
+    stack: error.stack ? error.stack : undefined
   }
 }
+// tslint:disable-next-line
+function isFailureIn(action: Action<any>, actions: AsyncActionCreators<any, any, AxiosError>[]): action is Action<Failure<any, AxiosError>> {
+  return actions.find(creator => isType(action, creator.failed)) !== undefined
+}
 
-export default function errorReducer(state: ErrorState = initialState, action: Action): ErrorState {
-  if (isType(action, updateDocumentAction.failed)) {
-    const error = action.payload.error
-    return updateError(state, error)
-  }
-  if (isType(action, getRootAction.failed)) {
+export default function errorReducer<T>(state: ErrorState = initialState, action: Action<T>): ErrorState {
+  if (isFailureIn(action, RECORDED_API_ACTIONS)) {
     const error = action.payload.error
     return updateError(state, error)
   }
