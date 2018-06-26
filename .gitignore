@@ -5,6 +5,7 @@
 /*.ez
 .elixir_ls
 .vscode
+google.env
 /assets/yarn-error.log
 /assets/ts-build
 workspace.code-workspace

@@ -13,12 +13,28 @@ defmodule OnlineEditorWeb.ErrorView do
     %{"code" => 404, "message" => error}
   end
 
+  def render("400.json", _) do
+    render("400.json", %{error: "Bad request"})
+  end
+
+  def render("401.json", _assigns) do
+    %{"message" => "Unauthorized", "code" => 401}
+  end
+
+  def render("403.json", _assigns) do
+    %{"message" => "Forbidden", "code" => 403}
+  end
+
   def render("409.json", _) do
     %{"code" => 409, "message" => "A newer version of the resource exists"}
   end
 
-  def render("400.json", _) do
-    render("400.json", %{error: "Bad request"})
+  def render("422.json", _assigns) do
+    %{"message" => "Unprocessable entity", "code" => 422}
+  end
+
+  def render("500.json", _assigns) do
+    %{"message" => "Internal Server Error", "code" => 500}
   end
 
   def render("500.html", _assigns) do
@@ -28,6 +44,12 @@ defmodule OnlineEditorWeb.ErrorView do
   # In case no render clause matches or no
   # template is found, let's render it as 500
   def template_not_found(_template, assigns) do
-    render "500.html", assigns
+    render("500.json", assigns)
+  end
+
+  # In case no render clause matches or no
+  # template is found, let's render it as 500
+  def template_not_found(_template, assigns) do
+    render("500.html", assigns)
   end
 end

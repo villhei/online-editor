@@ -105,11 +105,11 @@ export function configureApiEndpoints<T extends HasId>(apiPath: string): ApiEndp
 
   function getAll(options: RequestOptions = requestDefaults): Promise<Array<T>> {
     const query = getQueryString(options)
-    return axios.get<Array<T>>(apiPath + query).then(res => res.data)
+    return axios.get<Array<T>>(apiPath + query, rqOptions).then(res => res.data)
   }
 
   function getById(id: ApiResourceId): Promise<T> {
-    return axios.get<T>(`${apiPath}/${id}`).then(res => res.data)
+    return axios.get<T>(`${apiPath}/${id}`, rqOptions).then(res => res.data)
   }
 
   function update(

@@ -6,9 +6,9 @@ defmodule OnlineEditor.Mixfile do
       app: :online_editor,
       version: "0.0.1",
       elixir: "~> 1.4",
-      elixirc_paths: elixirc_paths(Mix.env),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers,
-      start_permanent: Mix.env == :prod,
+      elixirc_paths: elixirc_paths(Mix.env()),
+      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
+      start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
     ]
@@ -20,13 +20,13 @@ defmodule OnlineEditor.Mixfile do
   def application do
     [
       mod: {OnlineEditor.Application, []},
-      extra_applications: [:logger, :runtime_tools]
+      extra_applications: [:logger, :runtime_tools, :ueberauth, :ueberauth_google]
     ]
   end
 
   # Specifies which paths to compile per environment.
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
   #
@@ -44,7 +44,11 @@ defmodule OnlineEditor.Mixfile do
       {:credo, "~> 0.8", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.1"},
       {:uuid, "~> 1.1"},
-      {:distillery, "~> 1.0.0"}
+      {:distillery, "~> 1.0.0"},
+      {:guardian, "~> 1.0"},
+      {:ueberauth, "~> 0.4"},
+      {:ueberauth_google, "~> 0.7"},
+      {:ja_serializer, "~> 0.13.0"}
     ]
   end
 
@@ -58,7 +62,7 @@ defmodule OnlineEditor.Mixfile do
     [
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
-      "test": ["ecto.create --quiet", "ecto.migrate", "test"]
+      test: ["ecto.create --quiet", "ecto.migrate", "test"]
     ]
   end
 end
