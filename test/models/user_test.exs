@@ -1,5 +1,5 @@
 defmodule OnlineEditor.UserTest do
-  use OnlineEditor.ModelCase
+  use OnlineEditor.DataCase
 
   alias OnlineEditor.User
 

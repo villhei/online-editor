@@ -24,8 +24,4 @@ defmodule OnlineEditorWeb.ErrorViewTest do
            "Internal server error"
   end
 
-  test "render any other" do
-    assert render_to_string(OnlineEditorWeb.ErrorView, "505.html", []) ==
-           "Internal server error"
-  end
 end

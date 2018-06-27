@@ -17,8 +17,12 @@ defmodule OnlineEditorWeb.ErrorView do
     render("400.json", %{error: "Bad request"})
   end
 
+  def render("401.json", %{message: message}) do
+    %{"message" => message, "code" => 401}
+  end
+
   def render("401.json", _assigns) do
-    %{"message" => "Unauthorized", "code" => 401}
+    render("401.json", "Unauthorized")
   end
 
   def render("403.json", _assigns) do
@@ -38,6 +42,10 @@ defmodule OnlineEditorWeb.ErrorView do
   end
 
   def render("500.html", _assigns) do
+    "Internal server error"
+  end
+
+  def render("505.html", _assigns) do
     "Internal server error"
   end
 

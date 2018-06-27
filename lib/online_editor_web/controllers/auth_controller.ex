@@ -47,6 +47,7 @@ defmodule OnlineEditorWeb.AuthController do
   end
 
   def sign_in_user(conn, %{"user" => user}) do
+    IO.puts("Signing in user: #{inspect(user)}")
     try do
       # Attempt to retrieve exactly one user from the DB, whose
       # email matches the one provided with the login request
@@ -56,11 +57,10 @@ defmodule OnlineEditorWeb.AuthController do
         true ->
           # Successful login
           # Encode a JWT
-          {:ok, jwt, _} = Guardian.encode_and_sign(user)
           conn
-          |> put_resp_header("Authorization", "Bearer #{jwt}")
+          |> Guardian.Plug.remember_me(User.info(user))
           # Return token to the client
-          |> json(%{access_token: jwt})
+          |> redirect(to: "/")
 
         false ->
           # Unsuccessful login
@@ -78,6 +78,7 @@ defmodule OnlineEditorWeb.AuthController do
   end
 
   def sign_up_user(conn, %{"user" => user}) do
+    IO.puts("Signing up user: #{inspect(user)}")
     changeset =
       User.changeset(%User{}, %{
         email: user.email,
@@ -90,13 +91,10 @@ defmodule OnlineEditorWeb.AuthController do
     case Repo.insert(changeset) do
       {:ok, user} ->
         # Encode a JWT
-        {:ok, jwt, _} = Guardian.encode_and_sign(user)
-
         conn
-        |> put_resp_header("Authorization", "Bearer #{jwt}")
+        |> Guardian.Plug.remember_me(User.info(user))
         # Return token to the client
-        |> json(%{access_token: jwt})
-
+        |> redirect(to: "/")
       {:error, changeset} ->
         conn
         |> put_status(422)
@@ -111,6 +109,7 @@ defmodule OnlineEditorWeb.AuthController do
   end
 
   def unauthorized(conn, params) do
+    IO.inspect(params)
     conn
     |> put_status(403)
     |> render(OnlineEditorWeb.ErrorView, "403.json")

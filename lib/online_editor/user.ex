@@ -1,6 +1,7 @@
 defmodule OnlineEditor.User do
   use OnlineEditor.Schema
   import Ecto.Changeset
+  alias OnlineEditor.User
 
   schema "users" do
     field(:email, :string)
@@ -17,5 +18,9 @@ defmodule OnlineEditor.User do
     |> cast(params, [:email, :auth_provider, :first_name, :last_name, :avatar])
     |> validate_required([:email, :auth_provider, :first_name, :last_name, :avatar])
     |> unique_constraint(:email)
+  end
+
+  def info(%User{} = user) do
+    %{ id: user.id, email: user.email}
   end
 end

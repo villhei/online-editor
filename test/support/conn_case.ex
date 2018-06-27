@@ -12,6 +12,8 @@ defmodule OnlineEditorWeb.ConnCase do
   inside a transaction which is reset at the beginning
   of the test unless the test case is marked as async.
   """
+  import OnlineEditor.Factory
+  alias OnlineEditor.Guardian
 
   use ExUnit.CaseTemplate
 
@@ -32,7 +34,13 @@ defmodule OnlineEditorWeb.ConnCase do
     unless tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(OnlineEditor.Repo, {:shared, self()})
     end
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    user = insert(:user)
+
+    conn = Phoenix.ConnTest.build_conn()
+    |> Guardian.Plug.remember_me(%{id: user.id})
+    |> Phoenix.ConnTest.recycle()
+
+    {:ok, conn: conn, user: user}
   end
 
 end

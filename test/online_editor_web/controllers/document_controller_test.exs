@@ -53,7 +53,8 @@ defmodule OnlineEditorWeb.DocumentControllerTest do
         %Document{
           name: "document_#{n}",
           folder: folder,
-          content: "Nonempty"
+          content: "Nonempty",
+          starred: false
         }
       end)
       |> Enum.map(&insert(&1))

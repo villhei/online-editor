@@ -3,9 +3,6 @@ defmodule OnlineEditorWeb.Router do
 
   pipeline :browser do
     plug(:accepts, ["html"])
-    plug(:fetch_session)
-    plug(:fetch_flash)
-    plug(:protect_from_forgery)
     plug(:put_secure_browser_headers)
   end
 
@@ -22,8 +19,7 @@ defmodule OnlineEditorWeb.Router do
       error_handler: OnlineEditorWeb.AuthErrorHandler
     )
 
-    plug(Guardian.Plug.VerifyHeader, realm: "Bearer")
-    plug(Guardian.Plug.EnsureAuthenticated)
+    plug(Guardian.Plug.VerifyCookie)
     plug(Guardian.Plug.LoadResource)
   end
 
@@ -33,6 +29,7 @@ defmodule OnlineEditorWeb.Router do
 
     resources("/documents", DocumentController)
     resources("/folders", FolderController)
+    get("/users/current", UserController, :current)
   end
 
   scope "/api/auth", OnlineEditorWeb do

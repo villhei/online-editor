@@ -72,7 +72,8 @@ defmodule OnlineEditorWeb.FolderQueryTest do
       insert(%Document{
         name: "1",
         folder: folder,
-        deleted: false
+        deleted: false,
+        starred: false
       })
 
     actual_document = %{document | folder: @unloaded_folder}
@@ -83,7 +84,7 @@ defmodule OnlineEditorWeb.FolderQueryTest do
       | parent: @unloaded_parent,
         children: [],
         documents: [actual_document],
-        deleted: false
+        deleted: false,
     }
 
     assert expected == actual

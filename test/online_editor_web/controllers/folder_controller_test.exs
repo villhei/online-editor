@@ -15,8 +15,8 @@ defmodule OnlineEditorWeb.FolderControllerTest do
 
   test "GET 200 - index path returns the list of all folders", %{conn: conn} do
     folder = insert(:folder)
-    conn = get(conn, "/api/folders/")
 
+    conn = get(conn, "/api/folders/")
     assigns = [
       folders: [Map.merge(folder, @no_relations)]
     ]
@@ -66,7 +66,7 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     assert json_response(conn, 200) == expected
   end
 
-  test "GET 404 - find by name returns not found for nonexistant folder", %{conn: conn} do
+  test "GET 200 - find by name returns not found for nonexistant folder", %{conn: conn} do
     conn = get(conn, "/api/folders/?find=Something")
     assert json_response(conn, 200) == []
   end
