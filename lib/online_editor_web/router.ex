@@ -6,11 +6,11 @@ defmodule OnlineEditorWeb.Router do
     plug(:put_secure_browser_headers)
   end
 
-  pipeline :api do
+  pipeline :auth do
     plug(:accepts, ["json"])
   end
 
-  pipeline :api_auth do
+  pipeline :authorized do
     plug(:accepts, ["json"])
 
     plug(
@@ -25,7 +25,7 @@ defmodule OnlineEditorWeb.Router do
 
   # Other scopes may use custom stacks.
   scope "/api", OnlineEditorWeb do
-    pipe_through(:api_auth)
+    pipe_through(:authorized)
 
     resources("/documents", DocumentController)
     resources("/folders", FolderController)
@@ -33,7 +33,7 @@ defmodule OnlineEditorWeb.Router do
   end
 
   scope "/api/auth", OnlineEditorWeb do
-    pipe_through(:api)
+    pipe_through(:auth)
     get("/:provider", AuthController, :request)
     get("/:provider/callback", AuthController, :callback)
     post("/:provider/callback", AuthController, :callback)

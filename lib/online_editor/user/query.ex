@@ -4,7 +4,7 @@ defmodule OnlineEditor.User.Query do
   alias Ueberauth.Auth
 
   def get_by_id(id) do
-    Repo.get_by(User, id: id, deleted: false)
+    user = Repo.get_by(User, id: id, deleted: false) |> Repo.preload(:root_folder)
   end
 
   def get_by_email(email) do
@@ -15,7 +15,7 @@ defmodule OnlineEditor.User.Query do
         select: u
       )
 
-    Repo.one(query)
+    Repo.one(query) |> Repo.preload(:root_folder)
   end
 
   def create_from_auth(user) do
