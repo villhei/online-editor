@@ -197,8 +197,8 @@ class EditorToolbar extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = ({ model, state, ui }: RootState, ownProps: RouterProvidedProps) => {
-  const { modifiedDocument, isModified } = state.editor
+const mapStateToProps = ({ model, ui }: RootState, ownProps: RouterProvidedProps) => {
+  const { modifiedDocument, isModified } = ui.editor
   const { editorToolbar } = ui.page
   return {
     ...selectApiResource(model.documents, ownProps.match.params.documentId),

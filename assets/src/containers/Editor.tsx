@@ -72,7 +72,7 @@ function isModified(modifiedDocument: PartialTextDocument | null): modifiedDocum
 
 const mapStateToProps = (state: RootState, ownProps: RouterProvidedProps) => {
   const resourceId: ApiResourceId = ownProps.match.params.documentId
-  const { modifiedDocument } = state.state.editor
+  const { modifiedDocument } = state.ui.editor
   const content = isModified(modifiedDocument) ? modifiedDocument.content : undefined
   const { saving } = state.ui.page.editorToolbar
   return {

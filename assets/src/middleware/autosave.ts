@@ -21,7 +21,7 @@ const autoSaveMiddleware: Middleware =
         saveTimeout = window.setTimeout(() => {
           updateDocument(api.dispatch, {
             id: action.payload.id,
-            resource: api.getState().state.editor.modifiedDocument
+            resource: api.getState().ui.editor.modifiedDocument
           })
           saveTimeout = null
         }, AUTOSAVE_TRIGGER_DELAY_MS)

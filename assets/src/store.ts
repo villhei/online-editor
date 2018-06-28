@@ -14,34 +14,35 @@ import {
   combineReducers,
   createStore
 } from 'redux'
-
 import thunk from 'redux-thunk'
 
 import { Map } from 'library/service/common'
+
 import autoSaveMiddleware from 'middleware/autosave'
 import editorReducer, { EditorState } from 'reducers/editor'
 import errorReducer, { ErrorState } from 'reducers/error'
 import pageReducer, { PageState } from 'reducers/page'
+import userReducer, { UserState } from 'reducers/user'
+
 import { history, router } from 'reducers/router'
 
 const reactRouterMiddleware = routerMiddleware(history)
 
-export type RootState = {
+export interface RootState {
+  model: {
+    folders: FolderState,
+    documents: DocumentReducerState,
+    user: UserState
+  },
   ui: {
     router: RouterState,
     page: PageState
-  },
-  model: {
-    folders: FolderState,
-    documents: DocumentReducerState
-  },
-  state: {
     editor: EditorState,
     error: ErrorState
   }
 }
 
-export type RouterProvidedProps = {
+export interface RouterProvidedProps {
   match: {
     path: string,
     url: string,
@@ -50,23 +51,17 @@ export type RouterProvidedProps = {
   }
 }
 
-const ui: Reducer<{
-  router: RouterState,
-  page: PageState
-}> = combineReducers({
-  router,
-  page: pageReducer
-})
-
 export const rootReducer: Reducer<RootState> = combineReducers({
-  ui,
   model: combineReducers({
     folders: folderReducer,
-    documents: documentReducer
+    documents: documentReducer,
+    user: userReducer
   }),
-  state: combineReducers({
+  ui: combineReducers({
     editor: editorReducer,
-    error: errorReducer
+    error: errorReducer,
+    router,
+    page: pageReducer
   })
 })
 

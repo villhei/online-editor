@@ -16,21 +16,19 @@ import {
   deleteMultiple,
   findByParent,
   getByFolderId,
-  getRoot,
   update
 } from 'service/folder-service'
 import actionCreatorFactory from 'typescript-fsa'
 
 import { wrapAsyncWorker } from './async'
 
-export const ACTION_GET_FOLDER = 'ACTION_GET_FOLDER'
-export const ACTION_CREATE_FOLDER = 'ACTION_CREATE_FOLDER'
-export const ACTION_GET_ROOT_FOLDER = 'ACTION_GET_ROOT_FOLDER'
-export const ACTION_GET_CHILDREN = 'ACTION_GET_CHILDREN'
-export const ACTION_SELECT_FOLDER = 'ACTION_SELECT_FOLDER'
-export const ACTION_DELETE_FOLDER = 'ACTION_DELETE_FOLDER'
-export const ACTION_DELETE_FOLDERS = 'ACTION_DELETE_FOLDERS'
-export const ACTION_UPDATE_FOLDER = 'ACTION_UPDATE_FOLDER'
+const ACTION_GET_FOLDER = 'ACTION_GET_FOLDER'
+const ACTION_CREATE_FOLDER = 'ACTION_CREATE_FOLDER'
+const ACTION_GET_ROOT_FOLDER = 'ACTION_GET_ROOT_FOLDER'
+const ACTION_GET_CHILDREN = 'ACTION_GET_CHILDREN'
+const ACTION_DELETE_FOLDER = 'ACTION_DELETE_FOLDER'
+const ACTION_DELETE_FOLDERS = 'ACTION_DELETE_FOLDERS'
+const ACTION_UPDATE_FOLDER = 'ACTION_UPDATE_FOLDER'
 
 const actionCreator = actionCreatorFactory()
 
@@ -56,8 +54,6 @@ export const deleteFoldersAction = actionCreator
   .async<Map<HasId>, Array<FolderId>,AxiosError>(ACTION_DELETE_FOLDERS)
 
 export const showFolder = (params: ByIdParams) => push('/folder/' + params.id)
-
-export const getRootFolder = wrapAsyncWorker(getRootAction, getRoot)
 
 export const getFolder = wrapAsyncWorker(getFolderAction,
   ({ id }: ByIdParams) => getByFolderId(id))

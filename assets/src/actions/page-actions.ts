@@ -1,3 +1,4 @@
+import { wrapAsyncWorker } from 'actions/async'
 import {
   deleteDocument,
   updateDocument
@@ -6,10 +7,9 @@ import {
   deleteFolder,
   deleteFoldersAction,
   getFolder,
-  getRootAction,
-  getRootFolder,
   updateFolder
 } from 'actions/folder-actions'
+import { AxiosError } from 'axios'
 import {
   ApiResourceId,
   ByIdParams,
@@ -28,24 +28,25 @@ import {
   FolderId,
   isFolder
 } from 'service/folder-service'
+import * as userService from 'service/user-service'
 import actionCreatorFactory from 'typescript-fsa'
 import { bindThunkAction } from 'typescript-fsa-redux-thunk'
 
 const actionCreator = actionCreatorFactory()
 
-export const TOGGLE_MENU = 'TOGGLE_MENU'
+const TOGGLE_MENU = 'TOGGLE_MENU'
 
-export const CLEAR_ERROR = 'CLEAR_ERROR'
+const CLEAR_ERROR = 'CLEAR_ERROR'
 
-export const SELECT_LAYOUT = 'SELECT_LAYOUT'
+const SET_SELECTED_ITEMS = 'SET_SELECTED_ITEMS'
 
-export const SET_SELECTED_ITEMS = 'SET_SELECTED_ITEMS'
+const ACTION_DELETE_DOCUMENT = 'ACTION_DELETE_DOCUMENT'
 
-export const ACTION_DELETE_DOCUMENT = 'ACTION_DELETE_DOCUMENT'
+const MOVE_SELECTED_ITEMS = 'MOVE_SELECTED_ITEMS'
 
-export const MOVE_SELECTED_ITEMS = 'MOVE_SELECTED_ITEMS'
+const SET_LIST_ORDERING = 'SET_LIST_ORDERING'
 
-export const SET_LIST_ORDERING = 'SET_LIST_ORDERING'
+const GET_CURRENT_USER = 'GET_CURRENT_USER'
 
 export const deleteDocumentAction = actionCreator
   .async<ByIdParams, ByResourceParams<TextDocument>>(ACTION_DELETE_DOCUMENT)
@@ -74,13 +75,17 @@ export const setSelectedItems = actionCreator<SelectedItems>(SET_SELECTED_ITEMS)
 
 export const setListOrdering = actionCreator<ListOrder>(SET_LIST_ORDERING)
 
+export const getCurrentUserAction = actionCreator.async<{}, userService.User, AxiosError>(GET_CURRENT_USER)
+
+export const getCurrentUser = wrapAsyncWorker(getCurrentUserAction, userService.getCurrentUser)
+
 export const moveSelectedItemsAction = actionCreator
   .async<MoveSelectedItems, Array<Folder>>(MOVE_SELECTED_ITEMS)
 
-export const selectRootFolder = bindThunkAction(getRootAction, async (_params, dispatch): Promise<Folder> => {
-  const folder = await getRootFolder(dispatch, {})
-  dispatch(push('/folder/' + folder.id))
-  return folder
+export const resolveCurrentUser = bindThunkAction(getCurrentUserAction, async (_params, dispatch): Promise<userService.User> => {
+  const user = await getCurrentUser(dispatch, {})
+  dispatch(push('/folder/' + user.rootFolder))
+  return user
 })
 
 export const moveItems = bindThunkAction(moveSelectedItemsAction, async ({ selection, destination }, dispatch): Promise<Array<Folder>> => {

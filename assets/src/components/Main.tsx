@@ -1,8 +1,8 @@
 import ConnectedSwitch from 'containers/ConnectedSwitch'
 import DocumentBrowser from 'containers/DocumentBrowser'
 import DocumentView from 'containers/DocumentView'
-import DummyLander from 'containers/DummyLander'
 import Editor from 'containers/Editor'
+import LandingPage from 'containers/LandingPage'
 import EditorToolbar from 'containers/toolbars/EditorToolbar'
 import MainToolbar from 'containers/toolbars/MainToolbar'
 import ViewToolbar from 'containers/toolbars/ViewToolbar'
@@ -44,7 +44,7 @@ export default class Main extends React.Component<Props, {}> {
                 <Route path='/view/:documentId' component={DocumentView} />
                 <Route path='/edit/:documentId' component={Editor} />
                 <Route path='/folder/:folderId' component={DocumentBrowser} />
-                <Route exact path='/' component={DummyLander} />
+                <Route exact path='/' component={LandingPage} />
               </ConnectedSwitch>
             </section>
           </div>

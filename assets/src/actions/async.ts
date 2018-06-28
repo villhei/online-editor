@@ -12,7 +12,7 @@ export function wrapAsyncWorker<P, S, E>(
       return result
     }).catch(error => {
       dispatch(asyncAction.failed({ params, error }))
-      return error
+      return Promise.reject(error)
     })
   }
 }
