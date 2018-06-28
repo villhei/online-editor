@@ -4,6 +4,7 @@ defmodule OnlineEditor.Folder do
   alias OnlineEditor.Document
   alias OnlineEditor.Folder
   alias OnlineEditor.Repo
+  alias OnlineEditor.User
 
   schema "folders" do
     field(:name, :string)
@@ -12,6 +13,7 @@ defmodule OnlineEditor.Folder do
     has_many(:documents, Document, foreign_key: :folder_id)
     has_many(:children, Folder, foreign_key: :parent_id)
     belongs_to(:parent, Folder)
+    belongs_to(:user, User)
     timestamps()
   end
 

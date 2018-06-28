@@ -2,10 +2,11 @@ defmodule OnlineEditor.Folder.Query do
   use OnlineEditor, :query
   alias OnlineEditor.Folder
 
-  def all do
+  def all(user_id) do
     query =
       from(
         f in Folder,
+        where: f.user_id == ^user_id,
         preload: [:children, :documents],
         select: f
       )
@@ -19,11 +20,11 @@ defmodule OnlineEditor.Folder.Query do
     |> Repo.preload(:documents)
   end
 
-  def get_by_name(name) do
+  def get_by_name(user_id, name) do
     query =
       from(
         f in Folder,
-        where: f.name == ^name,
+        where: f.name == ^name and f.user_id == ^user_id,
         preload: [:children, :documents],
         select: f
       )
@@ -35,11 +36,11 @@ defmodule OnlineEditor.Folder.Query do
     Repo.update(changeset)
   end
 
-  def get_by_parent(parent_id) do
+  def get_by_parent(user_id, parent_id) do
     query =
       from(
         f in Folder,
-        where: f.parent_id == ^parent_id,
+        where: f.parent_id == ^parent_id and f.user_id == ^user_id,
         preload: [:children, :documents],
         select: f
       )

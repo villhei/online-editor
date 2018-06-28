@@ -6,6 +6,7 @@ defmodule OnlineEditor.Document do
   import Ecto.Changeset
   alias OnlineEditor.Document
   alias OnlineEditor.Folder
+  alias OnlineEditor.User
 
   schema "documents" do
     field(:content, :string, default: "")
@@ -15,6 +16,7 @@ defmodule OnlineEditor.Document do
     field(:deleted, :boolean, default: false)
     field(:deleted_at, :naive_datetime)
     belongs_to(:folder, Folder)
+    belongs_to(:user, User)
     timestamps()
   end
 

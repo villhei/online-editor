@@ -13,49 +13,47 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     |> Poison.decode!()
   end
 
-  test "GET 200 - index path returns the list of all folders", %{conn: conn} do
-    folder = insert(:folder)
-
+  test "GET 200 - index path returns the list of all folders", %{conn: conn, user: user} do
     conn = get(conn, "/api/folders/")
     assigns = [
-      folders: [Map.merge(folder, @no_relations)]
+      folders: [Map.merge(user.root_folder, @no_relations)]
     ]
 
     expected = render_json("index.json", assigns)
     assert json_response(conn, 200) == expected
   end
 
-  test "GET 200 - index path returns the list of all folders when multiple", %{conn: conn} do
-    parent = insert(:folder)
-
+  test "GET 200 - index path returns the list of all folders when multiple", %{conn: conn, user: user} do
     child =
       insert(%Folder{
         name: "Child",
-        parent: parent,
+        parent: user.root_folder,
+        user: user,
         children: [],
         documents: []
       })
 
-    parent = Map.merge(parent, %{children: [child], documents: []})
+    parent = Map.merge(user.root_folder, %{children: [child], documents: []})
 
     expected = render_json("index.json", folders: [parent, child])
     conn = get(conn, "/api/folders/")
     assert json_response(conn, 200) == expected
   end
 
-  test "GET 200 - find by name can return the root folder", %{conn: conn} do
-    folder = insert(:folder) |> Map.merge(@no_relations)
+  test "GET 200 - find by name can return the root folder", %{conn: conn, user: user} do
+    folder = Map.merge(user.root_folder, @no_relations)
     conn = get(conn, "/api/folders/?find=Root")
     assert json_response(conn, 200) == render_json("index.json", %{folders: [folder]})
   end
 
-  test "GET 200 - index path allows for fetching children", %{conn: conn} do
+  test "GET 200 - index path allows for fetching children", %{conn: conn, user: user} do
     parent = insert(:folder)
 
     child =
       insert(%Folder{
         name: "Child",
         parent: parent,
+        user: user,
         children: [],
         documents: []
       })
@@ -71,13 +69,11 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     assert json_response(conn, 200) == []
   end
 
-  test "GET 200 - find by name can returns a folder populated with children", %{conn: conn} do
-    parent = insert(:folder)
-
+  test "GET 200 - find by name returns a folder populated with children", %{conn: conn, user: user} do
     child =
       insert(%Folder{
         name: "Child",
-        parent: parent
+        parent: user.root_folder
       })
 
     conn = get(conn, "/api/folders/?find=Root")
@@ -85,7 +81,7 @@ defmodule OnlineEditorWeb.FolderControllerTest do
     assigns = [
       folders: [
         %{
-          parent
+          user.root_folder
           | children: [child],
             documents: []
         }

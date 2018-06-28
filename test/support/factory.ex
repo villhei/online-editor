@@ -3,12 +3,14 @@ defmodule OnlineEditor.Factory do
   alias OnlineEditor.Document
   alias OnlineEditor.Folder
   alias OnlineEditor.User
+
   def document_factory() do
     %Document{
       name: "Document name.txt",
       content: "This is the document text content",
       owner: "ville.heikkinen@gmail.com",
-      starred: false
+      starred: false,
+      folder: build(:folder)
     }
   end
 
@@ -24,7 +26,8 @@ defmodule OnlineEditor.Factory do
       first_name: "Foo",
       last_name: "Bar",
       email: "foo@bar.com",
-      auth_provider: "test"
+      auth_provider: "test",
+      root_folder: build(:folder)
     }
   end
 end

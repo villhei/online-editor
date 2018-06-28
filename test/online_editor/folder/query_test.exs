@@ -30,7 +30,8 @@ defmodule OnlineEditorWeb.FolderQueryTest do
       __cardinality__: :many
   }
   test "find_by_name returns a folder populated with children" do
-    parent = insert(:folder)
+    user = insert(:user)
+    parent = user.root_folder
 
     child =
       insert(%Folder{
@@ -46,7 +47,7 @@ defmodule OnlineEditorWeb.FolderQueryTest do
         documents: @unloaded_documents
     }
 
-    actual = Query.get_by_name("Root")
+    actual = Query.get_by_name(user.id, "Root")
 
     expected = %{
       parent
@@ -66,8 +67,8 @@ defmodule OnlineEditorWeb.FolderQueryTest do
   end
 
   test "find_by_name returns a folder populated with documents" do
-    folder = insert(:folder)
-
+    user = insert(:user)
+    folder = user.root_folder
     document =
       insert(%Document{
         name: "1",
@@ -77,7 +78,7 @@ defmodule OnlineEditorWeb.FolderQueryTest do
       })
 
     actual_document = %{document | folder: @unloaded_folder}
-    actual = Query.get_by_name("Root")
+    actual = Query.get_by_name(user.id, "Root")
 
     expected = %{
       folder

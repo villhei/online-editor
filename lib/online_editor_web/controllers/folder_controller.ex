@@ -7,7 +7,8 @@ defmodule OnlineEditorWeb.FolderController do
   alias OnlineEditor.Repo
 
   def index(%Plug.Conn{query_params: %{"find" => name}} = conn, _params) do
-    case Query.get_by_name(name) do
+    user = Guardian.Plug.current_resource(conn)
+    case Query.get_by_name(user.id, name) do
       nil ->
         conn |> render("index.json", folders: [])
 
@@ -17,13 +18,15 @@ defmodule OnlineEditorWeb.FolderController do
   end
 
   def index(%Plug.Conn{query_params: %{"children" => folder_id}} = conn, _params) do
-    case Query.get_by_parent(folder_id) do
+    user = Guardian.Plug.current_resource(conn)
+    case Query.get_by_parent(user.id, folder_id) do
       folders -> conn |> render("index.json", folders: folders)
     end
   end
 
   def index(conn, _params) do
-    folders = Query.all()
+    user = Guardian.Plug.current_resource(conn)
+    folders = Query.all(user.id)
     render(conn, "index.json", folders: folders)
   end
 

@@ -2,6 +2,7 @@ defmodule OnlineEditor.User do
   use OnlineEditor.Schema
   import Ecto.Changeset
   alias OnlineEditor.User
+  alias OnlineEditor.Folder
 
   schema "users" do
     field(:email, :string)
@@ -10,11 +11,12 @@ defmodule OnlineEditor.User do
     field(:last_name, :string)
     field(:deleted, :boolean)
     field(:avatar, :string)
+    has_one(:root_folder, Folder)
     timestamps()
   end
 
-  def changeset(struct, params \\ %{}) do
-    struct
+  def changeset(%User{} = user, params \\ %{}) do
+    user
     |> cast(params, [:email, :auth_provider, :first_name, :last_name, :avatar])
     |> validate_required([:email, :auth_provider, :first_name, :last_name, :avatar])
     |> unique_constraint(:email)

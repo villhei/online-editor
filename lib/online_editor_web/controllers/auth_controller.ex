@@ -6,6 +6,7 @@ defmodule OnlineEditorWeb.AuthController do
 
   alias OnlineEditorWeb.Models.AuthUser
   alias OnlineEditor.User
+  alias OnlineEditor.Folder
   alias OnlineEditor.Repo
   alias OnlineEditor.Guardian
 
@@ -78,17 +79,7 @@ defmodule OnlineEditorWeb.AuthController do
   end
 
   def sign_up_user(conn, %{"user" => user}) do
-    IO.puts("Signing up user: #{inspect(user)}")
-    changeset =
-      User.changeset(%User{}, %{
-        email: user.email,
-        avatar: user.avatar,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        auth_provider: "google"
-      })
-
-    case Repo.insert(changeset) do
+    case Query.create_from_auth(user) do
       {:ok, user} ->
         # Encode a JWT
         conn
