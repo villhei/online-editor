@@ -72,6 +72,5 @@ config :online_editor, :file_module, File
 config :online_editor, OnlineEditor.Repo,
   adapter: Ecto.Adapters.Postgres,
   url: {:system, "${DATABASE_URL}"},
-  database: "",
   ssl: true,
   pool_size: 1

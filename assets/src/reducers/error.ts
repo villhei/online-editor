@@ -42,7 +42,6 @@ const RECORDED_API_ACTIONS = [
   updateFolderAction
 ]
 
-// tslint:disable-next-line
 function updateError(state: ErrorState, error: Error): ErrorState {
   return {
     ...state,

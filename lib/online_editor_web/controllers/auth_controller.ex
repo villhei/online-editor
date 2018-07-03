@@ -12,9 +12,6 @@ defmodule OnlineEditorWeb.AuthController do
 
   plug(:scrub_params, "user" when action in [:sign_in_user])
 
-  def request(_params) do
-  end
-
   def delete(conn, _params) do
     # Sign out the user
     conn
