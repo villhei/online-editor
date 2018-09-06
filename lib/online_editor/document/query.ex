@@ -23,6 +23,10 @@ defmodule OnlineEditor.Document.Query do
     |> remove_content
   end
 
+  def get_by(%{} = params) do
+    Repo.get_by(Document, params)
+  end
+
   defp remove_content(documents) do
     documents
     |> Enum.map(fn document -> Map.put(document, :content, "") end)

@@ -1,10 +1,13 @@
 defmodule OnlineEditor.User.Query do
   use OnlineEditor, :query
   alias OnlineEditor.User
-  alias Ueberauth.Auth
 
   def get_by_id(id) do
-    user = Repo.get_by(User, id: id, deleted: false) |> Repo.preload(:root_folder)
+    Repo.get_by(User, id: id, deleted: false) |> Repo.preload(:root_folder)
+  end
+
+  def get_by(%{} = params) do
+    Repo.get_by(User, params)
   end
 
   def get_by_email(email) do
