@@ -11,7 +11,7 @@ config :online_editor, ecto_repos: [OnlineEditor.Repo]
 # Configures the endpoint
 config :online_editor, OnlineEditorWeb.Endpoint,
   url: [host: "localhost"],
-  whitelisted_logins: System.get_env("WHITELISTED_LOGINS") || "" |> String.split(",")
+  whitelisted_logins: System.get_env("WHITELISTED_LOGINS")
   secret_key_base: "DxkKyQ7dxHGhal9fDYEyC/4f26vcH1UX6giw0TEqns4iZA4nwQYFL9JAG06iE1uQ",
   render_errors: [view: OnlineEditorWeb.ErrorView, accepts: ~w(html json)],
   pubsub: [name: OnlineEditor.PubSub, adapter: Phoenix.PubSub.PG2]
