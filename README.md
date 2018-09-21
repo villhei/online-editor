@@ -56,11 +56,23 @@ Use the webpack-dev-server provided [`localhost:4001`](http://localhost:4001) fo
 This app is set up for deployment to [Gigalixir](https://gigalixir.com/). In order to deploy to Gigalixir, you must first set up an Gigalixir account and set up the provided gigalixir git repository as a target.
 
 ### Roughly
+
 1. Register a gigalixir app
 2. Set up gigalixir as git remote
-3. `git push gigalixir master`
-4. `gigalixir migrate <app-name>`
-5. Profit
+3. Configure the gigalixir environment
+4. Create the `google.env`
+```
+export GOOGLE_OAUTH_CLIENT_ID=google-oauth-id
+export GOOGLE_OAUTH_CLIENT_SECRET=google-oauth-secret
+export GOOGLE_OAUTH_REDIRECT_URI=<http://your-app-name.gigalirix.com>/api/auth/callback
+# Optional, not yet implemented
+export WHITELISTED_LOGINS=foo@gmail.com,other-google-account@gmail.com
+```
+5. Source the environment `source google.env`
+6. Execute the gigalixir config script: `bash configure_gigalixir.sh <your-app-name>`
+7. `git push gigalixir master`
+8. `gigalixir migrate <app-name>`
+9. Profit
 
 ## Code style
 
