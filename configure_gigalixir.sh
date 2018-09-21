@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 if [[ -z $1 ]] ; then
     echo 'Error! Expected an application name as an argument!'
     echo 'Usage: configure_gigalixir.sh <APP_NAME>'
