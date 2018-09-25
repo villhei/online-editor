@@ -12,7 +12,7 @@ import { store } from './store'
 
 const APP_ROOT: string = 'main'
 
-function render(Main: new () => React.Component<{}, {}>) {
+function render(Main: React.ComponentClass) {
   const main: HTMLElement = document.getElementById(APP_ROOT) as HTMLElement
   const reactApplication: JSX.Element = (
     <AppContainer>
@@ -25,8 +25,8 @@ function render(Main: new () => React.Component<{}, {}>) {
   return ReactDOM.render(reactApplication, main)
 
 }
-// tslint:disable:next-line no-any
-render(MainContainer as any)
+
+render(MainContainer)
 
 if (module.hot) {
   console.log('** HMR triggered for ' + module)

@@ -1,6 +1,18 @@
+import { resolveCurrentUser } from 'actions/page-actions'
+import { RootState } from 'main/store'
 import * as React from 'react'
+import { connect } from 'react-redux'
+import { Action } from 'redux'
+import { ThunkDispatch } from 'redux-thunk'
 
-class LandingPage extends React.Component<{}> {
+interface Props {
+  resolveCurrentUser: () => void
+}
+class LandingPage extends React.Component<Props> {
+  componentDidMount() {
+    console.log('didmount', this.props.resolveCurrentUser)
+    this.props.resolveCurrentUser()
+  }
   render() {
     return (
       <div className='ui container' >
@@ -14,4 +26,10 @@ class LandingPage extends React.Component<{}> {
   }
 }
 
-export default LandingPage
+const mapDispatchToProps = (dispatch: ThunkDispatch<RootState, {}, Action>) => ({
+  resolveCurrentUser: () => {
+    dispatch(resolveCurrentUser({}))
+  }
+})
+
+export default connect(undefined, mapDispatchToProps)(LandingPage)
