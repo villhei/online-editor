@@ -1,3 +1,4 @@
+import NotFound from 'components/NotFound'
 import ConnectedSwitch from 'containers/ConnectedSwitch'
 import DocumentBrowser from 'containers/DocumentBrowser'
 import DocumentView from 'containers/DocumentView'
@@ -22,7 +23,7 @@ export default class Main extends React.Component<Props, {}> {
     const { error, clearError } = this.props
     return (
       <div className='ui main full height with padding'>
-        <div className='ui fixed borderless grid menu'>
+        <div className='ui fixed grid menu'>
           <ConnectedSwitch>
             <Route path={'/edit/:documentId'} component={EditorToolbar} />
             <Route path={'/view/:documentId'} component={ViewToolbar} />
@@ -45,6 +46,7 @@ export default class Main extends React.Component<Props, {}> {
                 <Route path='/edit/:documentId' component={Editor} />
                 <Route path='/folder/:folderId' component={DocumentBrowser} />
                 <Route exact path='/' component={LandingPage} />
+                <Route component={NotFound} />
               </ConnectedSwitch>
             </section>
           </div>

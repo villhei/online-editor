@@ -15,8 +15,8 @@ defmodule OnlineEditorWeb.AuthController do
   def delete(conn, _params) do
     # Sign out the user
     conn
-    |> put_status(200)
-    |> Guardian.Plug.sign_out(conn)
+    |> put_resp_cookie("guardian_default_token", "")
+    |> redirect(to: "/")
   end
 
   def callback(%{assigns: %{ueberauth_failure: _fails}} = conn, _params) do

@@ -21,12 +21,12 @@ export default (props: Props) => {
   return (
     <div className='ui row'>
       <Link className='ui item' to={props.folderUrl}>
-        <i className='ui icons'>
+        <i className='ui icon'>
           <i className='folder icon' />
         </i>
       </Link>
-      <div className='item title field mobile hidden'>
-        <div className='ui basic inverted labeled input'>
+      <div className='ui title field mobile hidden'>
+        <div className='ui inverted input'>
           <input type='text' value={props.title} onChange={props.onNameChange} />
         </div>
       </div>
